@@ -1,2 +1,3 @@
-# RPS_solski_sist
-RPS projektna naloga.
+# Maturitetna naloga
+
+## O maturitetni nalogi

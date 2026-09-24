@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Maturitetna naloga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800">
+    <div class=" flex min-h-screen gap-6 p-4 md:p-8">
+        <aside
+            class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+            <div class="mb-14 flex items-center gap-3">
+                <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
+                    alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                    <p class="text-sm text-slate-500">Student</p>
+                </div>
+
+            </div>
+
+            <nav class="space-y-2">
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    <i class="bi bi-house"></i>
+                    Dashboard
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-book"></i>
+                    My Subjects
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-journal"></i>
+                    Nootebook
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-lightbulb"></i>
+                    Knowledge
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Study
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-file-earmark"></i>
+                    Exams
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-calendar-week"></i>
+                    Calendar
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <div class="w-full">
+
+        </div>
+
+        <aside
+            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            <!-- Calendar on top and exams on bottom -->
+            <div class="w-full max-w-md bg-white rounded-2xl">
+
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8249;
+                    </button>
+
+                    <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
+
+                    <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8250;
+                    </button>
+                </div>
+
+                <!-- Weekdays -->
+                <div class="grid grid-cols-7 mb-2 text-center">
+                    <div class="text-sm font-medium text-gray-400">Sun</div>
+                    <div class="text-sm font-medium text-gray-400">Mon</div>
+                    <div class="text-sm font-medium text-gray-400">Tue</div>
+                    <div class="text-sm font-medium text-gray-400">Wed</div>
+                    <div class="text-sm font-medium text-gray-400">Thu</div>
+                    <div class="text-sm font-medium text-gray-400">Fri</div>
+                    <div class="text-sm font-medium text-gray-400">Sat</div>
+                </div>
+
+                <!-- Calendar -->
+                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+
+                <!-- Selected date -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
+                    <p class="text-sm text-gray-500">Selected date</p>
+                    <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
+                        None
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-gray-800">Math Exam</span>
+                            <span class="text-sm text-gray-500">June 15, 2024</span>
+                        </div>
+                    </li>
+                </ul> 
+
+        </aside>
+    </div>
+</body>
+
+<script>
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("monthYear");
+    const selectedDate = document.getElementById("selectedDate");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let currentDate = new Date();
+    let selected = null;
+
+    function renderCalendar() {
+        calendar.innerHTML = "";
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        monthYear.textContent = new Date(year, month).toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+        // Empty days before the first day
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement("div");
+            empty.className = "h-10";
+            calendar.appendChild(empty);
+        }
+
+        // Calendar days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const button = document.createElement("button");
+
+            const date = new Date(year, month, day);
+
+            const isToday =
+                date.toDateString() === new Date().toDateString();
+
+            const isSelected =
+                selected &&
+                date.toDateString() === selected.toDateString();
+
+            button.textContent = day;
+
+            button.className = `
+          h-10 w-10 mx-auto rounded-full
+          flex items-center justify-center
+          text-sm transition
+          hover:bg-blue-100 hover:text-blue-600
+          ${isToday ? "ring-2 ring-blue-500" : ""}
+          ${isSelected ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white" : "text-gray-700"}
+        `;
+
+            button.addEventListener("click", () => {
+                selected = date;
+
+                
+
+                renderCalendar();
+            });
+
+            calendar.appendChild(button);
+        }
+    }
+
+    prevBtn.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    renderCalendar();
+</script>
+
+</html>
