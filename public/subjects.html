@@ -30,12 +30,12 @@
 
             <nav class="space-y-2">
                 <a href="index.html"
-                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-house"></i>
                     Dashboard
                 </a>
                 <a href="subjects.html"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
                     <i class="bi bi-book"></i>
                     My Subjects
                 </a>
@@ -74,19 +74,271 @@
 
         <div class="flex flex-col w-full">
 
-            <!-- Other content -->
-
             <div
                 class="mt-auto w-full h-[calc(100vh-320px)] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
 
-                <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
-                    <div class="flex items-center justify-between w-full">
-                        <h2 class="text-lg font-semibold text-gray-800">My Subjects</h2>
-                        <a href="subjects.html" class="text-blue-600 hover:underline">View All</a>
-                    </div>
+
+                    <ul class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] col-span-3 gap-3">
 
 
-                    <ul class="mt-4 flex col-span-3 gap-3 overflow-x-auto pb-2">
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center ">
+                                <div class="bg-blue-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">Mathematics</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-blue-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-purple-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-tropical-storm"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">Biology</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-purple-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-orange-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-flask"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">Chemistry</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-orange-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-green-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-lungs"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">Biology</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-green-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-yellow-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-bank"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">History</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-yellow-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-red-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-book"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">English</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-red-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center ">
+                                <div class="bg-blue-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">Mathematics</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-blue-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-purple-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-tropical-storm"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">Biology</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-purple-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-orange-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-flask"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">Chemistry</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-orange-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-green-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-lungs"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">Biology</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-green-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-yellow-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-bank"></i>
+                                </div>
+                                <span class="font-medium text-gray-800 ml-4">History</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-yellow-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
+                        <li
+                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                            <div class="flex items-center">
+                                <div class="bg-red-500 text-white p-2 px-3 rounded-lg">
+                                    <i class="bi bi-book"></i>
+                                </div>
+
+                                <span class="font-medium text-gray-800 ml-4">English</span>
+                            </div>
+
+                            <div class="my-4">
+                                <p class="text-sm text-gray-500">153 notes</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <div class="h-2 w-full rounded-full bg-gray-200">
+                                    <div class="h-2 rounded-full bg-red-500" style="width: 70%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
+                            </div>
+                        </li>
+
                         <li
                             class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
                             <div class="flex items-center ">
@@ -217,48 +469,9 @@
                         </li>
                     </ul>
 
-                </div>
-
-                <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
-                    <div class="flex items-center justify-between w-full">
-                        <h2 class="text-lg font-semibold text-gray-800 flex items-center">
-                            <div class="bg-blue-500 text-white p-0.5 px-2 rounded-full mr-4">
-                                <i class="bi bi-caret-right-fill"></i>
-                            </div> Continue Learning
-                        </h2>
-                        <a href="#" class="text-blue-600 hover:underline">Open notebook <i
-                                class="bi bi-arrow-right"></i></a>
-                    </div>
-
-                    <div class="mt-4 flex items-center gap-4">
-                        <img
-                            src="https://images.unsplash.com/photo-1633493702341-4d04841df53b?q=80&w=1160&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                            alt="Learning Image"
-                            class="rounded-xl w-56 h-56 object-cover"
-                        />
-
-                        <div class="text-left ml-4">
-                            <p class="text-gray-700 text-sm">Physics</p>
-                            <h1 class="text-gray-900 font-semibold text-3xl mt-2">
-                                Newton's Laws of Motion
-                            </h1>
-                            <p class="text-gray-700 text-lg mt-2">
-                                Learn about the fundamental principles of motion
-                                and how they govern the behavior of objects in our universe.
-                            </p>
-
-                            <button class="mt-8 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                                Continue Learning
-                                <i class="bi bi-arrow-right ml-2"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
         </div>
-
 
         <aside
             class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
@@ -313,10 +526,10 @@
                     </li>
                 </ul>
         </aside>
-    </div>
-</body>
 
-<script>
+    </div>
+
+    <script>
     const calendar = document.getElementById("calendar");
     const monthYear = document.getElementById("monthYear");
     const selectedDate = document.getElementById("selectedDate");
@@ -399,5 +612,5 @@
 
     renderCalendar();
 </script>
-
+</body>
 </html>
