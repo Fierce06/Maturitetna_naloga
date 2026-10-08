@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Maturitetna naloga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800">
+    <div class=" flex min-h-screen gap-6 p-4 md:p-8">
+        <aside
+            class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+            <div class="mb-14 flex items-center gap-3">
+                <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
+                    alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                    <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                    <p class="text-sm text-slate-500">Student</p>
+                </div>
+
+            </div>
+
+            <nav class="space-y-2">
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    <i class="bi bi-house"></i>
+                    Dashboard
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-book"></i>
+                    My Subjects
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-journal"></i>
+                    Nootebook
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-lightbulb"></i>
+                    Knowledge
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Study
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-file-earmark"></i>
+                    Exams
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-calendar-week"></i>
+                    Calendar
+                </a>
+                <a href="#"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <div id="center-content" class="flex flex-col w-full">
+            <!-- <div id="dashboard-view" aria-label="Dashboard"></div> -->
+
+            <section id="study-overview" class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
+                <header class="mb-6">
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Study center</p>
+                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Choose what you want to practise</h1>
+                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Choose a subject and open one of its practice exams. Your answers and progress remain in the current browser session.</p>
+                </header>
+
+                <div class="space-y-5">
+                    <section class="grid gap-4 rounded-2xl border border-blue-100 bg-white p-4 md:grid-cols-[150px_minmax(0,1fr)]">
+                        <div class="flex min-h-[145px] flex-col justify-between rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 p-5 text-white shadow-md shadow-blue-200">
+                            <i class="bi bi-calculator text-3xl"></i>
+                            <div><p class="text-xs font-semibold uppercase tracking-wider text-blue-100">Subject</p><h2 class="mt-1 text-xl font-bold">Mathematics</h2></div>
+                        </div>
+                        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            <button type="button" data-open-exam data-title="Polynomials Practice Exam" data-topics="Polynomial operations, zeros, Horner's method" data-icon="Σ" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-bezier2 text-2xl text-blue-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-blue-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Polynomials</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Trigonometry Practice Exam" data-topics="Angles, identities, trigonometric functions" data-icon="∠" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-triangle text-2xl text-blue-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-blue-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Trigonometry</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Analytic Geometry Practice Exam" data-topics="Lines, distances, midpoints and angles" data-icon="⌁" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-graph-up text-2xl text-blue-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-blue-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Analytic Geometry</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="grid gap-4 rounded-2xl border border-emerald-100 bg-white p-4 md:grid-cols-[150px_minmax(0,1fr)]">
+                        <div class="flex min-h-[145px] flex-col justify-between rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 p-5 text-white shadow-md shadow-emerald-200">
+                            <i class="bi bi-book text-3xl"></i>
+                            <div><p class="text-xs font-semibold uppercase tracking-wider text-emerald-100">Subject</p><h2 class="mt-1 text-xl font-bold">Slovenščina</h2></div>
+                        </div>
+                        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            <button type="button" data-open-exam data-title="Književnost – Practice Exam" data-topics="Literary works, authors and interpretation" data-icon="Aa" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-book-half text-2xl text-emerald-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-emerald-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Književnost</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Slovnica – Practice Exam" data-topics="Grammar, syntax and word classes" data-icon="Č" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-spellcheck text-2xl text-emerald-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-emerald-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Slovnica</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Esej – Practice Exam" data-topics="Argumentation, structure and literary comparison" data-icon="✎" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:bg-emerald-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-pencil-square text-2xl text-emerald-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-emerald-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Essay preparation</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                        </div>
+                    </section>
+
+                    <section class="grid gap-4 rounded-2xl border border-violet-100 bg-white p-4 md:grid-cols-[150px_minmax(0,1fr)]">
+                        <div class="flex min-h-[145px] flex-col justify-between rounded-xl bg-gradient-to-br from-violet-600 to-purple-800 p-5 text-white shadow-md shadow-violet-200">
+                            <i class="bi bi-lightning-charge text-3xl"></i>
+                            <div><p class="text-xs font-semibold uppercase tracking-wider text-violet-100">Subject</p><h2 class="mt-1 text-xl font-bold">Physics</h2></div>
+                        </div>
+                        <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            <button type="button" data-open-exam data-title="Mechanics Practice Exam" data-topics="Motion, acceleration and momentum" data-icon="⚛" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-violet-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-speedometer2 text-2xl text-violet-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-violet-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Mechanics</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Forces Practice Exam" data-topics="Newton's laws, force and acceleration" data-icon="F" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-violet-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-arrows-move text-2xl text-violet-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-violet-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Forces & Motion</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                            <button type="button" data-open-exam data-title="Energy Practice Exam" data-topics="Work, power and energy transfers" data-icon="E" class="group min-h-[145px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:bg-violet-50 hover:shadow-md">
+                                <span class="flex items-start justify-between"><i class="bi bi-battery-charging text-2xl text-violet-600"></i><i class="bi bi-arrow-up-right text-slate-400 transition group-hover:text-violet-600"></i></span>
+                                <strong class="mt-5 block text-slate-900">Energy & Power</strong><span class="mt-1 block text-xs text-slate-500">10 questions · 45 min</span>
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <main id="study-page" class="hidden min-w-0 w-full rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-lg shadow-slate-200/60 md:p-6">
+    <a class="text-sm text-[#526176] no-underline" href="#" id="back">← &nbsp; Back to Study</a>
+    <header class="border-b border-[#dfe6ef] pb-[22px]"><p class="mb-[-8px] mt-[25px] text-[11px] font-bold tracking-[2px] text-[#74839b]">AI STUDY NOTEBOOK · PRACTICE</p>
+      <div class="mb-[15px] mt-5 flex items-center gap-[18px]"><span id="exam-icon" class="grid size-[58px] shrink-0 place-items-center rounded-[15px] bg-[#e4eeff] text-[30px] font-bold text-[#4267bb]" aria-hidden="true">⚛</span><h1 id="exam-title" class="m-0 text-[clamp(25px,4vw,35px)] font-bold tracking-[-1px]">Physics Practice Exam</h1></div>
+      <div class="ml-[76px] flex flex-wrap gap-[22px] text-sm text-[#647084] max-[650px]:ml-0 max-[650px]:gap-3 max-[650px]:leading-[1.6]"><span>◷ &nbsp; Duration: <b>45 min</b></span><span>☷ &nbsp; 10 questions</span><span>◎ &nbsp; Topics: <span id="exam-topics">Mechanics, Forces, Energy</span></span></div>
+    </header>
+    <section class="my-6 flex items-center gap-[35px] rounded-[14px] border border-[#e2e8f1] bg-white p-[22px] max-[650px]:gap-3 max-[650px]:p-4" aria-label="Exam progress">
+      <div class="min-w-0 flex-1"><div class="mb-[13px] flex justify-between gap-3 text-sm max-[650px]:text-xs [&>span:last-child]:text-[#6f7a8e]"><strong id="answered-count">0 of 10 answered</strong><span id="completion-percent">0% complete</span></div><progress class="block h-[9px] w-full overflow-hidden rounded-[10px] border-0 bg-[#edf1f7] [&::-webkit-progress-bar]:bg-[#edf1f7] [&::-webkit-progress-value]:rounded-[10px] [&::-webkit-progress-value]:bg-[#4267bb] [&::-moz-progress-bar]:bg-[#4267bb]" value="0" max="10" aria-label="Exam progress">0%</progress></div>
+      <div class="flex items-center gap-3 border-l border-[#e5eaf1] pl-7 max-[650px]:gap-[7px] max-[650px]:pl-[15px] [&_strong]:block [&_strong]:text-[25px] [&_strong]:tabular-nums max-[650px]:[&_strong]:text-[21px] [&_small]:mt-[5px] [&_small]:block [&_small]:text-[#7b8594]"><span class="text-[31px] text-[#1265dc] max-[650px]:text-2xl" aria-hidden="true">◷</span><div><strong id="time">45:00</strong><small>time remaining</small></div></div>
+    </section>
+    <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question>
+      <div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div>
+      <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="question-eight"><span>1.</span><span>A 2.0 kg block is pushed with a constant horizontal force of 10 N on a frictionless surface. What is the acceleration of the block?</span></h2>
+      <fieldset class="m-0 border-0 p-0" aria-labelledby="question-eight">
+        <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="acceleration" value="2"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">A</span><span>2.0 m/s²</span></label>
+        <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="acceleration" value="5"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">B</span><span>5.0 m/s²</span></label>
+        <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="acceleration" value="10"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">C</span><span>10 m/s²</span></label>
+        <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="acceleration" value="0.2"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">D</span><span>0.20 m/s²</span></label>
+      </fieldset>
+    </section>
+    <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] pt-7 max-[650px]:p-[18px]" data-question>
+      <div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Numeric Answer</span><span class="text-[13px] text-[#788396]">2 marks</span></div>
+      <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="question-nine"><span>2.</span><span>A ball is thrown vertically upwards with an initial velocity of 20 m/s. Ignoring air resistance, what is the maximum height reached by the ball?<br>(Use g = 9.8 m/s²)</span></h2>
+      <div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><input class="min-w-0 w-full border-0 bg-[#fcfdff] p-[17px] text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4" type="number" step="any" placeholder="Enter your answer…" aria-labelledby="question-nine" aria-describedby="unit"><span id="unit">m</span></div>
+    </section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q3"><span>3.</span><span>Which quantity is a vector?</span></h2><fieldset class="m-0 border-0 p-0" aria-labelledby="q3"><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q3" value="0"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">A</span><span>Speed</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q3" value="1"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">B</span><span>Mass</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q3" value="2"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">C</span><span>Velocity</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q3" value="3"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">D</span><span>Energy</span></label></fieldset></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Numeric Answer</span><span class="text-[13px] text-[#788396]">2 marks</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q4"><span>4.</span><span>A cyclist travels 150 m in 12 s at a constant speed. Calculate the speed.</span></h2><div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><input class="min-w-0 w-full border-0 bg-[#fcfdff] p-[17px] text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4" type="number" step="any" placeholder="Enter your answer…" aria-labelledby="q4" aria-describedby="unit4"><span id="unit4">m/s</span></div></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q5"><span>5.</span><span>When the resultant force on a moving object is zero, the object…</span></h2><fieldset class="m-0 border-0 p-0" aria-labelledby="q5"><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q5" value="0"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">A</span><span>Stops immediately</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q5" value="1"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">B</span><span>Moves with constant velocity</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q5" value="2"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">C</span><span>Accelerates continuously</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q5" value="3"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">D</span><span>Loses its mass</span></label></fieldset></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Numeric Answer</span><span class="text-[13px] text-[#788396]">2 marks</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q6"><span>6.</span><span>A 4 kg object is lifted vertically by 3 m. Calculate its gain in gravitational potential energy. Use g = 9.8 m/s².</span></h2><div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><input class="min-w-0 w-full border-0 bg-[#fcfdff] p-[17px] text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4" type="number" step="any" placeholder="Enter your answer…" aria-labelledby="q6" aria-describedby="unit6"><span id="unit6">J</span></div></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q7"><span>7.</span><span>Which expression gives kinetic energy?</span></h2><fieldset class="m-0 border-0 p-0" aria-labelledby="q7"><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q7" value="0"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">A</span><span>mv</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q7" value="1"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">B</span><span>mgh</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q7" value="2"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">C</span><span>½mv²</span></label><label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff] has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-[#8bb7ff]"><input class="peer sr-only" type="radio" name="q7" value="3"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">D</span><span>F/t</span></label></fieldset></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Numeric Answer</span><span class="text-[13px] text-[#788396]">2 marks</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q8"><span>8.</span><span>A 0.5 kg ball moves at 8 m/s. Calculate its momentum.</span></h2><div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><input class="min-w-0 w-full border-0 bg-[#fcfdff] p-[17px] text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4" type="number" step="any" placeholder="Enter your answer…" aria-labelledby="q8" aria-describedby="unit8"><span id="unit8">kg·m/s</span></div></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Short Answer</span><span class="text-[13px] text-[#788396]">3 marks</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q9"><span>9.</span><span>Explain why a passenger moves forwards when a car brakes suddenly. Refer to inertia in your answer.</span></h2><div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><textarea class="min-h-[110px] w-full resize-y border-0 p-4 text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-[-3px]" placeholder="Write your explanation…" aria-labelledby="q9"></textarea></div></section>
+<section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question><div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#f1eafa] px-3 py-[7px] text-xs font-bold text-[#7645ad]">Numeric Answer</span><span class="text-[13px] text-[#788396]">2 marks</span></div><h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="q10"><span>10.</span><span>A machine transfers 600 J of energy in 5 s. Calculate its average power.</span></h2><div class="flex items-center overflow-hidden rounded-[10px] border border-[#dfe5ed] [&>span]:px-5 [&>span]:text-[#647084]"><input class="min-w-0 w-full border-0 bg-[#fcfdff] p-[17px] text-[#172033] focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4" type="number" step="any" placeholder="Enter your answer…" aria-labelledby="q10" aria-describedby="unit10"><span id="unit10">W</span></div></section>
+    <nav class="mt-[35px] flex flex-wrap items-center justify-between gap-[15px]" aria-label="Exam navigation">
+      <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 border-[#82a8d7] bg-white text-[#2468b8]" id="previous">← &nbsp; Back to top</button>
+      <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 border-transparent bg-white text-[#566379] aria-pressed:bg-[#f1eafa] aria-pressed:text-[#7345c3]" id="bookmark" aria-pressed="false">♧ &nbsp; Save for later</button>
+      <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 min-w-[120px] border-[#4267bb] bg-[#4267bb] text-white max-[650px]:min-w-[85px]" id="next">Finish practice &nbsp; →</button>
+    </nav>
+    <p class="mb-0 mt-5 min-h-5 text-[13px] text-[#69778a]" id="notice" role="status"></p>
+            </main>
+        </div>
+
+        <aside
+            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            <!-- Calendar on top and exams on bottom -->
+            <div class="w-full max-w-md bg-white rounded-2xl">
+
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8249;
+                    </button>
+
+                    <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
+
+                    <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8250;
+                    </button>
+                </div>
+
+                <!-- Weekdays -->
+                <div class="grid grid-cols-7 mb-2 text-center">
+                    <div class="text-sm font-medium text-gray-400">Sun</div>
+                    <div class="text-sm font-medium text-gray-400">Mon</div>
+                    <div class="text-sm font-medium text-gray-400">Tue</div>
+                    <div class="text-sm font-medium text-gray-400">Wed</div>
+                    <div class="text-sm font-medium text-gray-400">Thu</div>
+                    <div class="text-sm font-medium text-gray-400">Fri</div>
+                    <div class="text-sm font-medium text-gray-400">Sat</div>
+                </div>
+
+                <!-- Calendar -->
+                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+
+                <!-- Selected date -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
+                    <p class="text-sm text-gray-500">Selected date</p>
+                    <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
+                        None
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
+                <ul class="space-y-4">
+                    <li class="p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
+                        <div class="flex justify-between items-center">
+                            <span class="font-medium text-gray-800">Math Exam</span>
+                            <span class="text-sm text-gray-500">June 15, 2024</span>
+                        </div>
+                    </li>
+                </ul> 
+
+        </aside>
+    </div>
+
+
+<script>
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("monthYear");
+    const selectedDate = document.getElementById("selectedDate");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let currentDate = new Date();
+    let selected = null;
+
+    function renderCalendar() {
+        calendar.innerHTML = "";
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        monthYear.textContent = new Date(year, month).toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+       
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement("div");
+            empty.className = "h-10";
+            calendar.appendChild(empty);
+        }
+
+
+        for (let day = 1; day <= daysInMonth; day++) {
+            const button = document.createElement("button");
+
+            const date = new Date(year, month, day);
+
+            const isToday =
+                date.toDateString() === new Date().toDateString();
+
+            const isSelected =
+                selected &&
+                date.toDateString() === selected.toDateString();
+
+            button.textContent = day;
+
+            button.className = `
+          h-10 w-10 mx-auto rounded-full
+          flex items-center justify-center
+          text-sm transition
+          hover:bg-blue-100 hover:text-blue-600
+          ${isToday ? "ring-2 ring-blue-500" : ""}
+          ${isSelected ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white" : "text-gray-700"}
+        `;
+
+            button.addEventListener("click", () => {
+                selected = date;
+                selectedDate.textContent = date.toLocaleDateString("en-US", {day: "numeric", month: "long", year: "numeric"});
+
+                
+
+                renderCalendar();
+            });
+
+            calendar.appendChild(button);
+        }
+    }
+
+    prevBtn.addEventListener("click", () => {
+        currentDate.setDate(1);
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentDate.setDate(1);
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    renderCalendar();
+</script>
+
+<script>
+(() => {
+
+    const notice = document.getElementById('notice');
+    const questions = [...document.querySelectorAll('#study-page [data-question]')];
+    function updateProgress() {
+      const answered = questions.filter(q => q.querySelector('input[type="radio"]:checked') || [...q.querySelectorAll('input[type="number"], textarea')].some(el => el.value.trim() !== '')).length;
+      document.getElementById('answered-count').textContent = answered + ' of 10 answered';
+      document.getElementById('completion-percent').textContent = answered * 10 + '% complete';
+      document.querySelector('#study-page progress').value = answered;
+      return answered;
+    }
+    document.getElementById('study-page').addEventListener('input', updateProgress);
+    document.getElementById('bookmark').addEventListener('click', function () {
+      const active = this.getAttribute('aria-pressed') !== 'true';
+      this.setAttribute('aria-pressed', active);
+      this.textContent = active ? '◆  Marked for later' : '♧  Save for later';
+      notice.textContent = active ? 'Practice marked for later in this preview.' : 'Mark removed.';
+    });
+    document.getElementById('previous').addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+    document.getElementById('next').addEventListener('click', () => {
+      const answered = updateProgress();
+      notice.textContent = answered === 10 ? 'All 10 questions answered. This frontend preview does not grade or submit answers.' : answered + ' of 10 answered. Complete the remaining questions before finishing.';
+    });
+    document.getElementById('back').addEventListener('click', event => {
+      event.preventDefault();
+      showStudyOverview();
+    });
+    const dashboardLink = document.getElementById('dashboard-link');
+    const studyLink = document.getElementById('study-link');
+    const dashboardView = document.getElementById('dashboard-view');
+    const studyOverview = document.getElementById('study-overview');
+    const studyPage = document.getElementById('study-page');
+    const examTitle = document.getElementById('exam-title');
+    const examTopics = document.getElementById('exam-topics');
+    const examIcon = document.getElementById('exam-icon');
+    const examCards = [...document.querySelectorAll('[data-open-exam]')];
+    const activeNavClasses = "flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500";
+    const normalNavClasses = "flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900";
+    let timerStarted = false;
+
+    function setActiveLink(activeLink, inactiveLink) {
+      activeLink.className = activeNavClasses;
+      activeLink.setAttribute('aria-current', 'page');
+      inactiveLink.className = normalNavClasses;
+      inactiveLink.removeAttribute('aria-current');
+    }
+
+    function startExamTimer() {
+      if (timerStarted) return;
+      timerStarted = true;
+      const deadline = Date.now() + 45 * 60 * 1000;
+      const timer = setInterval(() => {
+        const remaining = Math.max(0, Math.ceil((deadline - Date.now()) / 1000));
+        document.getElementById('time').textContent = String(Math.floor(remaining / 60)).padStart(2, '0') + ':' + String(remaining % 60).padStart(2, '0');
+        if (remaining === 0) {
+          clearInterval(timer);
+          notice.textContent = 'Time is up. This preview does not submit answers.';
+        }
+      }, 1000);
+    }
+
+    function showStudyOverview() {
+      dashboardView.classList.add('hidden');
+      studyPage.classList.add('hidden');
+      studyOverview.classList.remove('hidden');
+      setActiveLink(studyLink, dashboardLink);
+      history.replaceState(null, '', '#study');
+      studyOverview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showExam(card) {
+      dashboardView.classList.add('hidden');
+      studyOverview.classList.add('hidden');
+      studyPage.classList.remove('hidden');
+      examTitle.textContent = card.dataset.title;
+      examTopics.textContent = card.dataset.topics;
+      examIcon.textContent = card.dataset.icon;
+      setActiveLink(studyLink, dashboardLink);
+      startExamTimer();
+      history.replaceState(null, '', '#exam');
+      studyPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showDashboard() {
+      studyOverview.classList.add('hidden');
+      studyPage.classList.add('hidden');
+      dashboardView.classList.remove('hidden');
+      setActiveLink(dashboardLink, studyLink);
+      history.replaceState(null, '', location.pathname + location.search);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    examCards.forEach(card => card.addEventListener('click', () => showExam(card)));
+
+    studyLink.addEventListener('click', event => {
+      event.preventDefault();
+      showStudyOverview();
+    });
+
+    dashboardLink.addEventListener('click', event => {
+      event.preventDefault();
+      showDashboard();
+    });
+
+    if (location.hash === '#study' || location.hash === '#study-page' || location.hash === '#exam') showStudyOverview();
+  
+})();
+</script>
+</body>
+</html>
