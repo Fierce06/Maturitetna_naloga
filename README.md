@@ -1,5 +1,8 @@
 ### Maturitetna naloga
 
+## O maturitetni nalogi
+
+## Podatkovna baza
 
 # AI Study Notebook
 

@@ -1,0 +1,2224 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>StudyGraph | Exams</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <!-- Tailwind -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+        body {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+        }
+    </style>
+</head>
+
+
+<body
+    class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800"
+>
+
+<div class="flex min-h-screen gap-6 p-4 md:p-8">
+
+    <!-- =====================================================
+         LEFT SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="w-full max-w-[260px] shrink-0 rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm"
+    >
+
+        <!-- USER -->
+
+        <div class="mb-14 flex items-center gap-3">
+
+            <img
+                src="https://avatars.githubusercontent.com/u/111075940?s=400"
+                alt="Profile Picture"
+                class="h-12 w-12 rounded-full object-cover"
+            >
+
+
+            <div>
+
+                <h2
+                    class="text-lg font-semibold text-slate-900"
+                >
+                    User name
+                </h2>
+
+                <p class="text-sm text-slate-500">
+                    Student
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="space-y-2">
+
+            <!-- DASHBOARD -->
+
+            <a
+                href="#dashboard"
+                id="dashboardLink"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-house"></i>
+
+                Dashboard
+            </a>
+
+
+            <a
+                href="#subjects"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-book"></i>
+
+                My Subjects
+            </a>
+
+
+            <a
+                href="#notebook"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-journal"></i>
+
+                Notebook
+            </a>
+
+
+            <a
+                href="#knowledge"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-lightbulb"></i>
+
+                Knowledge
+            </a>
+
+
+            <!-- STUDY - zaenkrat še ni povezan -->
+
+            <a
+                href="#study"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-graph-up-arrow"></i>
+
+                Study
+            </a>
+
+
+            <!-- EXAMS ACTIVE -->
+
+            <a
+                href="#exams"
+                class="flex items-center gap-3 rounded-xl bg-violet-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-violet-200"
+            >
+                <i class="bi bi-file-earmark-check"></i>
+
+                Exams
+            </a>
+
+
+            <a
+                href="#calendar"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-calendar-week"></i>
+
+                Calendar
+            </a>
+
+
+            <a
+                href="#settings"
+                class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900"
+            >
+                <i class="bi bi-gear"></i>
+
+                Settings
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         MAIN EXAM CONTENT
+    ====================================================== -->
+
+    <main class="min-w-0 flex-1">
+
+        <!-- =================================================
+             PAGE HEADER
+        ================================================== -->
+
+        <section
+            class="mb-6 rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-lg shadow-slate-200/60 backdrop-blur-sm"
+        >
+
+            <div
+                class="flex flex-col justify-between gap-5 lg:flex-row lg:items-center"
+            >
+
+                <div>
+
+                    <div
+                        class="mb-2 flex items-center gap-2 text-sm font-semibold text-violet-600"
+                    >
+
+                        <i class="bi bi-file-earmark-check"></i>
+
+                        Exam Planner
+
+                    </div>
+
+
+                    <h1
+                        class="text-3xl font-bold text-slate-900"
+                    >
+                        Exams
+                    </h1>
+
+
+                    <p
+                        class="mt-2 max-w-2xl text-slate-500"
+                    >
+                        Schedule your upcoming exams and keep track of when they are ready for your Study session.
+                    </p>
+
+                </div>
+
+
+                <button
+                    id="scrollToCreateButton"
+                    type="button"
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500"
+                >
+
+                    <i class="bi bi-plus-lg"></i>
+
+                    Create Exam
+
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SMALL OVERVIEW
+        ================================================== -->
+
+        <section
+            class="mb-6 grid gap-4 sm:grid-cols-3"
+        >
+
+            <!-- TOTAL -->
+
+            <div
+                class="rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/40"
+            >
+
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600"
+                >
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+
+
+                <p
+                    class="mt-4 text-sm font-medium text-slate-500"
+                >
+                    Scheduled Exams
+                </p>
+
+
+                <p
+                    id="scheduledCount"
+                    class="mt-1 text-3xl font-bold text-slate-900"
+                >
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- READY -->
+
+            <div
+                class="rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/40"
+            >
+
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600"
+                >
+                    <i class="bi bi-check-circle"></i>
+                </div>
+
+
+                <p
+                    class="mt-4 text-sm font-medium text-slate-500"
+                >
+                    Ready for Study
+                </p>
+
+
+                <p
+                    id="readyCount"
+                    class="mt-1 text-3xl font-bold text-slate-900"
+                >
+                    0
+                </p>
+
+            </div>
+
+
+            <!-- NEXT -->
+
+            <div
+                class="rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/40"
+            >
+
+                <div
+                    class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600"
+                >
+                    <i class="bi bi-clock"></i>
+                </div>
+
+
+                <p
+                    class="mt-4 text-sm font-medium text-slate-500"
+                >
+                    Next Exam
+                </p>
+
+
+                <p
+                    id="nextExamText"
+                    class="mt-2 font-semibold text-slate-900"
+                >
+                    None
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             READY FOR STUDY
+        ================================================== -->
+
+        <section
+            id="readySection"
+            class="mb-6 hidden"
+        >
+
+            <div class="mb-4">
+
+                <h2
+                    class="text-xl font-bold text-slate-900"
+                >
+                    Ready for Study
+                </h2>
+
+
+                <p class="mt-1 text-sm text-slate-500">
+                    These exams have reached their scheduled date.
+                </p>
+
+            </div>
+
+
+            <div
+                id="readyContainer"
+                class="grid gap-4 xl:grid-cols-2"
+            ></div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CREATE + UPCOMING
+        ================================================== -->
+
+        <section
+            class="grid gap-6 xl:grid-cols-[390px_1fr]"
+        >
+
+            <!-- =================================================
+                 CREATE EXAM
+            ================================================== -->
+
+            <div
+                id="createExamSection"
+                class="h-fit rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-lg shadow-slate-200/50 backdrop-blur-sm"
+            >
+
+                <div class="mb-6">
+
+                    <div
+                        class="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-100 text-blue-600"
+                    >
+                        <i class="bi bi-calendar-plus"></i>
+                    </div>
+
+
+                    <h2
+                        class="mt-4 text-xl font-bold text-slate-900"
+                    >
+                        Create Exam
+                    </h2>
+
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Add an exam to your study schedule.
+                    </p>
+
+                </div>
+
+
+                <form
+                    id="examForm"
+                    class="space-y-5"
+                >
+
+                    <!-- SUBJECT -->
+
+                    <div>
+
+                        <label
+                            for="subject"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Subject
+                        </label>
+
+
+                        <select
+                            id="subject"
+                            required
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >
+
+                            <option value="">
+                                Select subject
+                            </option>
+
+                            <option value="Physics">
+                                Physics
+                            </option>
+
+                            <option value="Mathematics">
+                                Mathematics
+                            </option>
+
+                            <option value="Computer Science">
+                                Computer Science
+                            </option>
+
+                            <option value="History">
+                                History
+                            </option>
+
+                            <option value="English">
+                                English
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- TITLE -->
+
+                    <div>
+
+                        <label
+                            for="examTitle"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Exam name
+                        </label>
+
+
+                        <input
+                            id="examTitle"
+                            type="text"
+                            maxlength="100"
+                            placeholder="e.g. Mechanics Test"
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >
+
+
+                        <p
+                            class="mt-2 text-xs text-slate-400"
+                        >
+                            Optional — the subject name will be used if left empty.
+                        </p>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div>
+
+                        <label
+                            for="examDate"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Exam date
+                        </label>
+
+
+                        <input
+                            id="examDate"
+                            type="date"
+                            required
+                            class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >
+
+                    </div>
+
+
+                    <!-- DURATION -->
+
+                    <div>
+
+                        <label
+                            for="duration"
+                            class="mb-2 block text-sm font-semibold text-slate-700"
+                        >
+                            Planned duration
+                        </label>
+
+
+                        <select
+                            id="duration"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                        >
+
+                            <option value="10">
+                                10 minutes
+                            </option>
+
+                            <option value="15">
+                                15 minutes
+                            </option>
+
+                            <option
+                                value="20"
+                                selected
+                            >
+                                20 minutes
+                            </option>
+
+                            <option value="30">
+                                30 minutes
+                            </option>
+
+                            <option value="45">
+                                45 minutes
+                            </option>
+
+                            <option value="60">
+                                60 minutes
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CREATE -->
+
+                    <button
+                        type="submit"
+                        class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 focus:ring-4 focus:ring-blue-100"
+                    >
+
+                        <i class="bi bi-check-lg"></i>
+
+                        Create Exam
+
+                    </button>
+
+                </form>
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    id="successMessage"
+                    class="mt-4 hidden rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-medium text-emerald-700"
+                >
+                    <i class="bi bi-check-circle mr-1"></i>
+
+                    Exam created successfully.
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 UPCOMING EXAMS
+            ================================================== -->
+
+            <div>
+
+                <div
+                    class="mb-4 flex items-end justify-between gap-4"
+                >
+
+                    <div>
+
+                        <h2
+                            class="text-xl font-bold text-slate-900"
+                        >
+                            Upcoming Exams
+                        </h2>
+
+
+                        <p
+                            class="mt-1 text-sm text-slate-500"
+                        >
+                            Your planned exams.
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        id="upcomingCounter"
+                        class="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-500"
+                    >
+                        0 upcoming
+                    </span>
+
+                </div>
+
+
+                <!-- LIST -->
+
+                <div
+                    id="upcomingContainer"
+                    class="space-y-4"
+                ></div>
+
+
+                <!-- EMPTY -->
+
+                <div
+                    id="emptyState"
+                    class="rounded-2xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center"
+                >
+
+                    <div
+                        class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-100 text-violet-600"
+                    >
+                        <i class="bi bi-calendar-plus text-2xl"></i>
+                    </div>
+
+
+                    <h3
+                        class="mt-4 text-lg font-semibold text-slate-900"
+                    >
+                        No exams scheduled
+                    </h3>
+
+
+                    <p
+                        class="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500"
+                    >
+                        Create an exam and it will appear here until its scheduled date arrives.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         RIGHT SIDEBAR
+    ====================================================== -->
+
+    <aside
+        class="w-full max-w-[420px] shrink-0 rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm"
+    >
+
+        <!-- CALENDAR -->
+
+        <div class="w-full">
+
+            <!-- HEADER -->
+
+            <div
+                class="mb-6 flex items-center justify-between"
+            >
+
+                <button
+                    id="prevBtn"
+                    class="flex h-10 w-10 items-center justify-center rounded-full text-xl text-gray-600 transition hover:bg-gray-100"
+                >
+                    &#8249;
+                </button>
+
+
+                <h2
+                    id="monthYear"
+                    class="text-xl font-semibold text-gray-800"
+                ></h2>
+
+
+                <button
+                    id="nextBtn"
+                    class="flex h-10 w-10 items-center justify-center rounded-full text-xl text-gray-600 transition hover:bg-gray-100"
+                >
+                    &#8250;
+                </button>
+
+            </div>
+
+
+            <!-- WEEKDAYS -->
+
+            <div
+                class="mb-2 grid grid-cols-7 text-center"
+            >
+
+                <div class="text-sm font-medium text-gray-400">
+                    Sun
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Mon
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Tue
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Wed
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Thu
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Fri
+                </div>
+
+                <div class="text-sm font-medium text-gray-400">
+                    Sat
+                </div>
+
+            </div>
+
+
+            <!-- CALENDAR DAYS -->
+
+            <div
+                id="calendar"
+                class="grid grid-cols-7 gap-1"
+            ></div>
+
+
+            <!-- SELECTED DATE -->
+
+            <div
+                class="mt-6 rounded-xl bg-gray-50 p-4 text-center"
+            >
+
+                <p class="text-sm text-gray-500">
+                    Selected date
+                </p>
+
+                <p
+                    id="selectedDate"
+                    class="mt-1 font-semibold text-gray-800"
+                >
+                    None
+                </p>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+const dashboardLink =
+    document.getElementById(
+        "dashboardLink"
+    );
+
+
+dashboardLink.addEventListener(
+    "click",
+    function(event) {
+
+        event.preventDefault();
+
+        /*
+            href ostane #dashboard,
+            JS pa nas pošlje nazaj na index.html.
+        */
+
+        window.location.href =
+            "index.html";
+
+    }
+);
+
+
+
+/* =========================================================
+   STORAGE
+========================================================= */
+
+let exams =
+    JSON.parse(
+        localStorage.getItem(
+            "studygraph_exams"
+        )
+    ) || [];
+
+
+
+function saveExams() {
+
+    localStorage.setItem(
+        "studygraph_exams",
+        JSON.stringify(
+            exams
+        )
+    );
+
+}
+
+
+
+/* =========================================================
+   DATE HELPERS
+========================================================= */
+
+function getTodayString() {
+
+    const date =
+        new Date();
+
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+
+function dateToString(date) {
+
+    const year =
+        date.getFullYear();
+
+
+    const month =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${year}-${month}-${day}`;
+
+}
+
+
+
+function parseLocalDate(
+    dateString
+) {
+
+    const parts =
+        dateString.split("-");
+
+
+    return new Date(
+        Number(
+            parts[0]
+        ),
+
+        Number(
+            parts[1]
+        ) - 1,
+
+        Number(
+            parts[2]
+        )
+    );
+
+}
+
+
+
+function formatDate(
+    dateString
+) {
+
+    return parseLocalDate(
+        dateString
+    ).toLocaleDateString(
+        "en-GB",
+        {
+            day:
+                "numeric",
+
+            month:
+                "long",
+
+            year:
+                "numeric"
+        }
+    );
+
+}
+
+
+
+function daysUntil(
+    dateString
+) {
+
+    const today =
+        parseLocalDate(
+            getTodayString()
+        );
+
+
+    const target =
+        parseLocalDate(
+            dateString
+        );
+
+
+    return Math.ceil(
+        (
+            target -
+            today
+        ) /
+        86400000
+    );
+
+}
+
+
+
+/* =========================================================
+   SUBJECT COLOR
+========================================================= */
+
+function getSubjectClasses(
+    subject
+) {
+
+    const subjectClasses = {
+
+        Physics:
+            "bg-violet-100 text-violet-700",
+
+        Mathematics:
+            "bg-blue-100 text-blue-700",
+
+        "Computer Science":
+            "bg-cyan-100 text-cyan-700",
+
+        History:
+            "bg-rose-100 text-rose-700",
+
+        English:
+            "bg-emerald-100 text-emerald-700"
+
+    };
+
+
+    return (
+        subjectClasses[
+            subject
+        ] ||
+        "bg-slate-100 text-slate-700"
+    );
+
+}
+
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+const examDateInput =
+    document.getElementById(
+        "examDate"
+    );
+
+
+examDateInput.min =
+    getTodayString();
+
+
+
+const examForm =
+    document.getElementById(
+        "examForm"
+    );
+
+
+examForm.addEventListener(
+    "submit",
+    function(event) {
+
+        event.preventDefault();
+
+
+        const subject =
+            document.getElementById(
+                "subject"
+            ).value;
+
+
+        const titleInput =
+            document.getElementById(
+                "examTitle"
+            ).value.trim();
+
+
+        const examDate =
+            document.getElementById(
+                "examDate"
+            ).value;
+
+
+        const duration =
+            Number(
+                document.getElementById(
+                    "duration"
+                ).value
+            );
+
+
+        if (
+            !subject ||
+            !examDate
+        ) {
+
+            return;
+
+        }
+
+
+        if (
+            examDate <
+            getTodayString()
+        ) {
+
+            alert(
+                "You cannot create an exam in the past."
+            );
+
+            return;
+
+        }
+
+
+        const exam = {
+
+            id:
+                Date.now(),
+
+            subject:
+                subject,
+
+            title:
+                titleInput ||
+                `${subject} Exam`,
+
+            date:
+                examDate,
+
+            duration:
+                duration,
+
+            createdAt:
+                Date.now()
+
+        };
+
+
+        exams.push(
+            exam
+        );
+
+
+        saveExams();
+
+
+        examForm.reset();
+
+
+        document.getElementById(
+            "duration"
+        ).value =
+            "20";
+
+
+        examDateInput.min =
+            getTodayString();
+
+
+        showSuccess();
+
+
+        renderEverything();
+
+    }
+);
+
+
+
+/* =========================================================
+   SUCCESS MESSAGE
+========================================================= */
+
+function showSuccess() {
+
+    const success =
+        document.getElementById(
+            "successMessage"
+        );
+
+
+    success.classList.remove(
+        "hidden"
+    );
+
+
+    setTimeout(
+        function() {
+
+            success.classList.add(
+                "hidden"
+            );
+
+        },
+        2500
+    );
+
+}
+
+
+
+/* =========================================================
+   DELETE EXAM
+========================================================= */
+
+function deleteExam(
+    examId
+) {
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to delete this exam?"
+        );
+
+
+    if (
+        !confirmed
+    ) {
+
+        return;
+
+    }
+
+
+    exams =
+        exams.filter(
+            function(exam) {
+
+                return (
+                    exam.id !==
+                    examId
+                );
+
+            }
+        );
+
+
+    saveExams();
+
+
+    renderEverything();
+
+}
+
+
+
+/* =========================================================
+   STATS
+========================================================= */
+
+function renderStatistics() {
+
+    const today =
+        getTodayString();
+
+
+    const ready =
+        exams.filter(
+            function(exam) {
+
+                return (
+                    exam.date <=
+                    today
+                );
+
+            }
+        );
+
+
+    const upcoming =
+        exams.filter(
+            function(exam) {
+
+                return (
+                    exam.date >
+                    today
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "scheduledCount"
+    ).textContent =
+        exams.length;
+
+
+    document.getElementById(
+        "readyCount"
+    ).textContent =
+        ready.length;
+
+
+    const nextExamText =
+        document.getElementById(
+            "nextExamText"
+        );
+
+
+    if (
+        upcoming.length ===
+        0
+    ) {
+
+        nextExamText.textContent =
+            "None";
+
+        return;
+
+    }
+
+
+    upcoming.sort(
+        function(
+            first,
+            second
+        ) {
+
+            return (
+                first.date.localeCompare(
+                    second.date
+                )
+            );
+
+        }
+    );
+
+
+    const nextExam =
+        upcoming[0];
+
+
+    const days =
+        daysUntil(
+            nextExam.date
+        );
+
+
+    nextExamText.textContent =
+        `${days} ${days === 1 ? "day" : "days"}`;
+
+}
+
+
+
+/* =========================================================
+   UPCOMING EXAMS
+========================================================= */
+
+function renderUpcoming() {
+
+    const today =
+        getTodayString();
+
+
+    const upcoming =
+        exams
+            .filter(
+                function(exam) {
+
+                    return (
+                        exam.date >
+                        today
+                    );
+
+                }
+            )
+            .sort(
+                function(
+                    first,
+                    second
+                ) {
+
+                    return (
+                        first.date.localeCompare(
+                            second.date
+                        )
+                    );
+
+                }
+            );
+
+
+    const container =
+        document.getElementById(
+            "upcomingContainer"
+        );
+
+
+    const emptyState =
+        document.getElementById(
+            "emptyState"
+        );
+
+
+    const counter =
+        document.getElementById(
+            "upcomingCounter"
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    counter.textContent =
+        `${upcoming.length} upcoming`;
+
+
+    if (
+        upcoming.length ===
+        0
+    ) {
+
+        emptyState.classList.remove(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    emptyState.classList.add(
+        "hidden"
+    );
+
+
+    upcoming.forEach(
+        function(exam) {
+
+            const days =
+                daysUntil(
+                    exam.date
+                );
+
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/40 backdrop-blur-sm";
+
+
+            card.innerHTML = `
+
+                <div
+                    class="
+                        flex
+                        flex-col
+                        justify-between
+                        gap-5
+                        sm:flex-row
+                        sm:items-center
+                    "
+                >
+
+                    <div
+                        class="
+                            flex
+                            min-w-0
+                            items-start
+                            gap-4
+                        "
+                    >
+
+                        <div
+                            class="
+                                flex
+                                h-12
+                                w-12
+                                shrink-0
+                                items-center
+                                justify-center
+                                rounded-xl
+                                ${getSubjectClasses(
+                                    exam.subject
+                                )}
+                            "
+                        >
+                            <i
+                                class="
+                                    bi
+                                    bi-file-earmark-text
+                                    text-lg
+                                "
+                            ></i>
+                        </div>
+
+
+                        <div
+                            class="
+                                min-w-0
+                            "
+                        >
+
+                            <span
+                                class="
+                                    inline-flex
+                                    rounded-full
+                                    px-2.5
+                                    py-1
+                                    text-xs
+                                    font-semibold
+                                    ${getSubjectClasses(
+                                        exam.subject
+                                    )}
+                                "
+                            >
+                                ${exam.subject}
+                            </span>
+
+
+                            <h3
+                                class="
+                                    mt-2
+                                    text-lg
+                                    font-bold
+                                    text-slate-900
+                                "
+                            >
+                                ${exam.title}
+                            </h3>
+
+
+                            <div
+                                class="
+                                    mt-2
+                                    flex
+                                    flex-wrap
+                                    gap-x-4
+                                    gap-y-1
+                                    text-sm
+                                    text-slate-500
+                                "
+                            >
+
+                                <span>
+                                    <i
+                                        class="
+                                            bi
+                                            bi-calendar3
+                                            mr-1
+                                        "
+                                    ></i>
+
+                                    ${formatDate(
+                                        exam.date
+                                    )}
+                                </span>
+
+
+                                <span>
+                                    <i
+                                        class="
+                                            bi
+                                            bi-clock
+                                            mr-1
+                                        "
+                                    ></i>
+
+                                    ${exam.duration}
+                                    min
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="
+                            flex
+                            shrink-0
+                            items-center
+                            gap-4
+                        "
+                    >
+
+                        <div
+                            class="
+                                min-w-16
+                                text-center
+                            "
+                        >
+
+                            <p
+                                class="
+                                    text-2xl
+                                    font-bold
+                                    text-blue-600
+                                "
+                            >
+                                ${days}
+                            </p>
+
+
+                            <p
+                                class="
+                                    text-xs
+                                    text-slate-400
+                                "
+                            >
+                                ${days === 1
+                                    ? "day left"
+                                    : "days left"}
+                            </p>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            onclick="deleteExam(${exam.id})"
+                            class="
+                                flex
+                                h-10
+                                w-10
+                                items-center
+                                justify-center
+                                rounded-xl
+                                border
+                                border-slate-200
+                                text-slate-400
+                                transition
+                                hover:border-rose-200
+                                hover:bg-rose-50
+                                hover:text-rose-600
+                            "
+                            title="Delete exam"
+                        >
+                            <i
+                                class="
+                                    bi
+                                    bi-trash
+                                "
+                            ></i>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   READY FOR STUDY
+========================================================= */
+
+function renderReady() {
+
+    const today =
+        getTodayString();
+
+
+    const ready =
+        exams
+            .filter(
+                function(exam) {
+
+                    return (
+                        exam.date <=
+                        today
+                    );
+
+                }
+            )
+            .sort(
+                function(
+                    first,
+                    second
+                ) {
+
+                    return (
+                        first.date.localeCompare(
+                            second.date
+                        )
+                    );
+
+                }
+            );
+
+
+    const section =
+        document.getElementById(
+            "readySection"
+        );
+
+
+    const container =
+        document.getElementById(
+            "readyContainer"
+        );
+
+
+    container.innerHTML =
+        "";
+
+
+    if (
+        ready.length ===
+        0
+    ) {
+
+        section.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    section.classList.remove(
+        "hidden"
+    );
+
+
+    ready.forEach(
+        function(exam) {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "rounded-2xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-6 shadow-lg shadow-emerald-100";
+
+
+            card.innerHTML = `
+
+                <div
+                    class="
+                        flex
+                        items-start
+                        justify-between
+                        gap-4
+                    "
+                >
+
+                    <div>
+
+                        <span
+                            class="
+                                rounded-full
+                                bg-emerald-100
+                                px-3
+                                py-1
+                                text-xs
+                                font-bold
+                                text-emerald-700
+                            "
+                        >
+                            READY FOR STUDY
+                        </span>
+
+
+                        <h3
+                            class="
+                                mt-4
+                                text-xl
+                                font-bold
+                                text-slate-900
+                            "
+                        >
+                            ${exam.title}
+                        </h3>
+
+
+                        <p
+                            class="
+                                mt-2
+                                text-sm
+                                text-slate-500
+                            "
+                        >
+                            ${exam.subject}
+                            ·
+                            ${formatDate(
+                                exam.date
+                            )}
+                        </p>
+
+
+                        <div
+                            class="
+                                mt-5
+                                rounded-xl
+                                bg-white/70
+                                p-4
+                                text-sm
+                                text-slate-600
+                            "
+                        >
+
+                            <i
+                                class="
+                                    bi
+                                    bi-info-circle
+                                    mr-1
+                                    text-emerald-600
+                                "
+                            ></i>
+
+                            This exam is ready and will be connected to the Study page later.
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        onclick="deleteExam(${exam.id})"
+                        class="
+                            flex
+                            h-10
+                            w-10
+                            shrink-0
+                            items-center
+                            justify-center
+                            rounded-xl
+                            border
+                            border-emerald-200
+                            bg-white
+                            text-slate-400
+                            transition
+                            hover:border-rose-200
+                            hover:bg-rose-50
+                            hover:text-rose-600
+                        "
+                    >
+                        <i
+                            class="
+                                bi
+                                bi-trash
+                            "
+                        ></i>
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   NEXT EXAM RIGHT SIDEBAR
+========================================================= */
+
+function renderNextExam() {
+
+    const today =
+        getTodayString();
+
+
+    const upcoming =
+        exams
+            .filter(
+                function(exam) {
+
+                    return (
+                        exam.date >
+                        today
+                    );
+
+                }
+            )
+            .sort(
+                function(
+                    first,
+                    second
+                ) {
+
+                    return (
+                        first.date.localeCompare(
+                            second.date
+                        )
+                    );
+
+                }
+            );
+
+
+    const container =
+        document.getElementById(
+            "nextExamCard"
+        );
+
+
+    if (
+        upcoming.length ===
+        0
+    ) {
+
+        container.innerHTML = `
+
+            <div
+                class="
+                    rounded-xl
+                    bg-slate-50
+                    p-5
+                    text-center
+                "
+            >
+
+                <i
+                    class="
+                        bi
+                        bi-calendar-x
+                        text-2xl
+                        text-slate-300
+                    "
+                ></i>
+
+
+                <p
+                    class="
+                        mt-2
+                        text-sm
+                        font-medium
+                        text-slate-500
+                    "
+                >
+                    No upcoming exam
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const exam =
+        upcoming[0];
+
+
+    const days =
+        daysUntil(
+            exam.date
+        );
+
+
+    container.innerHTML = `
+
+        <div
+            class="
+                rounded-xl
+                border
+                border-blue-100
+                bg-blue-50
+                p-5
+            "
+        >
+
+            <span
+                class="
+                    rounded-full
+                    px-2.5
+                    py-1
+                    text-xs
+                    font-semibold
+                    ${getSubjectClasses(
+                        exam.subject
+                    )}
+                "
+            >
+                ${exam.subject}
+            </span>
+
+
+            <h3
+                class="
+                    mt-3
+                    font-bold
+                    text-slate-900
+                "
+            >
+                ${exam.title}
+            </h3>
+
+
+            <p
+                class="
+                    mt-2
+                    text-sm
+                    text-slate-500
+                "
+            >
+                ${formatDate(
+                    exam.date
+                )}
+            </p>
+
+
+            <div
+                class="
+                    mt-4
+                    flex
+                    items-end
+                    justify-between
+                "
+            >
+
+                <p
+                    class="
+                        text-sm
+                        text-slate-500
+                    "
+                >
+                    ${exam.duration}
+                    minutes
+                </p>
+
+
+                <div
+                    class="
+                        text-right
+                    "
+                >
+
+                    <p
+                        class="
+                            text-2xl
+                            font-bold
+                            text-blue-600
+                        "
+                    >
+                        ${days}
+                    </p>
+
+                    <p
+                        class="
+                            text-xs
+                            text-slate-400
+                        "
+                    >
+                        ${days === 1
+                            ? "day left"
+                            : "days left"}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   SCROLL TO FORM
+========================================================= */
+
+document
+    .getElementById(
+        "scrollToCreateButton"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            document
+                .getElementById(
+                    "createExamSection"
+                )
+                .scrollIntoView({
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "center"
+                });
+
+        }
+    );
+
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function renderEverything() {
+
+    renderStatistics();
+
+    renderUpcoming();
+
+    renderReady();
+
+    renderNextExam();
+
+}
+
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("monthYear");
+    const selectedDate = document.getElementById("selectedDate");
+
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    let currentDate = new Date();
+    let selected = null;
+
+    function renderCalendar() {
+        calendar.innerHTML = "";
+
+        const year = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        monthYear.textContent = new Date(year, month).toLocaleDateString(
+            "en-US",
+            {
+                month: "long",
+                year: "numeric"
+            }
+        );
+
+        // Empty days before the first day
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement("div");
+            empty.className = "h-10";
+            calendar.appendChild(empty);
+        }
+
+        // Calendar days
+        for (let day = 1; day <= daysInMonth; day++) {
+            const button = document.createElement("button");
+
+            const date = new Date(year, month, day);
+
+            const isToday =
+                date.toDateString() === new Date().toDateString();
+
+            const isSelected =
+                selected &&
+                date.toDateString() === selected.toDateString();
+
+            button.textContent = day;
+
+            button.className = `
+          h-10 w-10 mx-auto rounded-full
+          flex items-center justify-center
+          text-sm transition
+          hover:bg-blue-100 hover:text-blue-600
+          ${isToday ? "ring-2 ring-blue-500" : ""}
+          ${isSelected ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white" : "text-gray-700"}
+        `;
+
+            button.addEventListener("click", () => {
+                selected = date;
+
+                
+
+                renderCalendar();
+            });
+
+            calendar.appendChild(button);
+        }
+    }
+
+    prevBtn.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    });
+
+    nextBtn.addEventListener("click", () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    });
+
+    renderCalendar();
+
+
+
+renderEverything();
+
+</script>
+
+</body>
+
+</html>
