@@ -21,7 +21,7 @@ module.exports.getAdminById = async function(id) {
 };
 
 // Registracija
-module.exports.createAdmin = async function(username, passwordHash) {
+module.exports.createUser = async function(username, passwordHash) {
     const insertQuery = `INSERT INTO users (username, password_hash)
             VALUES (?, ?)`;
     const [result] = await client.query(insertQuery, [username, passwordHash]);

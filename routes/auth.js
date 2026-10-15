@@ -26,12 +26,8 @@ router.post('/register', async (req, res) => {
     }
 
     try {
-        const checkAdmins = await dbUsers.numberOfAdmins();
-        if (checkAdmins > 0) {
-            return res.status(403).json({ success: false, error: 'Admin že obstaja!' });
-        }
         const passwordHash = await hashPassword(password);
-        await dbUsers.createAdmin(username, passwordHash);
+        await dbUsers.createUser(username, passwordHash);
         res.json({ success: true });
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
@@ -97,7 +93,6 @@ router.post('/login', async (req, res) => {
 
         req.session.userId = user.id;
         req.session.username = user.username;
-        req.session.id_employee = null;
 
         return res.json({ success: true });
     } catch (err) {

@@ -287,7 +287,7 @@
 
             <!-- FORM -->
 
-            <form class="mt-8 space-y-5">
+            <form class="mt-8 space-y-5" id="login">
 
                 <!-- EMAIL -->
 
@@ -311,6 +311,7 @@
                         <input
                             id="email"
                             type="email"
+                            name="email"
                             placeholder="student@example.com"
                             class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                         >
@@ -324,7 +325,7 @@
 
                 <div>
 
-                    <div
+                    <!-- <div
                         class="mb-2 flex items-center justify-between gap-4"
                     >
 
@@ -343,7 +344,7 @@
                             Forgot password?
                         </a>
 
-                    </div>
+                    </div> -->
 
 
                     <div class="relative">
@@ -356,6 +357,7 @@
                         <input
                             id="password"
                             type="password"
+                            name="password"
                             placeholder="Enter your password"
                             class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                         >
@@ -367,7 +369,7 @@
 
                 <!-- REMEMBER -->
 
-                <div
+                <!-- <div
                     class="flex items-center justify-between gap-4"
                 >
 
@@ -386,13 +388,15 @@
 
                     </label>
 
-                </div>
+                </div> -->
 
+                <!-- ERROR MESSAGE -->
+                <div id="admin-error" class="text-red-500 text-sm"></div>
 
                 <!-- LOGIN BUTTON -->
 
                 <button
-                    type="button"
+                    type="submit"
                     class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500"
                 >
                     Log in
@@ -459,5 +463,8 @@
 </div>
 
 </body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/auth.js"></script>
 
 </html>
