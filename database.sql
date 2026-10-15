@@ -8,18 +8,14 @@ USE studygraph;
 
 CREATE TABLE users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-
-    name VARCHAR(100) NOT NULL,
-
-    email VARCHAR(255) NOT NULL UNIQUE,
-
+    username VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
 
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    failed_attempts INT NOT NULL DEFAULT 0,
+    locked_until DATETIME DEFAULT NULL,
+    consecutive_failed_attempts INT NOT NULL DEFAULT 0,
 
-    updated_at TIMESTAMP
-        DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
 
