@@ -6,5 +6,27 @@
     "express": "^5.3.0",
     "express-session": "^1.19.0",
     "mysql2": "^3.24.5"
+  },
+  "name": "maturitetna_naloga",
+  "version": "1.0.0",
+  "description": "AI Study Notebook je spletna aplikacija za organizacijo šolskih zapiskov, učenje in pripravo na ocenjevanja s pomočjo umetne inteligence.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fierce06/Maturitetna_naloga.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Fierce06/Maturitetna_naloga/issues"
+  },
+  "homepage": "https://github.com/Fierce06/Maturitetna_naloga#readme",
+  "allowScripts": {
+    "bcrypt@6.0.0": true
   }
 }

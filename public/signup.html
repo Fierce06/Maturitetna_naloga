@@ -279,39 +279,7 @@
 
             <!-- FORM -->
 
-            <form class="mt-8 space-y-5">
-
-                <!-- NAME -->
-
-                <div>
-
-                    <label
-                        for="name"
-                        class="mb-2 block text-sm font-semibold text-slate-700"
-                    >
-                        Full name
-                    </label>
-
-
-                    <div class="relative">
-
-                        <i
-                            class="bi bi-person absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-                        ></i>
-
-
-                        <input
-                            id="name"
-                            type="text"
-                            placeholder="Enter your full name"
-                            class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-                        >
-
-                    </div>
-
-                </div>
-
-
+            <form class="mt-8 space-y-5" id="register">
                 <!-- EMAIL -->
 
                 <div>
@@ -333,6 +301,7 @@
 
                         <input
                             id="email"
+                            name="email"
                             type="email"
                             placeholder="student@example.com"
                             class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -365,6 +334,7 @@
                         <input
                             id="password"
                             type="password"
+                            name="password"
                             placeholder="Create a password"
                             class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                         >
@@ -373,7 +343,7 @@
 
 
                     <p class="mt-2 text-xs text-slate-400">
-                        Use at least 8 characters.
+                        Use at least 10 characters.
                     </p>
 
                 </div>
@@ -401,6 +371,7 @@
                         <input
                             id="confirmPassword"
                             type="password"
+                            name="passwordConfirm"
                             placeholder="Repeat your password"
                             class="w-full rounded-xl border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
                         >
@@ -410,7 +381,7 @@
                 </div>
 
 
-                <!-- CHECKBOX -->
+                <!-- CHECKBOX
 
                 <label
                     class="flex cursor-pointer items-start gap-3 rounded-xl bg-slate-50 p-4"
@@ -428,13 +399,17 @@
                         I agree to the Terms of Use and Privacy Policy.
                     </span>
 
-                </label>
+                </label> -->
 
+
+                <!-- ERROR MESSAGE -->
+                <div id="admin-error" class="text-red-500 text-sm"></div>
 
                 <!-- BUTTON -->
 
                 <button
-                    type="button"
+                    type="submit"
+
                     class="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3.5 text-sm font-semibold text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500"
                 >
                     Create account
@@ -474,5 +449,7 @@
 </div>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/auth.js"></script>
 
 </html>
