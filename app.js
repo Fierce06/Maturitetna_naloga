@@ -68,6 +68,7 @@ app.get('/calendar', requireAuth, (req, res) => {
 
 // API za prijavo in registracijo
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/subjects', require('./routes/subjects'));
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);

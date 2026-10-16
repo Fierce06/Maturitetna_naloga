@@ -19,7 +19,6 @@ function logout() {
 }
 
 $(document).ready(function () {
-    // checkAdmin();
 
     // Registracija uporabnika
     $('#register').on('submit', function (e) {
