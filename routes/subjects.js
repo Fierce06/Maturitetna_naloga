@@ -14,6 +14,17 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
+router.get('/subjectIds', requireAuth, async (req, res) => {
+    const user_id = req.session.userId; 
+    try {
+        const subjectIds = await dbSubjects.getAllSubjectIds(user_id);
+        res.json({ success: true, subjectIds });
+    } catch (error) {
+        console.error('Error fetching subjects:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 router.post('/', requireAuth, async (req, res) => {
     const { name, description, color } = req.body;
     const user_id = req.session.userId; 

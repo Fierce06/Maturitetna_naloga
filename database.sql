@@ -229,6 +229,32 @@ CREATE TABLE quiz_attempts (
 
 ) ENGINE=InnoDB;
 
+CREATE TABLE exams (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    subject_id INT UNSIGNED NOT NULL,
+
+    user_id INT UNSIGNED NOT NULL,
+
+    title VARCHAR(255) NOT NULL,
+
+    date DATE NOT NULL,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_exam_subject
+        FOREIGN KEY (subject_id)
+        REFERENCES subjects(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_exam_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+)
+
 
 CREATE INDEX idx_subjects_user
 ON subjects(user_id);

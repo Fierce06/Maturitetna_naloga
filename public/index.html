@@ -89,28 +89,8 @@
                     </div>
 
 
-                    <ul class="mt-4 flex col-span-3 gap-3 overflow-x-auto pb-2">
-                        <li
-                            class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
-                            <div class="flex items-center ">
-                                <div class="bg-blue-500 text-white p-2 px-3 rounded-lg">
-                                    <i class="bi bi-calculator"></i>
-                                </div>
-                                <span class="font-medium text-gray-800 ml-4">Mathematics</span>
-                            </div>
-
-                            <div class="my-4">
-                                <p class="text-sm text-gray-500">153 notes</p>
-                            </div>
-
-                            <div class="mt-4">
-                                <div class="h-2 w-full rounded-full bg-gray-200">
-                                    <div class="h-2 rounded-full bg-blue-500" style="width: 70%;"></div>
-                                </div>
-                                <p class="text-sm text-gray-500 mt-2">70% completed</p>
-                            </div>
-                        </li>
-
+                    <ul class="mt-4 flex col-span-3 gap-3 overflow-x-auto pb-2" id="subjectList">
+                       
                     </ul>
 
                 </div>
@@ -157,7 +137,7 @@
 
 
         <aside
-            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
             <!-- Calendar on top and exams on bottom -->
             <div class="w-full max-w-md bg-white rounded-2xl">
 
@@ -212,6 +192,58 @@
     </div>
 </body>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    function allSubjects() {
+    $.ajax({
+        url: '/api/subjects/',
+        method: 'GET',
+
+        success: function (odgovor) {
+            if (odgovor.success == false) {
+            }
+
+            const subjectList = $('#subjectList');
+            subjectList.empty();
+
+            odgovor.subjects.forEach(subject => {
+                const subjectItem = $(`
+                    <li class="max-w-[200px] min-w-[180px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                        <div class="flex items-center">
+                            <div style="background-color: ${subject.color}"
+                                class="p-2 px-3 rounded-lg text-white">
+                                <i class="bi ${subject.icon || 'bi-calculator'}"></i>
+                            </div>
+                            <span class="ml-4 font-medium text-gray-800">${subject.name}</span>
+                        </div>
+
+                        <div class="my-4">
+                            <p class="text-sm text-gray-500">153 notes</p>
+                        </div>
+
+                        <div class="mt-4">
+                            <div class="h-2 w-full rounded-full bg-gray-200">
+                                <div class="h-2 rounded-full"
+                                    style="width: 70%; background-color: ${subject.color}"></div>
+                            </div>
+                            <p class="mt-2 text-sm text-gray-500">70% completed</p>
+                        </div>
+                    </li>
+                `);
+
+                subjectList.append(subjectItem);
+            });
+
+        },
+        error: function (xhr) {
+            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
+
+        }
+    });
+}
+
+allSubjects();
+</script>
 <script src="js/calendar.js"></script>
 
 </html>

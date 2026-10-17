@@ -105,7 +105,7 @@ function allSubjects() {
                         </div>
 
                         <div class="my-4">
-                            <p class="text-sm text-gray-500">153 notes</p>
+                            <p class="text-sm text-gray-500">${subject.description}</p>
                         </div>
 
                         <div class="mt-4">

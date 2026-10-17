@@ -13,3 +13,9 @@ module.exports.insertNewSubject = async function(user_id, subjectName, subjectDe
     const [rows] = await client.query(selectQuery, [result.insertId]);
     return rows[0];
 }
+
+module.exports.getAllSubjectIds = async function(user_id) {
+    const query = 'SELECT id, name FROM subjects WHERE user_id = ?';
+    const [rows] = await client.query(query, [user_id]);
+    return rows.map(row => row);
+}
