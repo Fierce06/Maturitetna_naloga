@@ -79,3 +79,37 @@ nextBtn.addEventListener("click", () => {
 });
 
 renderCalendar();
+
+function allExams() {
+    $.ajax({
+        url: '/api/exams/',
+        method: 'GET',
+
+        success: function (odgovor) {
+            if (odgovor.success == false) {
+            }
+
+            examsList = $('#upcomingExams');
+            examsList.empty();  
+
+            odgovor.exams.forEach(exam => {
+                const examElement = $(`
+                    <div class="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md">
+                        <div class="flex items-center justify-between">
+                            <h1 class="text-md font-semibold text-slate-900">${exam.title}</h1>
+                            <span class="text-sm text-slate-500">${new Date(exam.date).toLocaleDateString()}</span>
+                        </div>
+                    </div>
+                `);
+                examsList.append(examElement);
+            })
+        },
+        error: function (xhr) {
+            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
+
+        }
+    });
+}
+$(document).ready(function () {
+allExams();
+})

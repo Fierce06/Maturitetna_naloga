@@ -49,7 +49,6 @@ function allExams() {
                     </div>
                 `);
                 examsList.append(examElement);
-                    
             })
 
             $('#scheduledCount').html(`${odgovor.exams.length}`);
