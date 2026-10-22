@@ -80,7 +80,7 @@
             <!-- Other content -->
 
             <div
-                class="mt-auto w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+                class="mt-0 w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm xl:flex-1 xl:min-h-0 xl:overflow-y-auto">
 
                 <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
                     <div class="flex items-center justify-between w-full">
@@ -95,15 +95,82 @@
 
                 </div>
 
+                <!-- Recommended Topics -->
                 <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
-                    <div class="flex items-center justify-between w-full">
+                    <div class="flex flex-wrap items-center justify-between gap-3 w-full">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                                <i class="bi bi-stars"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-800">Recommended Topics</h2>
+                                <p class="text-xs text-slate-500">Topics you can explore next</p>
+                            </div>
+                        </div>
+
+                        <a href="/study" class="text-sm text-blue-600 hover:underline">View All</a>
+                    </div>
+
+                    <div class="mt-4 flex gap-3 overflow-x-auto pb-2" id="recommendedTopics">
+                        <a href="/study" class="group min-w-[230px] flex-1 rounded-xl border border-violet-100 bg-violet-50/80 p-4 transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                                    <i class="bi bi-bezier2"></i>
+                                </div>
+                                <i class="bi bi-chevron-right text-violet-400 transition group-hover:translate-x-0.5"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Projectile Motion</h3>
+                            <p class="mt-1 text-xs font-medium text-violet-600">Physics</p>
+                            <p class="mt-2 text-sm leading-5 text-slate-600">Explore motion in two dimensions and projectile trajectories.</p>
+                        </a>
+
+                        <a href="/study" class="group min-w-[230px] flex-1 rounded-xl border border-blue-100 bg-blue-50/80 p-4 transition hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                                    <i class="bi bi-calculator"></i>
+                                </div>
+                                <i class="bi bi-chevron-right text-blue-400 transition group-hover:translate-x-0.5"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Integrals and Applications</h3>
+                            <p class="mt-1 text-xs font-medium text-blue-600">Mathematics</p>
+                            <p class="mt-2 text-sm leading-5 text-slate-600">Review definite integrals and their real-world applications.</p>
+                        </a>
+
+                        <a href="/study" class="group min-w-[230px] flex-1 rounded-xl border border-emerald-100 bg-emerald-50/80 p-4 transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                                    <i class="bi bi-diagram-3"></i>
+                                </div>
+                                <i class="bi bi-chevron-right text-emerald-400 transition group-hover:translate-x-0.5"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Binary Search Trees</h3>
+                            <p class="mt-1 text-xs font-medium text-emerald-600">Computer Science</p>
+                            <p class="mt-2 text-sm leading-5 text-slate-600">Understand tree structures and how search algorithms use them.</p>
+                        </a>
+
+                        <a href="/study" class="group min-w-[230px] flex-1 rounded-xl border border-orange-100 bg-orange-50/80 p-4 transition hover:-translate-y-0.5 hover:border-orange-200 hover:shadow-md">
+                            <div class="flex items-start justify-between gap-3">
+                                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                </div>
+                                <i class="bi bi-chevron-right text-orange-400 transition group-hover:translate-x-0.5"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Persuasive Writing</h3>
+                            <p class="mt-1 text-xs font-medium text-orange-600">English</p>
+                            <p class="mt-2 text-sm leading-5 text-slate-600">Practice building clear arguments with strong supporting evidence.</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Continue in Notebook -->
+                <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
+                    <div class="flex flex-wrap items-center justify-between gap-3 w-full">
                         <h2 class="text-lg font-semibold text-gray-800 flex items-center">
                             <div class="bg-blue-500 text-white p-0.5 px-2 rounded-full mr-4">
-                                <i class="bi bi-caret-right-fill"></i>
-                            </div> Continue Learning
+                                <i class="bi bi-journal-text"></i>
+                            </div> Continue in Notebook
                         </h2>
-                        <a href="#" class="text-blue-600 hover:underline">Open notebook <i
-                                class="bi bi-arrow-right"></i></a>
+                        <a href="/notebook" class="text-sm text-blue-600 hover:underline">Open notebook <i class="bi bi-arrow-right"></i></a>
                     </div>
 
                     <div class="mt-4 flex items-center gap-4">
@@ -116,18 +183,73 @@
                         <div class="text-left ml-4">
                             <p class="text-gray-700 text-sm">Physics</p>
                             <h1 class="text-gray-900 font-semibold text-3xl mt-2">
-                                Newton's Laws of Motion
+                                Newton's Laws - Class Notes
                             </h1>
                             <p class="text-gray-700 text-lg mt-2">
-                                Learn about the fundamental principles of motion
-                                and how they govern the behavior of objects in our universe.
+                                Continue writing your notes about Newton's laws of motion, examples, diagrams and key formulas.
                             </p>
+                            <p class="mt-2 text-sm text-slate-400">Last edited recently</p>
 
-                            <button class="mt-8 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
-                                Continue Learning
+                            <a href="/notebook" class="mt-8 inline-flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+                                Open Notebook
                                 <i class="bi bi-arrow-right ml-2"></i>
-                            </button>
+                            </a>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Practice -->
+                <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
+                    <div class="flex flex-wrap items-center justify-between gap-3 w-full">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                                <i class="bi bi-bar-chart"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-semibold text-gray-800">Quiz Practice</h2>
+                                <p class="text-xs text-slate-500">Test your knowledge with a quick quiz</p>
+                            </div>
+                        </div>
+
+                        <a href="/quiz.html" class="text-sm text-blue-600 hover:underline">View All</a>
+                    </div>
+
+                    <div class="mt-4 flex gap-3 overflow-x-auto pb-2" id="quizPractice">
+                        <a href="/quiz.html" class="group min-w-[220px] rounded-xl border border-violet-100 bg-violet-50/80 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600">
+                                <i class="bi bi-activity"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Physics Quiz</h3>
+                            <p class="mt-1 text-sm text-slate-500">10 questions</p>
+                            <span class="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm font-medium text-blue-600">Start Quiz <i class="bi bi-arrow-right"></i></span>
+                        </a>
+
+                        <a href="/quiz.html" class="group min-w-[220px] rounded-xl border border-blue-100 bg-blue-50/80 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+                                <i class="bi bi-calculator"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Mathematics Quiz</h3>
+                            <p class="mt-1 text-sm text-slate-500">10 questions</p>
+                            <span class="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm font-medium text-blue-600">Start Quiz <i class="bi bi-arrow-right"></i></span>
+                        </a>
+
+                        <a href="/quiz.html" class="group min-w-[220px] rounded-xl border border-emerald-100 bg-emerald-50/80 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                                <i class="bi bi-flower1"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">Biology Quiz</h3>
+                            <p class="mt-1 text-sm text-slate-500">10 questions</p>
+                            <span class="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm font-medium text-blue-600">Start Quiz <i class="bi bi-arrow-right"></i></span>
+                        </a>
+
+                        <a href="/quiz.html" class="group min-w-[220px] rounded-xl border border-orange-100 bg-orange-50/80 p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+                            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-orange-100 text-orange-600">
+                                <i class="bi bi-bank"></i>
+                            </div>
+                            <h3 class="mt-3 font-semibold text-slate-900">History Quiz</h3>
+                            <p class="mt-1 text-sm text-slate-500">10 questions</p>
+                            <span class="mt-3 inline-flex items-center gap-2 rounded-lg bg-white/80 px-3 py-2 text-sm font-medium text-blue-600">Start Quiz <i class="bi bi-arrow-right"></i></span>
+                        </a>
                     </div>
                 </div>
 
