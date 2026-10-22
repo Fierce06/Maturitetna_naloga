@@ -7,7 +7,7 @@ const path = require('path');
 const requireAuth = require('./middleware/requireAuth');
 
 const app = express();
-const PORT = 3100;
+const PORT = 3200;
 
 // Globalni middleware
 app.use(express.json({ limit: '4mb' }));
@@ -64,6 +64,10 @@ app.get('/exam', requireAuth, (req, res) => {
 
 app.get('/calendar', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'calendar.html'));
+});
+
+app.get('/settings', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'settings.html'));
 });
 
 // API za prijavo in registracijo

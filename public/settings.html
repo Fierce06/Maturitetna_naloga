@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - StudyGraph</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800 page-index">
+    <div class=" flex min-h-screen gap-6 p-4 md:p-8">
+        <aside
+            class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+            <div class="mb-14 flex items-center gap-3">
+                <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
+                    alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                    <a href="/login">
+                        <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                        <p class="text-sm text-slate-500">Student</p>
+                    </a>
+                </div>
+
+            </div>
+
+            <nav class="space-y-2">
+                <a href="/"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-house"></i>
+                    Dashboard
+                </a>
+                <a href="/subjects"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-book"></i>
+                    My Subjects
+                </a>
+                <a href="/notebook"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-journal"></i>
+                    Notebook
+                </a>
+                <a href="/knowledge"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-lightbulb"></i>
+                    Knowledge
+                </a>
+                <a href="/study"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Study
+                </a>
+                <a href="/exam"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-file-earmark"></i>
+                    Exams
+                </a>
+                
+                <a href="/settings"
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+    <main class="min-w-0 flex-1">
+
+        <div id="notice" class="mb-5 hidden rounded-xl p-4 text-sm" role="status"></div>
+
+        <!-- Account settings -->
+        <section class="mb-6 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-lg shadow-slate-200/50">
+            <div class="mb-6 flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-xl text-blue-600"><i class="bi bi-person-gear"></i></div>
+                <div>
+                    <h2 class="text-lg font-semibold">Account settings</h2>
+                    <p class="text-sm text-slate-500">Update your account information.</p>
+                </div>
+            </div>
+
+            <form id="accountForm" class="space-y-5">
+                <div class="max-w-xl">
+                    <label for="username" class="mb-2 block text-sm font-medium">Username</label>
+                    <input id="username" name="username" required minlength="3" maxlength="100" class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 outline-none focus:border-blue-400">
+                </div>
+                <div class="flex justify-end border-t border-slate-100 pt-5">
+                    <button class="rounded-xl bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-500" type="submit">Save changes <i class="bi bi-check2 ml-2"></i></button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Password -->
+        <section class="mb-6 rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-lg shadow-slate-200/50">
+            <div class="mb-6 flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100 text-xl text-violet-600"><i class="bi bi-shield-lock"></i></div>
+                <div>
+                    <h2 class="text-lg font-semibold">Security</h2>
+                    <p class="text-sm text-slate-500">Change your account password.</p>
+                </div>
+            </div>
+
+            <form id="passwordForm" class="space-y-5">
+                <div class="max-w-xl">
+                    <label for="currentPassword" class="mb-2 block text-sm font-medium">Current password</label>
+                    <input id="currentPassword" type="password" autocomplete="current-password" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                </div>
+                <div class="max-w-xl">
+                    <label for="newPassword" class="mb-2 block text-sm font-medium">New password</label>
+                    <input id="newPassword" type="password" minlength="12" autocomplete="new-password" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                </div>
+                <div class="max-w-xl">
+                    <label for="confirmPassword" class="mb-2 block text-sm font-medium">Confirm new password</label>
+                    <input id="confirmPassword" type="password" minlength="12" autocomplete="new-password" required class="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
+                </div>
+                <div class="flex justify-end border-t border-slate-100 pt-5">
+                    <button type="submit" class="rounded-xl bg-blue-600 px-3 py-2 font-medium text-white hover:bg-blue-500">Update password <i class="bi bi-key ml-2"></i></button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Danger zone -->
+        <section class="mb-6 rounded-2xl border border-red-200 bg-white/90 p-6 shadow-lg shadow-slate-200/40">
+            <div class="mb-6 flex items-center gap-4">
+                <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-red-100 text-xl text-red-600"><i class="bi bi-exclamation-triangle"></i></div>
+                <div>
+                    <h2 class="text-lg font-semibold text-red-700">Danger zone</h2>
+                    <p class="text-sm text-slate-500">Manage account deletion.</p>
+                </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <p class="max-w-lg text-sm text-slate-600">Permanently delete your account and associated learning data.</p>
+                <button id="deleteAccount" class="rounded-xl border border-red-200 px-3 py-2 font-medium text-red-600 hover:bg-red-50">Delete account</button>
+            </div>
+        </section>
+
+        <footer class="pb-4 text-center text-sm text-slate-400">StudyGraph &copy; 2026</footer>
+    </main>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    const key = 'studygraph-settings';
+
+    function getSettings() {
+        try {
+            return JSON.parse(localStorage.getItem(key) || '{}');
+        } catch {
+            return {};
+        }
+    }
+
+    function saveSettings(values) {
+        localStorage.setItem(key, JSON.stringify({
+            ...getSettings(),
+            ...values
+        }));
+    }
+
+    function notify(message, success = true) {
+        $('#notice')
+            .removeClass('hidden bg-emerald-50 text-emerald-700 bg-red-50 text-red-700')
+            .addClass(success ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700')
+            .text(message);
+    }
+
+    const settings = getSettings();
+    $('#theme').val(settings.theme || 'light');
+    $('#duration').val(String(settings.duration || 25));
+    $('#reminders').prop('checked', settings.reminders === true);
+
+    // Load current username if the API is implemented.
+    $.getJSON('/api/settings/')
+        .done(data => {
+            if (data.user) {
+                $('#username').val(data.user.username || '');
+                $('#usernameLabel').text(data.user.username || 'Student');
+            }
+        });
+
+    // Save username to backend.
+    $('#accountForm').on('submit', function (event) {
+        event.preventDefault();
+
+        const username = $('#username').val().trim();
+
+        if (username.length < 3) {
+            notify('Username must be at least 3 characters.', false);
+            return;
+        }
+
+        $.ajax({
+            url: '/api/settings/',
+            method: 'PATCH',
+            contentType: 'application/json',
+            data: JSON.stringify({ username })
+        }).done(data => {
+            if (data.success === false) {
+                notify(data.error || 'Could not update username.', false);
+                return;
+            }
+            $('#usernameLabel').text(username);
+            notify('Username updated successfully.');
+        }).fail(xhr => {
+            notify(xhr.responseJSON?.error || 'Username update failed. Check your backend route.', false);
+        });
+    });
+
+    // Change password through backend.
+    $('#passwordForm').on('submit', function (event) {
+        event.preventDefault();
+
+        const currentPassword = $('#currentPassword').val();
+        const newPassword = $('#newPassword').val();
+
+        if (newPassword.length < 12) {
+            notify('Password must contain at least 12 characters.', false);
+            return;
+        }
+
+        if (newPassword !== $('#confirmPassword').val()) {
+            notify('New passwords do not match.', false);
+            return;
+        }
+
+        $.ajax({
+            url: '/api/settings/password/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ currentPassword, newPassword })
+        }).done(() => {
+            $('#passwordForm')[0].reset();
+            notify('Password updated successfully.');
+        }).fail(xhr => {
+            notify(xhr.responseJSON?.error || 'Password update failed. Check your backend route.', false);
+        });
+    });
+
+    // Theme selection saved locally.
+    $('#theme').on('change', function () {
+        saveSettings({ theme: this.value });
+        document.documentElement.dataset.theme = this.value;
+        notify('Theme preference saved.');
+    });
+
+    // Study preferences saved locally.
+    $('#savePreferences').on('click', function () {
+        saveSettings({
+            duration: Number($('#duration').val()),
+            reminders: $('#reminders').is(':checked')
+        });
+        notify('Study preferences saved on this device.');
+    });
+
+    // Delete account through backend, only after confirmation.
+    $('#deleteAccount').on('click', function () {
+        if (!confirm('Are you sure you want to permanently delete your account?')) return;
+
+        $.ajax({
+            url: '/api/settings/account/',
+            method: 'DELETE'
+        }).done(() => {
+            window.location.href = '/login';
+        }).fail(xhr => {
+            notify(xhr.responseJSON?.error || 'Account deletion endpoint is not configured.', false);
+        });
+    });
+</script>
+<script src="/js/user.js"></script>
+</body>
+</html>

@@ -40,7 +40,7 @@
 
             <nav class="space-y-2">
                 <a href="/"
-                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-house"></i>
                     Dashboard
                 </a>
@@ -50,7 +50,7 @@
                     My Subjects
                 </a>
                 <a href="/notebook"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
                     <i class="bi bi-journal"></i>
                     Notebook
                 </a>
@@ -69,16 +69,17 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                <a href="/calendar"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
-                    <i class="bi bi-calendar-week"></i>
-                    Calendar
-                </a>
+                
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
             </nav>
         </aside>
 
@@ -161,7 +162,7 @@
         </div>
 
         <aside
-            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
             <!-- Calendar on top and exams on bottom -->
             <div class="w-full max-w-md bg-white rounded-2xl">
 
@@ -204,104 +205,15 @@
 
             <div class="mt-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
-                <ul class="space-y-4">
-                    <li class="p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium text-gray-800">Math Exam</span>
-                            <span class="text-sm text-gray-500">June 15, 2024</span>
-                        </div>
-                    </li>
+                <ul class="space-y-2" id="upcomingExams">
+                    
                 </ul>
+            </div>
         </aside>
     </div>
 
-
-<script>
-    const calendar = document.getElementById("calendar");
-    const monthYear = document.getElementById("monthYear");
-    const selectedDate = document.getElementById("selectedDate");
-
-    const prevBtn = document.getElementById("prevBtn");
-    const nextBtn = document.getElementById("nextBtn");
-
-    let currentDate = new Date();
-    let selected = null;
-
-    function renderCalendar() {
-        calendar.innerHTML = "";
-
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth();
-
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-        monthYear.textContent = new Date(year, month).toLocaleDateString(
-            "en-US",
-            {
-                month: "long",
-                year: "numeric"
-            }
-        );
-
-        // Empty days before the first day
-        for (let i = 0; i < firstDay; i++) {
-            const empty = document.createElement("div");
-            empty.className = "h-10";
-            calendar.appendChild(empty);
-        }
-
-        // Calendar days
-        for (let day = 1; day <= daysInMonth; day++) {
-            const button = document.createElement("button");
-
-            const date = new Date(year, month, day);
-
-            const isToday =
-                date.toDateString() === new Date().toDateString();
-
-            const isSelected =
-                selected &&
-                date.toDateString() === selected.toDateString();
-
-            button.textContent = day;
-
-            button.className = `
-          h-10 w-10 mx-auto rounded-full
-          flex items-center justify-center
-          text-sm transition
-          hover:bg-blue-100 hover:text-blue-600
-          ${isToday ? "ring-2 ring-blue-500" : ""}
-          ${isSelected ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white" : "text-gray-700"}
-        `;
-
-            button.addEventListener("click", () => {
-                selected = date;
-                selectedDate.textContent = date.toLocaleDateString("en-US", {day: "numeric", month: "long", year: "numeric"});
-
-                
-
-                renderCalendar();
-            });
-
-            calendar.appendChild(button);
-        }
-    }
-
-    prevBtn.addEventListener("click", () => {
-        currentDate.setDate(1);
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
-    });
-
-    nextBtn.addEventListener("click", () => {
-        currentDate.setDate(1);
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
-    });
-
-    renderCalendar();
-</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="js/calendar.js"></script>
 
 <script>
 (() => {
@@ -648,5 +560,6 @@
 })();
 </script>
 
+<script src="/js/user.js"></script>
 </body>
 </html>

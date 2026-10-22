@@ -11,31 +11,32 @@ function hashPassword(password) {
 }
 
 router.post('/register', async (req, res) => {
-    const { username, password, passwordConfirm } = req.body;
+    const { username, email, password, passwordConfirm } = req.body;
+    console.log('Creating user:', username, email); 
 
-    if (!username || !password || !passwordConfirm) {
-        return res.status(400).json({ success: false, error: 'Manjkajo obvezna polja!' });
+    if (!username || !email || !password || !passwordConfirm) {
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
 
     if (password !== passwordConfirm) {
-        return res.status(400).json({ success: false, error: 'Gesli se ne ujemata!' });
+        return res.status(400).json({ success: false, error: 'Passwords do not match' });
     }
 
     if (password.length < 10) {
-        return res.status(400).json({ success: false, error: 'Geslo mora biti dolgo vsaj 10 znakov!' });
+        return res.status(400).json({ success: false, error: 'Password must be at least 10 characters long!' });
     }
 
     try {
         const passwordHash = await hashPassword(password);
-        await dbUsers.createUser(username, passwordHash);
+        await dbUsers.createUser(username, email, passwordHash);
         res.json({ success: true });
     } catch (err) {
         if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
-            return res.status(409).json({ success: false, error: 'Admin s tem uporabniškim imenom že obstaja!' });
+            return res.status(409).json({ success: false, error: 'User with this username already exists!' });
         }
 
         console.error(err);
-        res.status(500).json({ success: false, error: 'Napaka pri vnosu!' });
+        res.status(500).json({ success: false, error: 'Error creating user' });
     }
 });
 
@@ -43,7 +44,7 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ success: false, error: 'Manjkajo obvezna polja!' });
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
 
     try {
@@ -51,7 +52,7 @@ router.post('/login', async (req, res) => {
 
         if (!user) {
             await bcrypt.compare((process.env.APP_SECRET || '') + password, DUMMY_BCRYPT_HASH);
-            return res.status(400).json({ success: false, error: 'Napačno geslo ali uporabniško ime!' });
+            return res.status(400).json({ success: false, error: 'Invalid username or password' });
         }
 
         const consecutiveFailedAttempts = parseInt(user.consecutive_failed_attempts, 10) + 1;
@@ -82,11 +83,11 @@ router.post('/login', async (req, res) => {
                 lockedUntil.setMinutes(lockedUntil.getMinutes() + (5 * consecutiveFailedAttempts));
 
                 await dbUsers.updateFailedAttempts(failedAttempts, lockedUntil, consecutiveFailedAttempts, username);
-                return res.status(423).json({ success: false, error: 'Prveč neuspešnih poskusov!' });
+                return res.status(423).json({ success: false, error: 'Account is temporarily locked. Please try again later.' });
             }
 
             await dbUsers.updateFailedAttempts(failedAttempts, null, consecutiveFailedAttemptsNotChanged, username);
-            return res.status(400).json({ success: false, error: 'Napačno geslo ali uporabniško ime!' });
+            return res.status(400).json({ success: false, error: 'Invalid username or password' });
         }
 
         await dbUsers.updateFailedAttempts(0, null, 0, username);
@@ -97,8 +98,12 @@ router.post('/login', async (req, res) => {
         return res.json({ success: true });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ success: false, error: 'Napaka pri vnosu!' });
+        return res.status(500).json({ success: false, error: 'Error creating user' });
     }
+});
+
+router.get('/me', requireAuth, (req, res) => {
+    res.json({ username: req.session.username, id: req.session.userId });
 });
 
 router.post('/changePassword', requireAuth, async (req, res) => {
@@ -144,7 +149,7 @@ router.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error(err);
-            return res.status(500).json({ success: false, error: 'Napaka pri odjavi!' });
+            return res.status(500).json({ success: false, error: 'Error during logout' });
         }
 
         res.clearCookie('connect.sid');

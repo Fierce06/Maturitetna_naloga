@@ -8,6 +8,8 @@ const nextBtn = document.getElementById("nextBtn");
 let currentDate = new Date();
 let selected = null;
 
+let examDates = [];
+
 function renderCalendar() {
     calendar.innerHTML = "";
 
@@ -47,19 +49,40 @@ function renderCalendar() {
 
         button.textContent = day;
 
+        const formattedDate = date.toISOString().split("T")[0];
+
         button.className = `
-          h-10 w-10 mx-auto rounded-full
-          flex items-center justify-center
-          text-sm transition
-          hover:bg-blue-100 hover:text-blue-600
-          ${isToday ? "ring-2 ring-blue-500" : ""}
-          ${isSelected ? "bg-blue-600 text-white hover:bg-blue-700 hover:text-white" : "text-gray-700"}
-        `;
+    h-10 w-10 mx-auto rounded-full
+    flex items-center justify-center
+    text-sm font-medium
+    transition-all duration-200
+    hover:scale-105
+
+    ${
+        examDates.includes(formattedDate)
+            ? "bg-red-50 border-2 border-red-300 text-red-600 hover:bg-red-100"
+            : "border-2 border-transparent text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+    }
+
+    ${
+        isToday
+            ? "ring-2 ring-blue-500 ring-offset-2"
+            : ""
+    }
+
+    ${
+        isSelected
+            ? examDates.includes(formattedDate)
+                ? "bg-red-500 border-red-500 text-white hover:bg-red-600 hover:text-white"
+                : "bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:text-white"
+            : ""
+    }
+`;
+
+        button.setAttribute("id", formattedDate);
 
         button.addEventListener("click", () => {
             selected = date;
-
-
 
             renderCalendar();
         });
@@ -101,8 +124,13 @@ function allExams() {
                         </div>
                     </div>
                 `);
+
                 examsList.append(examElement);
+                
             })
+
+            examDates = odgovor.exams.map(exam => exam.date.slice(0, 10));
+            renderCalendar();
         },
         error: function (xhr) {
             const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
@@ -111,5 +139,6 @@ function allExams() {
     });
 }
 $(document).ready(function () {
-allExams();
+    allExams();
+
 })

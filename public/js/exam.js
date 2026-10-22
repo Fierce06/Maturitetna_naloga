@@ -18,6 +18,8 @@ function allSubjectIds() {
                 const option = $(`<option value="${subject.id}">${subject.name}</option>`)
                 selectSubjects.append(option);
             })
+
+            allExam();
         },
         error: function (xhr) {
             const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
@@ -26,13 +28,14 @@ function allSubjectIds() {
     });
 }
 
-function allExams() {
+function allExam() {
     $.ajax({
         url: '/api/exams/',
         method: 'GET',
 
         success: function (odgovor) {
             if (odgovor.success == false) {
+                alert('Napaka pri pridobivanju izpitov');
             }
 
             examsList = $('#upcomingContainer');
@@ -55,14 +58,13 @@ function allExams() {
         },
         error: function (xhr) {
             const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-
+            alert(msg);
         }
     });
 }
 
 $(document).ready(function () {
     allSubjectIds();  
-    allExams();
 
     $('#examForm').on('submit', function (e) {
         e.preventDefault();
@@ -82,13 +84,13 @@ $(document).ready(function () {
 
             success: function (odgovor) {
                 console.log('Uspešno dodan izpit:', odgovor.newExam);
+
+                allExam();
             },
             error: function (xhr) {
                 const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
                 console.error(msg);
             }
         });
-
-        allExams();
     });
 })
