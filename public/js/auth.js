@@ -29,7 +29,8 @@ $(document).ready(function () {
         const geslo = $(this).find('[name=password]').val();
 
         const podatki = {
-            username: $(this).find('[name=email]').val(),
+            username: $(this).find('[name=username]').val(),
+            email: $(this).find('[name=email]').val(),
             password: geslo,
             passwordConfirm: gesloPonovitev
         };
@@ -70,7 +71,7 @@ $(document).ready(function () {
         e.preventDefault();
 
         const podatki = {
-            username: $(this).find('[name=email]').val(),
+            username: $(this).find('[name=username]').val(),
             password: $(this).find('[name=password]').val()
         };
 

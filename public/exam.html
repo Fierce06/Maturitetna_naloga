@@ -65,6 +65,7 @@
 
                 <h2
                     class="text-lg font-semibold text-slate-900"
+                    id="user-name"
                 >
                     User name
                 </h2>
@@ -111,16 +112,17 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                <a href="/calendar"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
-                    <i class="bi bi-calendar-week"></i>
-                    Calendar
-                </a>
+                
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
             </nav>
 
     </aside>
@@ -492,110 +494,54 @@
     ====================================================== -->
 
     <aside
-        class="w-full max-w-[350px] shrink-0 rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm"
-    >
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            <!-- Calendar on top and exams on bottom -->
+            <div class="w-full max-w-md bg-white rounded-2xl">
 
-        <!-- CALENDAR -->
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8249;
+                    </button>
 
-        <div class="w-full">
+                    <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
 
-            <!-- HEADER -->
-
-            <div
-                class="mb-6 flex items-center justify-between"
-            >
-
-                <button
-                    id="prevBtn"
-                    class="flex h-10 w-10 items-center justify-center rounded-full text-xl text-gray-600 transition hover:bg-gray-100"
-                >
-                    &#8249;
-                </button>
-
-
-                <h2
-                    id="monthYear"
-                    class="text-xl font-semibold text-gray-800"
-                ></h2>
-
-
-                <button
-                    id="nextBtn"
-                    class="flex h-10 w-10 items-center justify-center rounded-full text-xl text-gray-600 transition hover:bg-gray-100"
-                >
-                    &#8250;
-                </button>
-
-            </div>
-
-
-            <!-- WEEKDAYS -->
-
-            <div
-                class="mb-2 grid grid-cols-7 text-center"
-            >
-
-                <div class="text-sm font-medium text-gray-400">
-                    Sun
+                    <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8250;
+                    </button>
                 </div>
 
-                <div class="text-sm font-medium text-gray-400">
-                    Mon
+                <!-- Weekdays -->
+                <div class="grid grid-cols-7 mb-2 text-center">
+                    <div class="text-sm font-medium text-gray-400">Sun</div>
+                    <div class="text-sm font-medium text-gray-400">Mon</div>
+                    <div class="text-sm font-medium text-gray-400">Tue</div>
+                    <div class="text-sm font-medium text-gray-400">Wed</div>
+                    <div class="text-sm font-medium text-gray-400">Thu</div>
+                    <div class="text-sm font-medium text-gray-400">Fri</div>
+                    <div class="text-sm font-medium text-gray-400">Sat</div>
                 </div>
 
-                <div class="text-sm font-medium text-gray-400">
-                    Tue
-                </div>
+                <!-- Calendar -->
+                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
 
-                <div class="text-sm font-medium text-gray-400">
-                    Wed
-                </div>
-
-                <div class="text-sm font-medium text-gray-400">
-                    Thu
-                </div>
-
-                <div class="text-sm font-medium text-gray-400">
-                    Fri
-                </div>
-
-                <div class="text-sm font-medium text-gray-400">
-                    Sat
+                <!-- Selected date -->
+                <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
+                    <p class="text-sm text-gray-500">Selected date</p>
+                    <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
+                        None
+                    </p>
                 </div>
 
             </div>
 
-
-            <!-- CALENDAR DAYS -->
-
-            <div
-                id="calendar"
-                class="grid grid-cols-7 gap-1"
-            ></div>
-
-
-            <!-- SELECTED DATE -->
-
-            <div
-                class="mt-6 rounded-xl bg-gray-50 p-4 text-center"
-            >
-
-                <p class="text-sm text-gray-500">
-                    Selected date
-                </p>
-
-                <p
-                    id="selectedDate"
-                    class="mt-1 font-semibold text-gray-800"
-                >
-                    None
-                </p>
-
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
+                <ul class="space-y-2" id="upcomingExams">
+                    
+                </ul>
             </div>
-
-        </div>
-
-    </aside>
+        </aside>
 
 </div>
 
@@ -603,6 +549,7 @@
 <script src="js/exam.js"></script>
 <script src="js/calendar.js"></script>
 
+<script src="/js/user.js"></script>
 </body>
 
 </html>

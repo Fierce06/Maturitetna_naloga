@@ -7,7 +7,7 @@ const path = require('path');
 const requireAuth = require('./middleware/requireAuth');
 
 const app = express();
-const PORT = 3100;
+const PORT = 3200;
 
 // Globalni middleware
 app.use(express.json({ limit: '4mb' }));
@@ -66,10 +66,15 @@ app.get('/calendar', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'calendar.html'));
 });
 
+app.get('/settings', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'settings.html'));
+});
+
 // API za prijavo in registracijo
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/subjects', require('./routes/subjects'));
 app.use('/api/exams', require('./routes/exams'));
+app.use('/api/notebook', require('./routes/notebook'));
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);
