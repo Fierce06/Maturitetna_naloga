@@ -130,39 +130,44 @@ function allSubjects() {
 }
 
 $(document).ready(function () {
-    allSubjects();  
+    // Ob odprtju strani prikaže predmete iz baze
+    allSubjects();
 
-    $('#subjectForm').on('submit', function (e) {
+    $("#subjectForm").on("submit", function (e) {
         e.preventDefault();
 
-        const name = $(this).find('[name=name]').val();
-        const description = $(this).find('[name=description]').val();
-        const color = $(this).find('[name=color]').val();
-
         const podatki = {
-            name: name,
-            description: description,
-            color: color
+            name: subjectName.value.trim(),
+            description: subjectDescription.value.trim(),
+            color: selectedColor
         };
 
         $.ajax({
-            url: '/api/subjects/',
-            method: 'POST',
-            contentType: 'application/json',
+            url: "/api/subjects/",
+            method: "POST",
+            contentType: "application/json",
             data: JSON.stringify(podatki),
 
+            success: function () {
+                // Predmete ponovno naložimo šele po uspešnem shranjevanju
+                allSubjects();
 
-            success: function (odgovor) {
-                
+                subjectForm.reset();
+
+                selectedColor = "#3b82f6";
+                customSubjectColor.value = selectedColor;
+
+                updateColorSelection();
+                closeModal();
             },
-            error: function (xhr) {
-                const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
 
+            error: function (xhr) {
+                const msg =
+                    xhr.responseJSON?.error ||
+                    `Napaka: ${xhr.status} ${xhr.statusText}`;
+
+                alert(msg);
             }
         });
-
-        allSubjects();
-
-        closeModal();
     });
-})
+});
