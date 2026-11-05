@@ -60,25 +60,26 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                <a href="/calendar"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
-                    <i class="bi bi-calendar-week"></i>
-                    Calendar
-                </a>
+                
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
             </nav>
         </aside>
 
 
         <!-- Add Subject Modal -->
         <div id="subjectModal"
-            class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
+            class="fixed inset-0 z-50 h-full hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
 
-            <div class="w-full max-w-xl overflow-hidden rounded-xl bg-white shadow-xl">
+            <div class="w-full  max-w-xl overflow-hidden rounded-xl bg-white shadow-xl">
 
                 <!-- Header -->
                 <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
@@ -258,7 +259,7 @@
         <div class="flex flex-col w-full">
 
             <div
-                class="mt-auto w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+                class="mt-auto h-full w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
 
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-lg font-semibold text-gray-800">My Subjects</h2>
@@ -351,6 +352,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/subjects.js"></script>
     <script src="js/calendar.js"></script>
+<script src="/js/user.js"></script>
 </body>
 
 </html>

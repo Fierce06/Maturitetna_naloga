@@ -9,6 +9,7 @@ USE studygraph;
 CREATE TABLE users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
 
     failed_attempts INT NOT NULL DEFAULT 0,
@@ -53,6 +54,7 @@ CREATE TABLE subjects (
 CREATE TABLE notes (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
+    user_id INT UNSIGNED NOT NULL,
     subject_id INT UNSIGNED NOT NULL,
 
     title VARCHAR(255) NOT NULL,
@@ -68,6 +70,12 @@ CREATE TABLE notes (
     CONSTRAINT fk_note_subject
         FOREIGN KEY (subject_id)
         REFERENCES subjects(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    
+    CONSTRAINT fk_note_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
         ON DELETE CASCADE
         ON UPDATE CASCADE
 

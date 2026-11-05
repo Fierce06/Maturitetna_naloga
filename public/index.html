@@ -62,16 +62,17 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                <a href="/calendar"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
-                    <i class="bi bi-calendar-week"></i>
-                    Calendar
-                </a>
+                
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
             </nav>
         </aside>
 
@@ -80,7 +81,7 @@
             <!-- Other content -->
 
             <div
-                class="mt-auto w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+                class="mt-auto w-full h-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
 
                 <div class="mb-4 bg-white/80 p-4 rounded-xl shadow-sm shadow-slate-200/60">
                     <div class="flex items-center justify-between w-full">
@@ -186,6 +187,7 @@
             </div>
         </aside>
     </div>
+<script src="/js/user.js"></script>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -204,7 +206,7 @@
 
             odgovor.subjects.forEach(subject => {
                 const subjectItem = $(`
-                    <li class="max-w-[200px] min-w-[180px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
+                    <li class="max-w-[300px] min-w-[250px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center">
                             <div style="background-color: ${subject.color}"
                                 class="p-2 px-3 rounded-lg text-white">

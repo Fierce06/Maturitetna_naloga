@@ -31,7 +31,7 @@
 
             <nav class="space-y-2">
                 <a href="/"
-                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-house"></i>
                     Dashboard
                 </a>
@@ -51,7 +51,7 @@
                     Knowledge
                 </a>
                 <a href="/study"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
                     <i class="bi bi-graph-up-arrow"></i>
                     Study
                 </a>
@@ -60,16 +60,17 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                <a href="/calendar"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
-                    <i class="bi bi-calendar-week"></i>
-                    Calendar
-                </a>
+                
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
             </nav>
         </aside>
 
@@ -192,7 +193,7 @@
         </div>
 
         <aside
-            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
             <!-- Calendar on top and exams on bottom -->
             <div class="w-full max-w-md bg-white rounded-2xl">
 
@@ -235,19 +236,16 @@
 
             <div class="mt-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
-                <ul class="space-y-4">
-                    <li class="p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium text-gray-800">Math Exam</span>
-                            <span class="text-sm text-gray-500">June 15, 2024</span>
-                        </div>
-                    </li>
-                </ul> 
-
+                <ul class="space-y-2" id="upcomingExams">
+                    
+                </ul>
+            </div>
         </aside>
     </div>
 
+    
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/calendar.js"></script>
 
 <script>
@@ -359,5 +357,6 @@
   
 })();
 </script>
+<script src="/js/user.js"></script>
 </body>
 </html>
