@@ -75,7 +75,7 @@
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
-<button onclick="logout()"
+                <button onclick="logout()"
                     class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-box-arrow-left"></i>
                     Logout
@@ -96,6 +96,14 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <span id="save-status" class="hidden text-xs font-medium text-emerald-600 sm:inline"><i class="bi bi-cloud-check"></i> Shranjeno</span>
+                            <select
+                                id="subjectSelect"
+                                name="subjectSelect"
+                                required
+                                class="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+                            >
+
+                            </select>
                             <button id="new-note" type="button" class="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600"><i class="bi bi-file-earmark-plus mr-1"></i> Nov zapisek</button>
                             <button id="save-note" type="button" class="rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-500"><i class="bi bi-floppy mr-1"></i> Shrani</button>
                         </div>
@@ -106,7 +114,7 @@
                     <div class="flex flex-wrap items-center gap-2" aria-label="Orodna vrstica urejevalnika">
                         <div class="mr-1 flex rounded-lg border border-slate-200 bg-white p-1">
                             <button type="button" id="text-mode" class="rounded-md bg-blue-100 px-3 py-1.5 text-sm font-semibold text-blue-700" aria-pressed="true"><i class="bi bi-fonts mr-1"></i> Besedilo</button>
-                            <button type="button" id="draw-mode" class="rounded-md px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100" aria-pressed="false"><i class="bi bi-pencil mr-1"></i> Pisalo</button>
+                            <!-- <button type="button" id="draw-mode" class="rounded-md px-3 py-1.5 text-sm font-semibold text-slate-600 hover:bg-slate-100" aria-pressed="false"><i class="bi bi-pencil mr-1"></i> Pisalo</button> -->
                         </div>
                         <select id="font-name" class="h-9 rounded-lg border border-slate-200 bg-white px-2 text-sm text-slate-700" aria-label="Pisava">
                             <option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Courier New">Courier New</option>
@@ -125,7 +133,7 @@
                         <button type="button" id="add-photo" class="h-9 rounded-lg border border-blue-200 bg-blue-50 px-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100"><i class="bi bi-camera mr-1"></i> Slikaj / dodaj sliko</button>
                         <input id="photo-input" class="hidden" type="file" accept="image/*" capture="environment" multiple>
                     </div>
-
+<!-- 
                     <div id="drawing-tools" class="mt-3 hidden flex-wrap items-center gap-2 border-t border-slate-200 pt-3">
                         <span class="mr-1 text-xs font-semibold uppercase tracking-wider text-slate-500">Pisalo</span>
                         <button type="button" data-ink-color="#1e293b" class="size-7 rounded-full border-2 border-white bg-slate-800 shadow ring-2 ring-blue-500" aria-label="Črno pisalo"></button>
@@ -135,7 +143,7 @@
                         <select id="pen-size" class="h-8 rounded-lg border border-slate-200 bg-white px-2 text-xs" aria-label="Debelina pisala"><option value="2">Tanko</option><option value="4" selected>Srednje</option><option value="8">Debelo</option></select>
                         <button type="button" id="eraser" class="h-8 rounded-lg border border-slate-200 bg-white px-3 text-xs font-semibold text-slate-700 hover:bg-slate-100"><i class="bi bi-eraser mr-1"></i> Radirka</button>
                         <button type="button" id="clear-ink" class="h-8 rounded-lg border border-red-200 bg-white px-3 text-xs font-semibold text-red-600 hover:bg-red-50"><i class="bi bi-trash3 mr-1"></i> Počisti risbo</button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="grid min-h-[calc(100vh-10.5rem)] bg-slate-100/80 xl:grid-cols-[190px_minmax(0,1fr)]">
@@ -154,7 +162,6 @@
                             <canvas id="ink-canvas" class="pointer-events-none absolute inset-0 z-20 h-full w-full" aria-label="Površina za pisanje s pisalom"></canvas>
                             <div id="drawing-hint" class="pointer-events-none absolute bottom-5 left-1/2 z-30 hidden -translate-x-1/2 rounded-full bg-slate-900/80 px-4 py-2 text-xs font-medium text-white">Piši s pisalom, prstom ali miško</div>
                         </div>
-                        <p class="mt-4 w-full text-center text-xs text-slate-500"><i class="bi bi-shield-check mr-1"></i> V tej predstavitveni različici se zapiski samodejno shranijo v ta brskalnik.</p>
                     </div>
                 </div>
             </section>
@@ -214,351 +221,7 @@
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/calendar.js"></script>
-
-<script>
-(() => {
-
-    const notebookView = document.getElementById('notebook-view');
-    const noteEditor = document.getElementById('note-editor');
-    const noteTitle = document.getElementById('note-title');
-    const notePage = document.getElementById('note-page');
-    const notesList = document.getElementById('notes-list');
-    const noteCount = document.getElementById('note-count');
-    const saveStatus = document.getElementById('save-status');
-    const photoInput = document.getElementById('photo-input');
-    const photoGallery = document.getElementById('photo-gallery');
-    const canvas = document.getElementById('ink-canvas');
-    const drawingTools = document.getElementById('drawing-tools');
-    const drawingHint = document.getElementById('drawing-hint');
-    const textModeButton = document.getElementById('text-mode');
-    const drawModeButton = document.getElementById('draw-mode');
-    const storageKey = 'ai-study-notebook-v1';
-    const ctx = canvas.getContext('2d');
-    let activeNoteId = 'math-polynomials';
-    let saveTimer;
-    let drawing = false;
-    let erasing = false;
-    let inkColor = '#1e293b';
-    let inkSize = 4;
-    let pendingInk = '';
-    let lastPoint = null;
-
-    const starterNotes = {
-      'math-polynomials': {
-        title: 'Polinomi – zapiski',
-        updated: Date.now(),
-        html: '<h1 style="font-size:30px;font-weight:700;margin-bottom:18px;color:#0f172a">Polinomi</h1><p><strong>Polinom</strong> je algebrajski izraz, sestavljen iz spremenljivk in koeficientov.</p><h2 style="font-size:21px;font-weight:700;margin:24px 0 8px;color:#1e3a8a">Pomembno</h2><ul style="padding-left:24px;list-style:disc"><li>stopnja polinoma je največji eksponent,</li><li>ničle poiščemo tako, da je P(x) = 0,</li><li>pri deljenju lahko uporabimo Hornerjev algoritem.</li></ul><p style="margin-top:20px"><em>Primer:</em> P(x) = 2x² − 3x + 1</p>',
-        ink: '', photos: []
-      },
-      'physics-motion': {
-        title: 'Fizika – gibanje',
-        updated: Date.now() - 86400000,
-        html: '<h1 style="font-size:30px;font-weight:700;margin-bottom:18px;color:#0f172a">Enakomerno gibanje</h1><p>Pri enakomernem gibanju je hitrost konstantna.</p><p style="margin-top:18px"><strong>Osnovna enačba:</strong> v = s / t</p>',
-        ink: '', photos: []
-      },
-      'slovene-essay': {
-        title: 'Slovenščina – esej',
-        updated: Date.now() - 172800000,
-        html: '<h1 style="font-size:30px;font-weight:700;margin-bottom:18px;color:#0f172a">Zgradba eseja</h1><ol style="padding-left:24px;list-style:decimal"><li>Uvod in predstavitev problema</li><li>Jedro z argumenti in primeri</li><li>Zaključek z ugotovitvijo</li></ol>',
-        ink: '', photos: []
-      }
-    };
-
-    function getNotes() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(storageKey));
-        return saved && saved.notes ? saved : { activeNoteId, notes: starterNotes };
-      } catch (_) {
-        return { activeNoteId, notes: starterNotes };
-      }
-    }
-
-    let notebookState = getNotes();
-    activeNoteId = notebookState.notes[notebookState.activeNoteId] ? notebookState.activeNoteId : Object.keys(notebookState.notes)[0];
-
-    function showSaveStatus(message = 'Shranjeno', isError = false) {
-      saveStatus.innerHTML = '<i class="bi ' + (isError ? 'bi-exclamation-triangle' : 'bi-cloud-check') + '"></i> ' + message;
-      saveStatus.classList.toggle('text-emerald-600', !isError);
-      saveStatus.classList.toggle('text-red-600', isError);
-    }
-
-    function persistState() {
-      try {
-        localStorage.setItem(storageKey, JSON.stringify(notebookState));
-        showSaveStatus();
-        return true;
-      } catch (_) {
-        showSaveStatus('Slika je prevelika za lokalno shranjevanje', true);
-        return false;
-      }
-    }
-
-    function canvasData() {
-      try { return canvas.width ? canvas.toDataURL('image/png') : pendingInk; }
-      catch (_) { return pendingInk; }
-    }
-
-    function saveCurrentNote() {
-      const current = notebookState.notes[activeNoteId];
-      if (!current) return;
-      current.title = noteTitle.value.trim() || 'Neimenovan zapisek';
-      current.html = noteEditor.innerHTML;
-      current.ink = canvasData();
-      current.updated = Date.now();
-      notebookState.activeNoteId = activeNoteId;
-      if (persistState()) renderNotesList();
-    }
-
-    function scheduleSave() {
-      showSaveStatus('Shranjujem …');
-      clearTimeout(saveTimer);
-      saveTimer = setTimeout(saveCurrentNote, 500);
-    }
-
-    function renderNotesList() {
-      notesList.innerHTML = '';
-      const entries = Object.entries(notebookState.notes).sort((a, b) => b[1].updated - a[1].updated);
-      noteCount.textContent = entries.length;
-      entries.forEach(([id, note]) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.dataset.noteId = id;
-        button.className = 'rounded-xl border p-3 text-left transition ' + (id === activeNoteId ? 'border-blue-300 bg-blue-50 shadow-sm' : 'border-slate-200 bg-white hover:border-blue-200 hover:bg-slate-50');
-        const title = document.createElement('strong');
-        title.className = 'block truncate text-sm text-slate-900';
-        title.textContent = note.title;
-        const meta = document.createElement('span');
-        meta.className = 'mt-1 block text-xs text-slate-500';
-        meta.textContent = new Date(note.updated).toLocaleDateString('sl-SI', { day: 'numeric', month: 'short' });
-        button.append(title, meta);
-        notesList.appendChild(button);
-      });
-    }
-
-    function renderPhotos() {
-      photoGallery.innerHTML = '';
-      const photos = notebookState.notes[activeNoteId]?.photos || [];
-      photos.forEach((src, index) => {
-        const figure = document.createElement('figure');
-        figure.className = 'group relative overflow-hidden rounded-xl border border-slate-200 bg-slate-50';
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = 'Fotografirani zapiski ' + (index + 1);
-        img.className = 'h-56 w-full object-contain';
-        const remove = document.createElement('button');
-        remove.type = 'button';
-        remove.dataset.removePhoto = index;
-        remove.className = 'absolute right-2 top-2 grid size-8 place-items-center rounded-full bg-white/90 text-red-600 opacity-100 shadow transition hover:bg-red-50 sm:opacity-0 sm:group-hover:opacity-100';
-        remove.innerHTML = '<i class="bi bi-trash3"></i>';
-        remove.setAttribute('aria-label', 'Odstrani fotografijo');
-        figure.append(img, remove);
-        photoGallery.appendChild(figure);
-      });
-    }
-
-    function clearCanvas() {
-      const rect = canvas.getBoundingClientRect();
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.restore();
-      pendingInk = '';
-    }
-
-    function drawSavedInk(source) {
-      pendingInk = source || '';
-      if (!source || canvas.width === 0) return;
-      const image = new Image();
-      image.onload = () => {
-        const rect = canvas.getBoundingClientRect();
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-        ctx.restore();
-        ctx.setTransform(window.devicePixelRatio || 1, 0, 0, window.devicePixelRatio || 1, 0, 0);
-        pendingInk = source;
-      };
-      image.src = source;
-    }
-
-    function resizeCanvas() {
-      if (notebookView.classList.contains('hidden')) return;
-      const rect = notePage.getBoundingClientRect();
-      if (!rect.width || !rect.height) return;
-      const existing = canvas.width ? canvasData() : pendingInk;
-      const ratio = window.devicePixelRatio || 1;
-      canvas.width = Math.round(rect.width * ratio);
-      canvas.height = Math.round(rect.height * ratio);
-      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      drawSavedInk(existing);
-    }
-
-    function loadNote(id) {
-      const note = notebookState.notes[id];
-      if (!note) return;
-      activeNoteId = id;
-      noteTitle.value = note.title;
-      noteEditor.innerHTML = note.html || '';
-      pendingInk = note.ink || '';
-      renderPhotos();
-      renderNotesList();
-      requestAnimationFrame(() => {
-        resizeCanvas();
-        drawSavedInk(note.ink || '');
-      });
-    }
-
-    function setNotebookMode(mode) {
-      const isDraw = mode === 'draw';
-      canvas.classList.toggle('pointer-events-none', !isDraw);
-      canvas.classList.toggle('cursor-crosshair', isDraw);
-      noteEditor.contentEditable = String(!isDraw);
-      drawingTools.classList.toggle('hidden', !isDraw);
-      drawingTools.classList.toggle('flex', isDraw);
-      drawingHint.classList.toggle('hidden', !isDraw);
-      textModeButton.setAttribute('aria-pressed', String(!isDraw));
-      drawModeButton.setAttribute('aria-pressed', String(isDraw));
-      textModeButton.className = 'rounded-md px-3 py-1.5 text-sm font-semibold ' + (!isDraw ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100');
-      drawModeButton.className = 'rounded-md px-3 py-1.5 text-sm font-semibold ' + (isDraw ? 'bg-blue-100 text-blue-700' : 'text-slate-600 hover:bg-slate-100');
-      if (isDraw) resizeCanvas(); else noteEditor.focus();
-    }
-
-    function pointFromEvent(event) {
-      const rect = canvas.getBoundingClientRect();
-      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
-    }
-
-    canvas.addEventListener('pointerdown', event => {
-      drawing = true;
-      canvas.setPointerCapture(event.pointerId);
-      lastPoint = pointFromEvent(event);
-    });
-    canvas.addEventListener('pointermove', event => {
-      if (!drawing || !lastPoint) return;
-      const point = pointFromEvent(event);
-      ctx.save();
-      ctx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
-      ctx.strokeStyle = inkColor;
-      ctx.lineWidth = erasing ? inkSize * 4 : inkSize;
-      ctx.beginPath();
-      ctx.moveTo(lastPoint.x, lastPoint.y);
-      ctx.lineTo(point.x, point.y);
-      ctx.stroke();
-      ctx.restore();
-      lastPoint = point;
-    });
-    function endInk() {
-      if (!drawing) return;
-      drawing = false;
-      lastPoint = null;
-      pendingInk = canvasData();
-      scheduleSave();
-    }
-    canvas.addEventListener('pointerup', endInk);
-    canvas.addEventListener('pointercancel', endInk);
-
-    document.querySelectorAll('[data-ink-color]').forEach(button => button.addEventListener('click', () => {
-      inkColor = button.dataset.inkColor;
-      erasing = false;
-      document.querySelectorAll('[data-ink-color]').forEach(item => item.classList.remove('ring-2', 'ring-blue-500'));
-      button.classList.add('ring-2', 'ring-blue-500');
-      document.getElementById('eraser').classList.remove('bg-blue-100', 'text-blue-700');
-    }));
-    document.getElementById('pen-size').addEventListener('change', event => inkSize = Number(event.target.value));
-    document.getElementById('eraser').addEventListener('click', event => {
-      erasing = !erasing;
-      event.currentTarget.classList.toggle('bg-blue-100', erasing);
-      event.currentTarget.classList.toggle('text-blue-700', erasing);
-    });
-    document.getElementById('clear-ink').addEventListener('click', () => { clearCanvas(); saveCurrentNote(); });
-
-    document.querySelectorAll('[data-command]').forEach(button => button.addEventListener('mousedown', event => {
-      event.preventDefault();
-      noteEditor.focus();
-      document.execCommand(button.dataset.command, false);
-      scheduleSave();
-    }));
-    document.getElementById('font-name').addEventListener('change', event => { noteEditor.focus(); document.execCommand('fontName', false, event.target.value); scheduleSave(); });
-    document.getElementById('font-size').addEventListener('change', event => { noteEditor.focus(); document.execCommand('fontSize', false, event.target.value); scheduleSave(); });
-
-    function openPhotoPicker() { photoInput.click(); }
-    document.getElementById('add-photo').addEventListener('click', openPhotoPicker);
-    document.getElementById('quick-photo').addEventListener('click', openPhotoPicker);
-
-    function compressPhoto(file) {
-      return new Promise((resolve, reject) => {
-        const image = new Image();
-        const objectUrl = URL.createObjectURL(file);
-        image.onload = () => {
-          const maxSide = 1400;
-          const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
-          const temp = document.createElement('canvas');
-          temp.width = Math.max(1, Math.round(image.width * scale));
-          temp.height = Math.max(1, Math.round(image.height * scale));
-          temp.getContext('2d').drawImage(image, 0, 0, temp.width, temp.height);
-          URL.revokeObjectURL(objectUrl);
-          resolve(temp.toDataURL('image/jpeg', 0.82));
-        };
-        image.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('image')); };
-        image.src = objectUrl;
-      });
-    }
-
-    photoInput.addEventListener('change', async event => {
-      const files = [...event.target.files].filter(file => file.type.startsWith('image/'));
-      if (!files.length) return;
-      showSaveStatus('Obdelujem slike …');
-      const photos = notebookState.notes[activeNoteId].photos;
-      for (const file of files) {
-        try { photos.push(await compressPhoto(file)); } catch (_) { showSaveStatus('Slike ni bilo mogoče dodati', true); }
-      }
-      renderPhotos();
-      saveCurrentNote();
-      photoInput.value = '';
-      requestAnimationFrame(resizeCanvas);
-    });
-
-    photoGallery.addEventListener('click', event => {
-      const button = event.target.closest('[data-remove-photo]');
-      if (!button) return;
-      notebookState.notes[activeNoteId].photos.splice(Number(button.dataset.removePhoto), 1);
-      renderPhotos();
-      saveCurrentNote();
-      requestAnimationFrame(resizeCanvas);
-    });
-
-    notesList.addEventListener('click', event => {
-      const button = event.target.closest('[data-note-id]');
-      if (!button || button.dataset.noteId === activeNoteId) return;
-      saveCurrentNote();
-      loadNote(button.dataset.noteId);
-    });
-
-    document.getElementById('new-note').addEventListener('click', () => {
-      saveCurrentNote();
-      const id = 'note-' + Date.now();
-      notebookState.notes[id] = { title: 'Nov zapisek', updated: Date.now(), html: '', ink: '', photos: [] };
-      loadNote(id);
-      setNotebookMode('text');
-      noteTitle.select();
-      saveCurrentNote();
-    });
-
-    noteEditor.addEventListener('input', scheduleSave);
-    noteTitle.addEventListener('input', scheduleSave);
-    document.getElementById('save-note').addEventListener('click', saveCurrentNote);
-    textModeButton.addEventListener('click', () => setNotebookMode('text'));
-    drawModeButton.addEventListener('click', () => setNotebookMode('draw'));
-    new ResizeObserver(() => resizeCanvas()).observe(notePage);
-
-    window.initializeNotebookCanvas = resizeCanvas;
-    window.saveOpenNotebook = saveCurrentNote;
-    loadNote(activeNoteId);
-})();
-</script>
+<script src="js/notebook.js"></script>
 
 <script src="/js/user.js"></script>
 </body>
