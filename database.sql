@@ -145,6 +145,8 @@ CREATE TABLE note_connections (
 CREATE TABLE quizzes (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 
+    user_id INT UNSIGNED NOT NULL,
+
     subject_id INT UNSIGNED NOT NULL,
 
     note_id INT UNSIGNED NULL,
@@ -152,6 +154,16 @@ CREATE TABLE quizzes (
     title VARCHAR(255) NOT NULL,
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    updated_at TIMESTAMP
+        DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_user_id
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
 
     CONSTRAINT fk_quiz_subject
         FOREIGN KEY (subject_id)
