@@ -21,10 +21,11 @@ module.exports.getAdminById = async function(id) {
 };
 
 // Registracija
-module.exports.createUser = async function(username, passwordHash) {
-    const insertQuery = `INSERT INTO users (username, password_hash)
-            VALUES (?, ?)`;
-    const [result] = await client.query(insertQuery, [username, passwordHash]);
+module.exports.createUser = async function(username, email, passwordHash) {
+    console.log('Creating user:', username, email);
+    const insertQuery = `INSERT INTO users (username, email, password_hash)
+            VALUES (?, ?, ?)`;
+    const [result] = await client.query(insertQuery, [username, email, passwordHash]);
     const selectQuery = 'SELECT id, username, password_hash, failed_attempts, locked_until, created_at, consecutive_failed_attempts FROM users WHERE id = ? LIMIT 1';
     const [rows] = await client.query(selectQuery, [result.insertId]);
     return rows[0];
