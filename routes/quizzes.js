@@ -7,8 +7,20 @@ const openRouter = require('../ai/openrouter');
 router.get('/', requireAuth, async (req, res) => {
     const user_id = req.session.userId; 
     try {
-        const quizzes = await dbQuizzes.getAllQuizzes(user_id);
+        const quizzes = await dbQuizzes.getQuizzesByUserId(user_id);
         res.json({ success: true, quizzes });
+    } catch (error) {
+        console.error('Error fetching quizzes:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+router.get('/questions/:id', requireAuth, async (req, res) => {
+    const quiz_id = req.params.id;
+    try {
+        const questions = await dbQuizzes.getQuizAndQuestionsById(quiz_id);
+        console.log(questions);
+        res.json({ success: true, questions });
     } catch (error) {
         console.error('Error fetching quizzes:', error);
         res.status(500).json({ error: 'Internal server error' });
