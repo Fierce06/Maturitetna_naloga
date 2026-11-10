@@ -29,7 +29,7 @@ router.post('/', requireAuth, async (req, res) => {
     const { name, description, color } = req.body;
     const user_id = req.session.userId; 
 
-    if (!name || !description || !color || !user_id) {
+    if (!name || !color || !user_id) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
