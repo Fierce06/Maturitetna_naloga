@@ -13,17 +13,19 @@ module.exports.createQuizQuestions = async function(quiz_id, question, answer_a,
 };
 
 module.exports.getQuizzesByUserId = async function(user_id) {
-    const query = 'SELECT * FROM quizzes WHERE user_id = ?';
+    const query = `SELECT q.*, COUNT(qq.id) AS question_count
+                   FROM quizzes q
+                   LEFT JOIN quiz_questions qq ON q.id = qq.quiz_id
+                   WHERE q.user_id = ?
+                   GROUP BY q.id`;
     const [rows] = await client.query(query, [user_id]);
     return rows;
 }
 
 module.exports.getQuizAndQuestionsById = async function(quiz_id) {
-    const quizQuery = 'SELECT * FROM quizzes WHERE id = ?';
     const questionsQuery = 'SELECT * FROM quiz_questions WHERE quiz_id = ? ORDER BY position ASC';
-    const [quizRows] = await client.query(quizQuery, [quiz_id]);
     const [questionRows] = await client.query(questionsQuery, [quiz_id]);
-    return { quiz: quizRows[0], questions: questionRows };
+    return { questions: questionRows };
 }
 
 module.exports.deleteQuiz = async function(quiz_id) {

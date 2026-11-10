@@ -7,9 +7,7 @@ const examTopics = document.getElementById("exam-topics");
 const examIcon = document.getElementById("exam-icon");
 const notice = document.getElementById("notice");
 
-const questions = [
-    ...document.querySelectorAll("#study-page [data-question]")
-];
+let questions = [];
 
 let timerId = null;
 
@@ -28,111 +26,44 @@ function validColor(color) {
         : "#3b82f6";
 }
 
-function practiceCards(subject) {
-    const name = subject.name.toLowerCase();
-
-    if (name.includes("matem")) {
-        return [
-            {
-                name: "Polinomi",
-                title: "Polinomi – Practice Exam",
-                topics: "Polinomi, ničle in Hornerjev postopek",
-                icon: "Σ",
-                bootstrapIcon: "bi-bezier2"
-            },
-            {
-                name: "Trigonometrija",
-                title: "Trigonometrija – Practice Exam",
-                topics: "Koti, identitete in kotne funkcije",
-                icon: "∠",
-                bootstrapIcon: "bi-triangle"
-            },
-            {
-                name: "Analitična geometrija",
-                title: "Analitična geometrija – Practice Exam",
-                topics: "Premice, razdalje, razpolovišča in koti",
-                icon: "⌁",
-                bootstrapIcon: "bi-graph-up"
-            }
-        ];
-    }
-
-    if (name.includes("sloven")) {
-        return [
-            {
-                name: "Književnost",
-                title: "Književnost – Practice Exam",
-                topics: "Književna dela, avtorji in interpretacija",
-                icon: "Aa",
-                bootstrapIcon: "bi-book-half"
-            },
-            {
-                name: "Slovnica",
-                title: "Slovnica – Practice Exam",
-                topics: "Besedne vrste, skladnja in slovnica",
-                icon: "Č",
-                bootstrapIcon: "bi-spellcheck"
-            },
-            {
-                name: "Priprava na esej",
-                title: "Priprava na esej",
-                topics: "Zgradba, argumentacija in primerjava del",
-                icon: "✎",
-                bootstrapIcon: "bi-pencil-square"
-            }
-        ];
-    }
-
-    if (name.includes("fiz")) {
-        return [
-            {
-                name: "Mehanika",
-                title: "Mehanika – Practice Exam",
-                topics: "Gibanje, pospešek in gibalna količina",
-                icon: "⚛",
-                bootstrapIcon: "bi-speedometer2"
-            },
-            {
-                name: "Sile in gibanje",
-                title: "Sile in gibanje – Practice Exam",
-                topics: "Newtonovi zakoni, sile in pospešek",
-                icon: "F",
-                bootstrapIcon: "bi-arrows-move"
-            },
-            {
-                name: "Energija in moč",
-                title: "Energija in moč – Practice Exam",
-                topics: "Delo, energija in moč",
-                icon: "E",
-                bootstrapIcon: "bi-battery-charging"
-            }
-        ];
-    }
-
-    return [
-        {
-            name: "Hitro preverjanje",
-            title: `${subject.name} – hitro preverjanje`,
-            topics: subject.description || subject.name,
-            icon: "?",
-            bootstrapIcon: "bi-question-circle"
-        },
-        {
-            name: "Ključni pojmi",
-            title: `${subject.name} – ključni pojmi`,
-            topics: subject.description || subject.name,
-            icon: "A",
-            bootstrapIcon: "bi-journal-text"
-        },
-        {
-            name: "Mešane naloge",
-            title: `${subject.name} – mešane naloge`,
-            topics: subject.description || subject.name,
-            icon: "✓",
-            bootstrapIcon: "bi-check2-square"
+var quizzes = { quizzes: [] };
+async function getAllQuizzes() {
+    try {
+        const response = await fetch("/api/quiz/");
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
         }
-    ];
+
+        if (!response.ok) {
+            throw new Error("Predmetov ni bilo mogoče pridobiti.");
+        }
+
+        quizzes = await response.json();
+    } catch (error) {
+        console.error(error);
+    }
 }
+
+function practiceCards(subject) {
+    var cards = [];
+
+    for (const quiz of quizzes.quizzes) {
+        if (quiz.subject_id === subject.id) {
+            cards.push({
+                id: quiz.id,
+                name: quiz.title,
+                title: quiz.title,
+                icon: "?",
+                bootstrapIcon: "bi-question-circle",
+                question_count: quiz.question_count
+            });
+        }
+    }
+
+    return cards;
+}
+getAllQuizzes();
 
 function createSubject(subject) {
     const color = validColor(subject.color);
@@ -165,8 +96,9 @@ function createSubject(subject) {
                     <button
                         type="button"
                         data-open-exam
+                        id="${card.id}"
+                        data-id="${escapeHtml(card.id)}"
                         data-title="${escapeHtml(card.title)}"
-                        data-topics="${escapeHtml(card.topics)}"
                         data-icon="${escapeHtml(card.icon)}"
                         class="group min-h-[145px] rounded-xl border border-slate-200
                                bg-slate-50 p-4 text-left transition
@@ -185,7 +117,7 @@ function createSubject(subject) {
                         </strong>
 
                         <span class="mt-1 block text-xs text-slate-500">
-                            10 questions · 45 min
+                            ${card.question_count} questions · 45 min
                         </span>
                     </button>
                 `).join("")}
@@ -196,6 +128,7 @@ function createSubject(subject) {
 
 async function loadStudySubjects() {
     try {
+        await getAllQuizzes();
         const response = await fetch("/api/subjects/");
 
         if (response.redirected) {
@@ -251,11 +184,14 @@ function updateProgress() {
         return selectedRadio || writtenAnswer;
     }).length;
 
+    const total = questions.length;
+    const percent = total === 0 ? 0 : Math.round(answered / total * 100);
+
     document.getElementById("answered-count").textContent =
-        `${answered} of 10 answered`;
+        `${answered} of ${total} answered`;
 
     document.getElementById("completion-percent").textContent =
-        `${answered * 10}% complete`;
+        `${percent}% complete`;
 
     document.querySelector("#study-page progress").value = answered;
 
@@ -288,13 +224,54 @@ function startTimer() {
     }, 1000);
 }
 
-function showExam(card) {
+async function showExam(card) {
+    try {
+        const quizId = card.dataset.id;
+        const response = await fetch("/api/quiz/questions/" + quizId);
+        if (response.redirected) {
+            window.location.href = response.url;
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("Predmetov ni bilo mogoče pridobiti.");
+        }
+
+        const data = await response.json();
+        const main = document.getElementById("study-page");
+        const quizQuestions = data.questions.questions;
+
+        main.querySelectorAll("[data-question]").forEach(element => element.remove());
+        main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+            const questionId = `question-${index}`;
+            return `
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question>
+                    <div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div>
+                    <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
+                    <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
+                        ${[
+                            ["A", element.answer_a],
+                            ["B", element.answer_b],
+                            ["C", element.answer_c],
+                            ["D", element.answer_d]
+                        ].map(([label, answer]) => `
+                            <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff]"><input class="peer sr-only" type="radio" name="${questionId}" value="${label}"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">${label}</span><span>${escapeHtml(answer)}</span></label>
+                        `).join("")}
+                    </fieldset>
+                </section>
+            `;
+        }).join(""));
+        questions = [...main.querySelectorAll("[data-question]")];
+    } catch (error) {
+        console.error(error);
+    }
+
     studyOverview.classList.add("hidden");
     studyPage.classList.remove("hidden");
 
-    examTitle.textContent = card.dataset.title;
-    examTopics.textContent = card.dataset.topics;
-    examIcon.textContent = card.dataset.icon;
+    // examTitle.textContent = card.dataset.title;
+    // examTopics.textContent = card.dataset.topics;
+    // examIcon.textContent = card.dataset.icon;
 
     startTimer();
 
@@ -314,6 +291,7 @@ function showStudyOverview() {
 
 studySubjectsList.addEventListener("click", event => {
     const card = event.target.closest("[data-open-exam]");
+    console.log(card);
 
     if (card) {
         showExam(card);
@@ -327,25 +305,25 @@ document.getElementById("back").addEventListener("click", event => {
     showStudyOverview();
 });
 
-document.getElementById("previous").addEventListener("click", () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-});
+// document.getElementById("previous").addEventListener("click", () => {
+//     window.scrollTo({ top: 0, behavior: "smooth" });
+// });
 
-document.getElementById("bookmark").addEventListener("click", function () {
-    const active = this.getAttribute("aria-pressed") !== "true";
+// document.getElementById("bookmark").addEventListener("click", function () {
+//     const active = this.getAttribute("aria-pressed") !== "true";
 
-    this.setAttribute("aria-pressed", String(active));
-    this.textContent = active
-        ? "◆  Marked for later"
-        : "♧  Save for later";
-});
+//     this.setAttribute("aria-pressed", String(active));
+//     this.textContent = active
+//         ? "◆  Marked for later"
+//         : "♧  Save for later";
+// });
 
-document.getElementById("next").addEventListener("click", () => {
-    const answered = updateProgress();
+// document.getElementById("next").addEventListener("click", () => {
+//     const answered = updateProgress();
 
-    notice.textContent = answered === 10
-        ? "All 10 questions answered."
-        : `${answered} of 10 answered. Complete the remaining questions.`;
-});
+//     notice.textContent = answered === questions.length
+//         ? `All ${questions.length} questions answered.`
+//         : `${answered} of ${questions.length} answered. Complete the remaining questions.`;
+// });
 
 loadStudySubjects();
