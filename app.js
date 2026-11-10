@@ -75,6 +75,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/subjects', require('./routes/subjects'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api/notebook', require('./routes/notebook'));
+app.use('/api/quiz', require('./routes/quizzes'));
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);

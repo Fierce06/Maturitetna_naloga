@@ -13,8 +13,8 @@ module.exports.getNoteById = async function(note_id) {
 };
 
 module.exports.insertNewNote = async function(user_id, subject_id, title, content) {
-    const insertQuery = `INSERT INTO notes (user_id, subject_id, title, content, subject_id) VALUES (?, ?, ?, ?, ?)`;
-    const [result] = await client.query(insertQuery, [parseInt(user_id), parseInt(subject_id), title, content, parseInt(subject_id)]);
+    const insertQuery = `INSERT INTO notes (user_id, subject_id, title, content) VALUES (?, ?, ?, ?)`;
+    const [result] = await client.query(insertQuery, [parseInt(user_id), parseInt(subject_id), title, content]);
     const selectQuery = 'SELECT * FROM notes WHERE id = ? LIMIT 1';
     const [rows] = await client.query(selectQuery, [result.insertId]);
     return rows[0];
