@@ -76,7 +76,13 @@ app.use('/api/subjects', require('./routes/subjects'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api/notebook', require('./routes/notebook'));
 app.use('/api/quiz', require('./routes/quizzes'));
+//pot za notebook
+app.use(
+    '/api/practice-exams',
+    require('./routes/practiceExams')
+);
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);
 });
+

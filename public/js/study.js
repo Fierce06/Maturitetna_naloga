@@ -312,7 +312,7 @@ function showStudyOverview() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-studySubjectsList.addEventListener("click", event => {
+studyOverview.addEventListener("click", event => {
     const card = event.target.closest("[data-open-exam]");
 
     if (card) {

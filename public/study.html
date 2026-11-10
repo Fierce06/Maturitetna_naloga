@@ -78,18 +78,211 @@
             <!-- <div id="dashboard-view" aria-label="Dashboard"></div> -->
 
             <section id="study-overview" class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
-                <header class="mb-6">
-                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">Study center</p>
-                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Choose what you want to practise</h1>
-                    <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">Choose a subject and open one of its practice exams. Your answers and progress remain in the current browser session.</p>
-                </header>
+                <header
+    class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"
+>
+    <div>
+        <p
+            class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600"
+        >
+            Study center
+        </p>
 
+        <h1
+            class="mt-2 text-3xl font-bold tracking-tight text-slate-900"
+        >
+            Choose what you want to practise
+        </h1>
+
+        <p
+            class="mt-2 max-w-2xl text-sm leading-6 text-slate-500"
+        >
+            Choose a subject and open one of its practice exams.
+            Your answers and progress remain in the current browser
+            session.
+        </p>
+    </div>
+
+    <button
+        type="button"
+        id="openAddExamModal"
+        class="inline-flex shrink-0 items-center justify-center gap-2
+               rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold
+               text-white shadow-md shadow-blue-200 transition
+               hover:bg-blue-500 focus:outline-none focus:ring-2
+               focus:ring-blue-500 focus:ring-offset-2"
+    >
+        <i class="bi bi-plus-lg"></i>
+        Add exam
+    </button>
+</header>
+<section
+    id="customPracticeExamsSection"
+    class="mb-6 hidden rounded-2xl border border-blue-100
+           bg-blue-50/60 p-4"
+>
+    <div class="mb-4 flex items-center justify-between">
+        <div>
+            <p
+                class="text-xs font-bold uppercase tracking-wider
+                       text-blue-600"
+            >
+                Your exams
+            </p>
+
+            <h2 class="mt-1 text-lg font-bold text-slate-900">
+                Exams made from your notes
+            </h2>
+        </div>
+    </div>
+
+    <div
+        id="customPracticeExamsList"
+        class="grid gap-3 md:grid-cols-2 xl:grid-cols-3"
+    ></div>
+</section>
                 <div id="studySubjectsList" class="space-y-5">
                     <p class="py-10 text-center text-sm text-slate-500">
                         Loading subjects...
                     </p>
                 </div>
             </section>
+            <main id="study-page"
+            <div
+    id="addExamModal"
+    class="fixed inset-0 z-50 hidden items-center justify-center
+           bg-slate-950/40 p-4 backdrop-blur-sm"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="addExamModalTitle"
+>
+    <div
+        class="flex max-h-[90vh] w-full max-w-2xl flex-col
+               overflow-hidden rounded-2xl bg-white shadow-2xl"
+    >
+        <div
+            class="flex items-start justify-between border-b
+                   border-slate-200 px-6 py-5"
+        >
+            <div>
+                <p
+                    class="text-xs font-bold uppercase tracking-wider
+                           text-blue-600"
+                >
+                    New practice exam
+                </p>
+
+                <h2
+                    id="addExamModalTitle"
+                    class="mt-1 text-2xl font-bold text-slate-900"
+                >
+                    Add exam
+                </h2>
+
+                <p class="mt-1 text-sm text-slate-500">
+                    Choose the notes you want to practise.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                id="closeAddExamModal"
+                class="grid h-10 w-10 place-items-center rounded-xl
+                       text-slate-500 transition hover:bg-slate-100
+                       hover:text-slate-900"
+                aria-label="Close"
+            >
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <form
+            id="addExamForm"
+            class="flex min-h-0 flex-1 flex-col"
+        >
+            <div class="overflow-y-auto px-6 py-5">
+                <label
+                    for="practiceExamTitle"
+                    class="mb-2 block text-sm font-semibold text-slate-700"
+                >
+                    Exam title
+                </label>
+
+                <input
+                    type="text"
+                    id="practiceExamTitle"
+                    maxlength="255"
+                    required
+                    placeholder="For example: Physics revision"
+                    class="w-full rounded-xl border border-slate-300
+                           px-4 py-3 text-sm outline-none transition
+                           focus:border-blue-500 focus:ring-2
+                           focus:ring-blue-100"
+                >
+
+                <div class="mt-6">
+                    <div class="mb-3 flex items-center justify-between">
+                        <label class="text-sm font-semibold text-slate-700">
+                            Select notes
+                        </label>
+
+                        <span
+                            id="selectedNotesCount"
+                            class="text-xs font-medium text-slate-500"
+                        >
+                            0 selected
+                        </span>
+                    </div>
+
+                    <div
+                        id="examNotesList"
+                        class="space-y-4"
+                    >
+                        <p
+                            class="rounded-xl bg-slate-50 p-5
+                                   text-center text-sm text-slate-500"
+                        >
+                            Loading notes...
+                        </p>
+                    </div>
+                </div>
+
+                <p
+                    id="addExamError"
+                    class="mt-4 hidden rounded-xl bg-red-50 p-3
+                           text-sm text-red-700"
+                    role="alert"
+                ></p>
+            </div>
+
+            <div
+                class="flex justify-end gap-3 border-t border-slate-200
+                       bg-slate-50 px-6 py-4"
+            >
+                <button
+                    type="button"
+                    id="cancelAddExam"
+                    class="rounded-xl border border-slate-300 bg-white
+                           px-5 py-2.5 text-sm font-semibold text-slate-700
+                           transition hover:bg-slate-100"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    id="createPracticeExam"
+                    class="rounded-xl bg-blue-600 px-5 py-2.5
+                           text-sm font-semibold text-white transition
+                           hover:bg-blue-500 disabled:cursor-not-allowed
+                           disabled:opacity-60"
+                >
+                    Create exam
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
             <main id="study-page" class="hidden min-w-0 w-full rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-lg shadow-slate-200/60 md:p-6">
     <a class="text-sm text-[#526176] no-underline" href="#" id="back">← &nbsp; Back to Study</a>
@@ -189,6 +382,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/calendar.js"></script>
 <script src="js/study.js"></script>
+<script src="js/practiceExams.js"></script>
 
 </body>
 </html> 
