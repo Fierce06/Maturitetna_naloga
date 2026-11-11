@@ -60,13 +60,13 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
-                
+
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-gear"></i>
                     Settings
                 </a>
-<button onclick="logout()"
+                <button onclick="logout()"
                     class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-box-arrow-left"></i>
                     Logout
@@ -77,279 +77,236 @@
         <div id="center-content" class="flex flex-col w-full">
             <!-- <div id="dashboard-view" aria-label="Dashboard"></div> -->
 
-            <section id="study-overview" class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
-                <header
-    class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between"
->
-    <div>
-        <p
-            class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600"
-        >
-            Study center
-        </p>
+            <section id="study-overview"
+                class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
+                <header class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                            Study center
+                        </p>
 
-        <h1
-            class="mt-2 text-3xl font-bold tracking-tight text-slate-900"
-        >
-            Choose what you want to practise
-        </h1>
+                        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                            Choose what you want to practise
+                        </h1>
 
-        <p
-            class="mt-2 max-w-2xl text-sm leading-6 text-slate-500"
-        >
-            Choose a subject and open one of its practice exams.
-            Your answers and progress remain in the current browser
-            session.
-        </p>
-    </div>
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                            Choose a subject and open one of its practice exams.
+                            Your answers and progress remain in the current browser
+                            session.
+                        </p>
+                    </div>
 
-    <button
-        type="button"
-        id="openAddExamModal"
-        class="inline-flex shrink-0 items-center justify-center gap-2
+                    <button type="button" id="openAddExamModal" class="inline-flex shrink-0 items-center justify-center gap-2
                rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold
                text-white shadow-md shadow-blue-200 transition
                hover:bg-blue-500 focus:outline-none focus:ring-2
-               focus:ring-blue-500 focus:ring-offset-2"
-    >
-        <i class="bi bi-plus-lg"></i>
-        Add exam
-    </button>
-</header>
-<section
-    id="customPracticeExamsSection"
-    class="mb-6 hidden rounded-2xl border border-blue-100
-           bg-blue-50/60 p-4"
->
-    <div class="mb-4 flex items-center justify-between">
-        <div>
-            <p
-                class="text-xs font-bold uppercase tracking-wider
-                       text-blue-600"
-            >
-                Your exams
-            </p>
+               focus:ring-blue-500 focus:ring-offset-2">
+                        <i class="bi bi-plus-lg"></i>
+                        Add exam
+                    </button>
+                </header>
+                <section id="customPracticeExamsSection" class="mb-6 hidden rounded-2xl border border-blue-100
+           bg-blue-50/60 p-4">
+                    <div class="mb-4 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider
+                       text-blue-600">
+                                Your exams
+                            </p>
 
-            <h2 class="mt-1 text-lg font-bold text-slate-900">
-                Exams made from your notes
-            </h2>
-        </div>
-    </div>
+                            <h2 class="mt-1 text-lg font-bold text-slate-900">
+                                Exams made from your notes
+                            </h2>
+                        </div>
+                    </div>
 
-    <div
-        id="customPracticeExamsList"
-        class="grid gap-3 md:grid-cols-2 xl:grid-cols-3"
-    ></div>
-</section>
+                    <div id="customPracticeExamsList" class="grid gap-3 md:grid-cols-2 xl:grid-cols-3"></div>
+                </section>
                 <div id="studySubjectsList" class="space-y-5">
                     <p class="py-10 text-center text-sm text-slate-500">
                         Loading subjects...
                     </p>
                 </div>
             </section>
-            <main id="study-page"
-            <div
-    id="addExamModal"
-    class="fixed inset-0 z-50 hidden items-center justify-center
-           bg-slate-950/40 p-4 backdrop-blur-sm"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="addExamModalTitle"
->
-    <div
-        class="flex max-h-[90vh] w-full max-w-2xl flex-col
-               overflow-hidden rounded-2xl bg-white shadow-2xl"
-    >
-        <div
-            class="flex items-start justify-between border-b
-                   border-slate-200 px-6 py-5"
-        >
-            <div>
-                <p
-                    class="text-xs font-bold uppercase tracking-wider
-                           text-blue-600"
-                >
-                    New practice exam
-                </p>
+            <div id="addExamModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="addExamModalTitle">
+                <div class="flex max-h-[90vh] w-full max-w-2xl flex-col
+               overflow-hidden rounded-2xl bg-white shadow-2xl">
+                    <div class="flex items-start justify-between border-b
+                   border-slate-200 px-6 py-5">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-wider
+                           text-blue-600">
+                                New practice exam
+                            </p>
 
-                <h2
-                    id="addExamModalTitle"
-                    class="mt-1 text-2xl font-bold text-slate-900"
-                >
-                    Add exam
-                </h2>
+                            <h2 id="addExamModalTitle" class="mt-1 text-2xl font-bold text-slate-900">
+                                Add exam
+                            </h2>
 
-                <p class="mt-1 text-sm text-slate-500">
-                    Choose the notes you want to practise.
-                </p>
-            </div>
+                            <p class="mt-1 text-sm text-slate-500">
+                                Choose the notes you want to practise.
+                            </p>
+                        </div>
 
-            <button
-                type="button"
-                id="closeAddExamModal"
-                class="grid h-10 w-10 place-items-center rounded-xl
+                        <button type="button" id="closeAddExamModal" class="grid h-10 w-10 place-items-center rounded-xl
                        text-slate-500 transition hover:bg-slate-100
-                       hover:text-slate-900"
-                aria-label="Close"
-            >
-                <i class="bi bi-x-lg"></i>
-            </button>
-        </div>
+                       hover:text-slate-900" aria-label="Close">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
 
-        <form
-            id="addExamForm"
-            class="flex min-h-0 flex-1 flex-col"
-        >
-            <div class="overflow-y-auto px-6 py-5">
-                <label
-                    for="practiceExamTitle"
-                    class="mb-2 block text-sm font-semibold text-slate-700"
-                >
-                    Exam title
-                </label>
+                    <form id="addExamForm" class="flex min-h-0 flex-1 flex-col">
+                        <div class="overflow-y-auto px-6 py-5">
+                            <label for="practiceExamTitle" class="mb-2 block text-sm font-semibold text-slate-700">
+                                Exam title
+                            </label>
 
-                <input
-                    type="text"
-                    id="practiceExamTitle"
-                    maxlength="255"
-                    required
-                    placeholder="For example: Physics revision"
-                    class="w-full rounded-xl border border-slate-300
+                            <input type="text" id="practiceExamTitle" maxlength="255" required
+                                placeholder="For example: Physics revision" class="w-full rounded-xl border border-slate-300
                            px-4 py-3 text-sm outline-none transition
                            focus:border-blue-500 focus:ring-2
-                           focus:ring-blue-100"
-                >
+                           focus:ring-blue-100">
 
-                <div class="mt-6">
-                    <div class="mb-3 flex items-center justify-between">
-                        <label class="text-sm font-semibold text-slate-700">
-                            Select notes
-                        </label>
+                            <div class="mt-6">
+                                <div class="mb-3 flex items-center justify-between">
+                                    <label class="text-sm font-semibold text-slate-700">
+                                        Select notes
+                                    </label>
 
-                        <span
-                            id="selectedNotesCount"
-                            class="text-xs font-medium text-slate-500"
-                        >
-                            0 selected
-                        </span>
-                    </div>
+                                    <span id="selectedNotesCount" class="text-xs font-medium text-slate-500">
+                                        0 selected
+                                    </span>
+                                </div>
 
-                    <div
-                        id="examNotesList"
-                        class="space-y-4"
-                    >
-                        <p
-                            class="rounded-xl bg-slate-50 p-5
-                                   text-center text-sm text-slate-500"
-                        >
-                            Loading notes...
-                        </p>
-                    </div>
-                </div>
+                                <div id="examNotesList" class="space-y-4">
+                                    <p class="rounded-xl bg-slate-50 p-5
+                                   text-center text-sm text-slate-500">
+                                        Loading notes...
+                                    </p>
+                                </div>
+                            </div>
 
-                <p
-                    id="addExamError"
-                    class="mt-4 hidden rounded-xl bg-red-50 p-3
-                           text-sm text-red-700"
-                    role="alert"
-                ></p>
-            </div>
+                            <label for="difficultySelect" class="mt-4 block text-sm font-semibold text-slate-700">
+                                Select difficulty
+                            </label>
 
-            <div
-                class="flex justify-end gap-3 border-t border-slate-200
-                       bg-slate-50 px-6 py-4"
-            >
-                <button
-                    type="button"
-                    id="cancelAddExam"
-                    class="rounded-xl border border-slate-300 bg-white
+                            <select id="difficultySelect" class="mt-6 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition">
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+
+                            <label for="numberOfQuestions" class="mt-4 block text-sm font-semibold text-slate-700">
+                                Number of questions
+                            </label>
+
+                            <input type="number" id="numberOfQuestions" min="1" max="100" value="10" class="mt-4 w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition"
+                                placeholder="Number of questions">
+
+                            <p id="addExamError" class="mt-4 hidden rounded-xl bg-red-50 p-3
+                           text-sm text-red-700" role="alert"></p>
+                        </div>
+
+                        <div class="flex justify-end gap-3 border-t border-slate-200
+                       bg-slate-50 px-6 py-4">
+                            <button type="button" id="cancelAddExam" class="rounded-xl border border-slate-300 bg-white
                            px-5 py-2.5 text-sm font-semibold text-slate-700
-                           transition hover:bg-slate-100"
-                >
-                    Cancel
-                </button>
+                           transition hover:bg-slate-100">
+                                Cancel
+                            </button>
 
-                <button
-                    type="submit"
-                    id="createPracticeExam"
-                    class="rounded-xl bg-blue-600 px-5 py-2.5
+                            <button type="submit" id="createPracticeExam" class="rounded-xl bg-blue-600 px-5 py-2.5
                            text-sm font-semibold text-white transition
                            hover:bg-blue-500 disabled:cursor-not-allowed
-                           disabled:opacity-60"
-                >
-                    Create exam
-                </button>
+                           disabled:opacity-60">
+                                Create exam
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
-    </div>
-</div>
 
-            <main id="study-page" class="hidden min-w-0 w-full rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-lg shadow-slate-200/60 md:p-6">
-                <a class="text-sm text-[#526176] no-underline" href="#" id="back">← &nbsp; Back to Study</a>
-                <section class="my-6 flex items-center gap-[35px] rounded-[14px] border border-[#e2e8f1] bg-white p-[22px] max-[650px]:gap-3 max-[650px]:p-4" aria-label="Exam progress">
-                    <div class="min-w-0 flex-1"><div class="mb-[13px] flex justify-between gap-3 text-sm max-[650px]:text-xs [&>span:last-child]:text-[#6f7a8e]"><strong id="answered-count">0 of 10 answered</strong><span id="completion-percent">0% complete</span></div><progress class="block h-[9px] w-full overflow-hidden rounded-[10px] border-0 bg-[#edf1f7] [&::-webkit-progress-bar]:bg-[#edf1f7] [&::-webkit-progress-value]:rounded-[10px] [&::-webkit-progress-value]:bg-[#4267bb] [&::-moz-progress-bar]:bg-[#4267bb]" value="0" max="10" aria-label="Exam progress">0%</progress></div>
-                    <div class="flex items-center gap-3 border-l border-[#e5eaf1] pl-7 max-[650px]:gap-[7px] max-[650px]:pl-[15px] [&_strong]:block [&_strong]:text-[25px] [&_strong]:tabular-nums max-[650px]:[&_strong]:text-[21px] [&_small]:mt-[5px] [&_small]:block [&_small]:text-[#7b8594]"><span class="text-[31px] text-[#1265dc] max-[650px]:text-2xl" aria-hidden="true">◷</span><div><strong id="time">45:00</strong><small>time remaining</small></div></div>
-                </section>
-            </main>
+            <main id="study-page"
+            class="hidden min-w-0 w-full rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-lg shadow-slate-200/60 md:p-6">
+            <a class="text-sm text-[#526176] no-underline" href="#" id="back">← &nbsp; Back to Study</a>
+            <section
+                class="my-6 flex items-center gap-[35px] rounded-[14px] border border-[#e2e8f1] bg-white p-[22px] max-[650px]:gap-3 max-[650px]:p-4"
+                aria-label="Exam progress">
+                <div class="min-w-0 flex-1">
+                    <div
+                        class="mb-[13px] flex justify-between gap-3 text-sm max-[650px]:text-xs [&>span:last-child]:text-[#6f7a8e]">
+                        <strong id="answered-count">0 of 10 answered</strong><span id="completion-percent">0%
+                            complete</span></div><progress
+                        class="block h-[9px] w-full overflow-hidden rounded-[10px] border-0 bg-[#edf1f7] [&::-webkit-progress-bar]:bg-[#edf1f7] [&::-webkit-progress-value]:rounded-[10px] [&::-webkit-progress-value]:bg-[#4267bb] [&::-moz-progress-bar]:bg-[#4267bb]"
+                        value="0" max="10" aria-label="Exam progress">0%</progress>
+                </div>
+                <div
+                    class="flex items-center gap-3 border-l border-[#e5eaf1] pl-7 max-[650px]:gap-[7px] max-[650px]:pl-[15px] [&_strong]:block [&_strong]:text-[25px] [&_strong]:tabular-nums max-[650px]:[&_strong]:text-[21px] [&_small]:mt-[5px] [&_small]:block [&_small]:text-[#7b8594]">
+                    <span class="text-[31px] text-[#1265dc] max-[650px]:text-2xl" aria-hidden="true">◷</span>
+                    <div><strong id="time">45:00</strong><small>time remaining</small></div>
+                </div>
+            </section>
+        </main>
         </div>
 
         <aside
-            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
-            <!-- Calendar on top and exams on bottom -->
-            <div class="w-full max-w-md bg-white rounded-2xl">
+        class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+        <!-- Calendar on top and exams on bottom -->
+        <div class="w-full max-w-md bg-white rounded-2xl">
 
-                <!-- Header -->
-                <div class="flex items-center justify-between mb-6">
-                    <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
-                        &#8249;
-                    </button>
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-6">
+                <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                    &#8249;
+                </button>
 
-                    <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
+                <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
 
-                    <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
-                        &#8250;
-                    </button>
-                </div>
-
-                <!-- Weekdays -->
-                <div class="grid grid-cols-7 mb-2 text-center">
-                    <div class="text-sm font-medium text-gray-400">Sun</div>
-                    <div class="text-sm font-medium text-gray-400">Mon</div>
-                    <div class="text-sm font-medium text-gray-400">Tue</div>
-                    <div class="text-sm font-medium text-gray-400">Wed</div>
-                    <div class="text-sm font-medium text-gray-400">Thu</div>
-                    <div class="text-sm font-medium text-gray-400">Fri</div>
-                    <div class="text-sm font-medium text-gray-400">Sat</div>
-                </div>
-
-                <!-- Calendar -->
-                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
-
-                <!-- Selected date -->
-                <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
-                    <p class="text-sm text-gray-500">Selected date</p>
-                    <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
-                        None
-                    </p>
-                </div>
-
+                <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                    &#8250;
+                </button>
             </div>
 
-            <div class="mt-8">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
-                <ul class="space-y-2" id="upcomingExams">
-                    
-                </ul>
+            <!-- Weekdays -->
+            <div class="grid grid-cols-7 mb-2 text-center">
+                <div class="text-sm font-medium text-gray-400">Sun</div>
+                <div class="text-sm font-medium text-gray-400">Mon</div>
+                <div class="text-sm font-medium text-gray-400">Tue</div>
+                <div class="text-sm font-medium text-gray-400">Wed</div>
+                <div class="text-sm font-medium text-gray-400">Thu</div>
+                <div class="text-sm font-medium text-gray-400">Fri</div>
+                <div class="text-sm font-medium text-gray-400">Sat</div>
             </div>
-        </aside>
+
+            <!-- Calendar -->
+            <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+
+            <!-- Selected date -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
+                <p class="text-sm text-gray-500">Selected date</p>
+                <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
+                    None
+                </p>
+            </div>
+
+        </div>
+
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
+            <ul class="space-y-2" id="upcomingExams">
+
+            </ul>
+        </div>
+    </aside>
     </div>
 
-    
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="js/calendar.js"></script>
-<script src="js/study.js"></script>
-<script src="js/practiceExams.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/calendar.js"></script>
+    <script src="js/study.js"></script>
+    <script src="js/practiceExams.js"></script>
 
 </body>
-</html> 
+
+</html>

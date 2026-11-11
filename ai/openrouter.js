@@ -78,9 +78,9 @@ Number of questions: ${questionCount}
 
     const data = await response.json();
     const content = data?.choices?.[0]?.message?.content;
-
+    console.dir(data.choices[0].message, { depth: null });
     if (!content) {
-        throw new Error("OpenRouter returned an empty response.");
+        throw new Error("OpenRouter returned an empty response. Finish reason: " + data?.choices?.[0]?.finish_reason);
     }
 
     try {

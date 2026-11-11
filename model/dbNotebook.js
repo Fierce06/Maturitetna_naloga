@@ -61,11 +61,12 @@ module.exports.insertNewNote = async function (
     }
 
     const insertQuery = `
-        INSERT INTO notes (subject_id, title, content)
-        VALUES (?, ?, ?)
+        INSERT INTO notes (user_id, subject_id, title, content)
+        VALUES (?, ?, ?, ?)
     `;
 
     const [result] = await client.query(insertQuery, [
+        user_id,
         subject_id,
         title,
         content
