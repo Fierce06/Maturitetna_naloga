@@ -78,11 +78,6 @@ app.use('/api/notebook', require('./routes/notebook'));
 // Profilna fotografija prijavljenega uporabnika
 app.use('/api/profile-photo', require('./routes/profilePhoto'));
 app.use('/api/quiz', require('./routes/quizzes'));
-//pot za notebook
-app.use(
-    '/api/practice-exams',
-    require('./routes/practiceExams')
-);
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);

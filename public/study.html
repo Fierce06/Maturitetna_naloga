@@ -226,6 +226,21 @@
                 </div>
             </div>
 
+            <div id="scoreModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="scoreModalTitle">
+                <div class="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
+                    <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-blue-100 text-2xl text-blue-600">
+                        <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                    </div>
+                    <h2 id="scoreModalTitle" class="mt-5 text-2xl font-bold text-slate-900">Practice complete</h2>
+                    <p class="mt-2 text-sm text-slate-500">Your score</p>
+                    <p id="scoreModalValue" class="mt-1 text-5xl font-bold text-blue-600">0%</p>
+                    <p id="scoreModalDetails" class="mt-3 text-sm text-slate-600"></p>
+                    <button type="button" id="closeScoreModal" class="mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Continue
+                    </button>
+                </div>
+            </div>
+
             <main id="study-page"
             class="hidden min-w-0 w-full rounded-2xl border border-slate-200 bg-white/60 p-4 shadow-lg shadow-slate-200/60 md:p-6">
             <a class="text-sm text-[#526176] no-underline" href="#" id="back">← &nbsp; Back to Study</a>
@@ -246,6 +261,15 @@
                     <div><strong id="time">45:00</strong><small>time remaining</small></div>
                 </div>
             </section>
+
+            <p id="notice" class="my-6 rounded-[10px] bg-[#f1eafa] p-[15px] text-sm text-[#7345c3] hidden" role="alert"></p>
+
+            <div id="exam-questions" class="space-y-6"></div>
+
+            <nav class="mt-[35px] flex flex-wrap items-center justify-between gap-[15px]" aria-label="Exam navigation">
+                <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 border-[#82a8d7] bg-white text-[#2468b8]" id="previous">← &nbsp; Back to top</button>
+                <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 min-w-[120px] border-[#4267bb] bg-[#4267bb] text-white max-[650px]:min-w-[85px]" id="next">Finish practice &nbsp; →</button>
+            </nav>
         </main>
         </div>
 
@@ -306,6 +330,7 @@
     <script src="js/calendar.js"></script>
     <script src="js/study.js"></script>
     <script src="js/practiceExams.js"></script>
+    <script src="/js/user.js"></script>
 
 </body>
 

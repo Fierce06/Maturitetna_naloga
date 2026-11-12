@@ -5,6 +5,11 @@ const requireAuth = require('../middleware/requireAuth');
 const openRouter = require('../ai/openrouter');
 const dbNotebook = require('../model/dbNotebook');
 
+/**
+ * Remove HTML tags and styles from the given content.
+ * @param {string} content 
+ * @returns {string}
+ */
 function removeHtmlAndStyles(content) {
     if (typeof content !== 'string') {
         return '';
@@ -23,6 +28,10 @@ function removeHtmlAndStyles(content) {
         .trim();
 }
 
+/**
+ * Get all quizzes for the authenticated user.
+ * @returns { success: boolean, quizzes: Array } - List of quizzes for the user.
+ */
 router.get('/', requireAuth, async (req, res) => {
     const user_id = req.session.userId; 
     try {
@@ -34,11 +43,15 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Get all questions for a specific quiz by its ID for the authenticated user.
+ * @param { number } quiz_id - The ID of the quiz to retrieve questions for.
+ * @returns { success: boolean, questions: Array } - List of questions for the specified quiz.
+ */
 router.get('/questions/:id', requireAuth, async (req, res) => {
     const quiz_id = req.params.id;
     try {
         const questions = await dbQuizzes.getQuizAndQuestionsById(quiz_id);
-        console.log(questions);
         res.json({ success: true, questions });
     } catch (error) {
         console.error('Error fetching quizzes:', error);
@@ -57,6 +70,11 @@ router.get('/questions/:id', requireAuth, async (req, res) => {
 //     }
 // });
 
+/**
+ * Create a new quiz for the authenticated user based on a specific note.
+ * @param { number } note_id - The ID of the note to generate the quiz from.
+ * @param { string } title - The title of the quiz.
+ */
 router.post('/', requireAuth, async (req, res) => {
     const { subject_id, note_id, title, topic, difficulty, number_of_questions } = req.body;
     const user_id = req.session.userId; 
@@ -87,6 +105,14 @@ router.post('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Create a new quiz for the authenticated user based on multiple notes.
+ * @param { Array<number> } note_ids - The IDs of the notes to generate the quiz from.
+ * @param { string } title - The title of the quiz.
+ * @param { string } difficulty - The difficulty level of the quiz.
+ * @param { number } number_of_questions - The number of questions to generate for the quiz.
+ * @returns { success: boolean, newQuiz: Object } - A success flag and the newly created quiz object.
+ */
 router.post('/create', requireAuth, async (req, res) => {
     const { note_ids, title, difficulty, number_of_questions } = req.body;
     const user_id = req.session.userId; 
@@ -108,14 +134,8 @@ router.post('/create', requireAuth, async (req, res) => {
             }
             topic += `${removeHtmlAndStyles(note.content)}\n`;
         }
-
-        console.log('Combined topic:', topic);
-        console.log('First subject ID:', first_subject_id); 
-        console.log('Note IDs:', note_ids);
         // Generate quiz using OpenRouter
         const newQuestions = await openRouter.generateQuiz({ topic, difficulty, questionCount: number_of_questions });
-
-        console.log('Generated questions:', newQuestions);
 
         // Save the generated quiz to the database
         const newQuiz = await dbQuizzes.createQuiz(user_id, first_subject_id, note_ids[0], title);

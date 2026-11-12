@@ -6,6 +6,9 @@ const examTitle = document.getElementById("exam-title");
 const examTopics = document.getElementById("exam-topics");
 const examIcon = document.getElementById("exam-icon");
 const notice = document.getElementById("notice");
+const scoreModal = document.getElementById("scoreModal");
+const scoreModalValue = document.getElementById("scoreModalValue");
+const scoreModalDetails = document.getElementById("scoreModalDetails");
 
 let questions = [];
 
@@ -78,7 +81,7 @@ function createSubject(subject) {
                         p-5 text-white shadow-md"
                  style="background-color: ${color}">
 
-                <i class="bi bi-book text-3xl"></i>
+                <i class="bi ${subject.icon || 'bi-calculator'} text-3xl"></i>
 
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-white/70">
@@ -224,7 +227,11 @@ function startTimer() {
     }, 1000);
 }
 
+var correctAnswers = {};
+var explanation = {};
 async function showExam(card) {
+    correctAnswers = {};
+    explanation = {};
     try {
         const quizId = card.dataset.id;
         const response = await fetch("/api/quiz/questions/" + quizId);
@@ -238,15 +245,18 @@ async function showExam(card) {
         }
 
         const data = await response.json();
-        const main = document.getElementById("study-page");
+        const main = document.getElementById("exam-questions");
         const quizQuestions = data.questions.questions;
+
+        document.querySelector("#study-page progress").max = quizQuestions.length;
 
         main.querySelectorAll("[data-question]").forEach(element => element.remove());
         main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
             const questionId = `question-${index}`;
+            correctAnswers[questionId] = element.correct_answer;
+            explanation[questionId] = element.explanation;
             return `
-                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question>
-                    <div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div>
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
                     <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
                     <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
                         ${[
@@ -269,10 +279,6 @@ async function showExam(card) {
     studyOverview.classList.add("hidden");
     studyPage.classList.remove("hidden");
 
-    // examTitle.textContent = card.dataset.title;
-    // examTopics.textContent = card.dataset.topics;
-    // examIcon.textContent = card.dataset.icon;
-
     startTimer();
 
     history.replaceState(null, "", "#exam");
@@ -291,7 +297,6 @@ function showStudyOverview() {
 
 studyOverview.addEventListener("click", event => {
     const card = event.target.closest("[data-open-exam]");
-    console.log(card);
 
     if (card) {
         showExam(card);
@@ -305,25 +310,81 @@ document.getElementById("back").addEventListener("click", event => {
     showStudyOverview();
 });
 
-// document.getElementById("previous").addEventListener("click", () => {
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-// });
+document.getElementById("previous").addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
-// document.getElementById("bookmark").addEventListener("click", function () {
-//     const active = this.getAttribute("aria-pressed") !== "true";
+document.getElementById("next").addEventListener("click", () => {
+    const answered = updateProgress();
 
-//     this.setAttribute("aria-pressed", String(active));
-//     this.textContent = active
-//         ? "◆  Marked for later"
-//         : "♧  Save for later";
-// });
+    notice.textContent = answered === questions.length
+        ? `All ${questions.length} questions answered.`
+        : `${answered} of ${questions.length} answered. Complete the remaining questions.`;
 
-// document.getElementById("next").addEventListener("click", () => {
-//     const answered = updateProgress();
+    notice.classList.remove("hidden");
 
-//     notice.textContent = answered === questions.length
-//         ? `All ${questions.length} questions answered.`
-//         : `${answered} of ${questions.length} answered. Complete the remaining questions.`;
-// });
+    checkExamAnswers();
+});
+
+function checkExamAnswers() {
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    questions.forEach((question, index) => {
+        const questionId = `question-${index}`;
+        const selectedRadio = question.querySelector('input[type="radio"]:checked');
+
+        if (selectedRadio) {
+            const selectedAnswer = selectedRadio.value;
+            const correctAnswer = Object.keys(correctAnswers).includes(questionId) ? correctAnswers[questionId] : null;
+
+            const questionContainer = document.getElementById(questionId);
+
+            if (selectedAnswer === correctAnswer) {
+                correctCount++;
+                questionContainer.classList.add("border-green-500", "shadow-lg", "shadow-green-200", "border-2");
+                questionContainer.classList.remove("border-red-500", "shadow-red-200");
+            } else {
+                incorrectCount++;
+                questionContainer.classList.add("border-red-500", "shadow-lg", "shadow-red-200", "border-2");
+                questionContainer.classList.remove("border-green-500", "shadow-green-200");
+            }
+
+            questionContainer.insertAdjacentHTML("beforeend", `
+                <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+                    <strong>Correct Answer:</strong> ${correctAnswer || "N/A"}<br>
+                    <strong>Explanation:</strong> ${explanation[questionId] || "No explanation available."}
+                </div>
+            `);
+            
+        }
+    });
+
+    const score = questions.length === 0
+        ? 0
+        : Math.round((correctCount / questions.length) * 100);
+
+    notice.textContent = `Correct: ${correctCount}, Incorrect: ${incorrectCount} out of ${questions.length} questions. Current score: ${score}%.`;
+    scoreModalValue.textContent = `${score}%`;
+    scoreModalDetails.textContent = `${correctCount} correct and ${incorrectCount} incorrect out of ${questions.length} questions.`;
+    scoreModal.classList.remove("hidden");
+    scoreModal.classList.add("flex");
+}
+
+function closeScoreModal() {
+    scoreModal.classList.add("hidden");
+    scoreModal.classList.remove("flex");
+}
+
+document.getElementById("closeScoreModal").addEventListener("click", closeScoreModal);
+scoreModal.addEventListener("click", event => {
+    if (event.target === scoreModal) closeScoreModal();
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !scoreModal.classList.contains("hidden")) {
+        closeScoreModal();
+    }
+});
 
 loadStudySubjects();

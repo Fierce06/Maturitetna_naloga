@@ -3,6 +3,10 @@ const router = express.Router();
 const dbExams = require('../model/dbExams');
 const requireAuth = require('../middleware/requireAuth');
 
+/**
+ * Get all exams for the authenticated user.
+ * @returns { success: boolean, exams: Array } - List of exams for the user.
+ */
 router.get('/', requireAuth, async (req, res) => {
     const user_id = req.session.userId; 
     try {
@@ -14,6 +18,13 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Create a new exam for the authenticated user.
+ * @param { number } subject_id - The ID of the subject for the exam.
+ * @param { string } title - The title of the exam.
+ * @param { string } date - The date of the exam in YYYY-MM-DD format.
+ * @returns { success: boolean, newExam: Object } - The newly created exam object.
+ */
 router.post('/', requireAuth, async (req, res) => {
     const { subject_id, title, date } = req.body;
     const user_id = req.session.userId; 

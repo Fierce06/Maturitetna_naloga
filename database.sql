@@ -47,6 +47,8 @@ CREATE TABLE subjects (
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    icon VARCHAR(255) NULL DEFAULT 'bi-calculator',
+
     updated_at TIMESTAMP NOT NULL
         DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
@@ -341,6 +343,39 @@ CREATE TABLE exams (
 
 
 -- =====================================================
+-- FRIENDS
+-- =====================================================
+
+CREATE TABLE friends (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT UNSIGNED NOT NULL,
+    friend_id INT UNSIGNED NOT NULL,
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_friend_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_friend_friend
+        FOREIGN KEY (friend_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    -- Prevent duplicate friendships and self-friendships
+    CONSTRAINT uq_friendship
+        UNIQUE (user_id, friend_id),
+
+    CONSTRAINT chk_no_self_friendship
+        CHECK (user_id != friend_id)
+
+) ENGINE=InnoDB;
+
+-- =====================================================
 -- ADDITIONAL INDEXES
 -- =====================================================
 
@@ -392,3 +427,10 @@ ON exams(user_id, date);
 
 CREATE INDEX idx_exams_subject
 ON exams(subject_id);
+
+-- Friends
+CREATE INDEX idx_friends_user
+ON friends(user_id);
+
+CREATE INDEX idx_friends_friend
+ON friends(friend_id);

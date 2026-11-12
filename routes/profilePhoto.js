@@ -5,11 +5,11 @@ const crypto = require('crypto');
 
 const router = express.Router();
 
-// Mapa za profilne fotografije in največja dovoljena velikost shranjene slike.
+// Map the profile pictures directory and set the maximum allowed file size for uploads.
 const mapaFotografij = path.join(__dirname, '..', 'uploads', 'profile-pictures');
 const najvecjaVelikost = 1.5 * 1024 * 1024;
 
-// Dostop do fotografij imajo samo prijavljeni uporabniki.
+// Access to profile photo routes requires an active session with a valid user ID.
 router.use(function (req, res, next) {
     if (!req.session || !req.session.userId) {
         return res.status(401).json({
@@ -21,12 +21,12 @@ router.use(function (req, res, next) {
     next();
 });
 
-// Pot do datoteke določimo s pomočjo ID-ja iz seje, ne iz uporabnikovega vnosa.
+// Return the file path for a user's profile photo.
 function potDoFotografije(userId) {
     return path.join(mapaFotografij, `${Number(userId)}.jpg`);
 }
 
-// Preverimo, ali ima trenutno prijavljeni uporabnik shranjeno fotografijo.
+// Check if the authenticated user has a profile photo and return its URL if it exists.
 router.get('/status', async function (req, res) {
     try {
         await fs.promises.access(potDoFotografije(req.session.userId));
@@ -54,7 +54,7 @@ router.get('/status', async function (req, res) {
     }
 });
 
-// Vrnjena slika pripada samo uporabniku, ki ima trenutno aktivno sejo.
+// Return the authenticated user's profile photo as a JPEG image, or a 404 error if it doesn't exist.
 router.get('/image', function (req, res) {
     res.set('Cache-Control', 'private, no-store');
     res.set('X-Content-Type-Options', 'nosniff');
@@ -68,7 +68,7 @@ router.get('/image', function (req, res) {
     });
 });
 
-// Shranimo fotografijo, ki jo je brskalnik pred pošiljanjem obrezal na 512 × 512 px.
+// Handle profile photo uploads. The uploaded image must be a base64-encoded JPEG and not exceed the maximum allowed size.
 router.post('/', async function (req, res) {
     const imageData = req.body && req.body.imageData;
 
@@ -79,7 +79,7 @@ router.post('/', async function (req, res) {
         });
     }
 
-    // Preverimo, ali smo prejeli sliko v JPG/base64 obliki.
+    // Check if the uploaded image is a valid base64-encoded JPEG.
     const ujemanje = /^data:image\/jpeg;base64,([A-Za-z0-9+/]+={0,2})$/.exec(imageData);
 
     if (!ujemanje) {
@@ -91,7 +91,7 @@ router.post('/', async function (req, res) {
 
     const vsebina = Buffer.from(ujemanje[1], 'base64');
 
-    // Dodatno preverimo začetne in končne bajte datoteke JPG.
+    // Check if the image is a valid JPEG by verifying its magic numbers and size.
     const jeJpg = vsebina.length >= 100 &&
         vsebina[0] === 0xff &&
         vsebina[1] === 0xd8 &&
@@ -109,7 +109,7 @@ router.post('/', async function (req, res) {
     let zacasnaPot;
 
     try {
-        // Najprej napišemo začasno datoteko in jo nato preimenujemo.
+        // Create the profile pictures directory if it doesn't exist, then write the uploaded image to a temporary file before renaming it to the final destination.
         await fs.promises.mkdir(mapaFotografij, { recursive: true });
 
         const nakljucnoIme = crypto.randomBytes(8).toString('hex');
@@ -127,10 +127,10 @@ router.post('/', async function (req, res) {
             photoUrl: '/api/profile-photo/image'
         });
     } catch (napaka) {
-        // Ob neuspešnem shranjevanju odstranimo morebitno začasno datoteko.
+        // If a temporary file was created, attempt to delete it. Log the error and return a 500 response if the upload fails.
         if (zacasnaPot) {
             await fs.promises.unlink(zacasnaPot).catch(function () {
-                // Datoteka morda ni bila ustvarjena; prvotno napako obravnavamo spodaj.
+                // Ignore errors when trying to delete the temporary file.
             });
         }
 
@@ -143,7 +143,7 @@ router.post('/', async function (req, res) {
     }
 });
 
-// Odstranimo uporabnikovo fotografijo in omogočimo prikaz privzete slike.
+// Handle profile photo deletion. If the photo doesn't exist, return a success response. Log any errors and return a 500 response if the deletion fails.
 router.delete('/', async function (req, res) {
     try {
         await fs.promises.unlink(potDoFotografije(req.session.userId));
