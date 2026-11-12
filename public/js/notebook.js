@@ -209,3 +209,46 @@ document.getElementById('save-note').addEventListener('click', saveCurrentNote);
 
 loadNotebook();
 allSubjectIds();
+
+function removeAllHTMLTagsExceptPAndBr(html) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    const elements = tempDiv.querySelectorAll('*');
+    elements.forEach(el => {
+        if (el.tagName !== 'P' && el.tagName !== 'BR') {
+            el.replaceWith(...el.childNodes);
+        }
+    });
+    return tempDiv.innerHTML;
+}
+
+function generateQuiz() {
+    const topic = removeAllHTMLTagsExceptPAndBr(noteEditor.innerHTML);
+    const difficulty = 'medium';
+    const questionCount = 10;
+
+    $.ajax({
+        url: '/api/quiz',
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            subject_id: $('#subjectSelect').val(),
+            note_id: activeNote.id,
+            title: noteTitle.value.trim() || 'Nov zapisek',
+            topic: topic,
+            difficulty: difficulty,
+            number_of_questions: questionCount
+        }),
+        success: function (response) {
+            const newQuiz = response.newQuiz;
+            console.log('Kviz uspešno ustvarjen:', newQuiz);
+            showSaveStatus('Kviz uspešno ustvarjen', false);
+        }
+        ,
+        error: function (xhr) {
+            const message = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
+            showSaveStatus(message, true);
+        }
+    });
+}
