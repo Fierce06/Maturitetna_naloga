@@ -29,25 +29,25 @@ function validColor(color) {
         : "#3b82f6";
 }
 
+// Getting all quizzes and storing them in a variable for later use
 var quizzes = { quizzes: [] };
-async function getAllQuizzes() {
-    try {
-        const response = await fetch("/api/quiz/");
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
+function getAllQuizzes(success) {
+    $.ajax({
+        url: "/api/quiz/",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while creating the subject.');
+                return;
+            }
+            quizzes = response;
+            success();
         }
-
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
-
-        quizzes = await response.json();
-    } catch (error) {
-        console.error(error);
-    }
+    });
 }
 
+// Function to get practice cards for a subject
 function practiceCards(subject) {
     var cards = [];
 
@@ -68,6 +68,7 @@ function practiceCards(subject) {
 }
 getAllQuizzes();
 
+// Function to create a subject card
 function createSubject(subject) {
     const color = validColor(subject.color);
     const cards = practiceCards(subject);
@@ -129,52 +130,44 @@ function createSubject(subject) {
     `;
 }
 
-async function loadStudySubjects() {
-    try {
-        await getAllQuizzes();
-        const response = await fetch("/api/subjects/");
+// Loading subjects when the page is ready
+function loadStudySubjects() {
 
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
-        }
+    // Fetching all quizzes first, then fetching subjects
+    getAllQuizzes(function () {
+        $.ajax({
+            url: "/api/subjects/",
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (!data.success) {
+                    showErrorModal(response.error || 'Error occurred while creating the subject.');
+                    return;
+                }
 
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
+                if (!data.subjects || data.subjects.length === 0) {
+                    studySubjectsList.innerHTML = `
+                        <div class="rounded-xl border border-dashed border-slate-300
+                                    bg-slate-50 p-10 text-center">
+                            <p class="font-medium text-slate-700">
+                                You don't have any subjects yet.
+                            </p>
+                            <a href="/subjects"
+                            class="mt-3 inline-block text-sm font-medium text-blue-600">
+                                Add your first subject
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
 
-        const data = await response.json();
-
-        if (!data.subjects || data.subjects.length === 0) {
-            studySubjectsList.innerHTML = `
-                <div class="rounded-xl border border-dashed border-slate-300
-                            bg-slate-50 p-10 text-center">
-                    <p class="font-medium text-slate-700">
-                        Nimaš še nobenega predmeta.
-                    </p>
-                    <a href="/subjects"
-                       class="mt-3 inline-block text-sm font-medium text-blue-600">
-                        Dodaj prvi predmet
-                    </a>
-                </div>
-            `;
-            return;
-        }
-
-        studySubjectsList.innerHTML =
-            data.subjects.map(createSubject).join("");
-
-    } catch (error) {
-        console.error(error);
-
-        studySubjectsList.innerHTML = `
-            <p class="rounded-xl bg-red-50 p-4 text-sm text-red-700">
-                Pri nalaganju predmetov je prišlo do napake.
-            </p>
-        `;
-    }
+                studySubjectsList.innerHTML = data.subjects.map(createSubject).join("");
+            }
+        });
+    })
 }
 
+// Updating the progress of the study session
 function updateProgress() {
     const answered = questions.filter(question => {
         const selectedRadio =
@@ -201,6 +194,7 @@ function updateProgress() {
     return answered;
 }
 
+// Function to start the timer for the study session
 function startTimer() {
     clearInterval(timerId);
 
@@ -227,31 +221,36 @@ function startTimer() {
     }, 1000);
 }
 
+// Showing exam with questions for a selected subject
 var correctAnswers = {};
 var explanation = {};
-async function showExam(card) {
+function showExam(card, quizIdFromUrl = null) {
     correctAnswers = {};
     explanation = {};
-    try {
-        const quizId = card.dataset.id;
-        const response = await fetch("/api/quiz/questions/" + quizId);
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
-        }
 
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
+    var quizId = null;
+    if (quizIdFromUrl) {
+        quizId = quizIdFromUrl;
+    } else if (card) {
+        quizId = card.dataset.id;
+    }
 
-        const data = await response.json();
-        const main = document.getElementById("exam-questions");
-        const quizQuestions = data.questions.questions;
+    $.ajax({
+        url: "/api/quiz/questions/" + quizId,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (!data.success) {
+                showErrorModal(response.error || 'Error occurred while creating the subject.');
+                return;
+            }
+            const main = document.getElementById("exam-questions");
+            const quizQuestions = data.questions.questions;
 
-        document.querySelector("#study-page progress").max = quizQuestions.length;
+            document.querySelector("#study-page progress").max = quizQuestions.length;
 
-        main.querySelectorAll("[data-question]").forEach(element => element.remove());
-        main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+            main.querySelectorAll("[data-question]").forEach(element => element.remove());
+            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
             const questionId = `question-${index}`;
             correctAnswers[questionId] = element.correct_answer;
             explanation[questionId] = element.explanation;
@@ -270,11 +269,10 @@ async function showExam(card) {
                     </fieldset>
                 </section>
             `;
-        }).join(""));
-        questions = [...main.querySelectorAll("[data-question]")];
-    } catch (error) {
-        console.error(error);
-    }
+            }).join(""));
+            questions = [...main.querySelectorAll("[data-question]")];
+        }
+    });
 
     studyOverview.classList.add("hidden");
     studyPage.classList.remove("hidden");
@@ -285,6 +283,7 @@ async function showExam(card) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Function to show the study overview page
 function showStudyOverview() {
     clearInterval(timerId);
 
@@ -295,6 +294,7 @@ function showStudyOverview() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Event listeners for user interactions
 studyOverview.addEventListener("click", event => {
     const card = event.target.closest("[data-open-exam]");
 
@@ -326,6 +326,7 @@ document.getElementById("next").addEventListener("click", () => {
     checkExamAnswers();
 });
 
+// Function to check the answers of the exam and display the results
 function checkExamAnswers() {
     let correctCount = 0;
     let incorrectCount = 0;
@@ -388,3 +389,12 @@ document.addEventListener("keydown", event => {
 });
 
 loadStudySubjects();
+
+// If url contains quizz id show the exam page directly
+const urlParams = new URLSearchParams(window.location.search);
+const quizId = urlParams.get("quizId");
+
+if (quizId) {
+    // Show the exam page
+    showExam(null, quizId);
+}

@@ -3,9 +3,6 @@ const subjectForm = document.getElementById("subjectForm");
 const subjectName = document.getElementById("subjectName");
 const subjectDescription = document.getElementById("subjectDescription");
 const customSubjectColor = document.getElementById("customSubjectColor");
-const subjectsErrorToast = document.getElementById("subjectsErrorToast");
-const subjectsErrorMessage = document.getElementById("subjectsErrorMessage");
-const closeSubjectsError = document.getElementById("closeSubjectsError");
 
 var editMode = false;
 
@@ -13,22 +10,7 @@ let selectedColor = "#3b82f6";
 let selectedIcon = "bi-calculator";
 let errorToastTimer;
 
-function showErrorToast(message) {
-    subjectsErrorMessage.textContent = message;
-    subjectsErrorToast.classList.remove("hidden");
-    subjectsErrorToast.classList.add("flex");
-
-    clearTimeout(errorToastTimer);
-    errorToastTimer = setTimeout(hideErrorToast, 5000);
-}
-
-function hideErrorToast() {
-    subjectsErrorToast.classList.add("hidden");
-    subjectsErrorToast.classList.remove("flex");
-}
-
-closeSubjectsError.addEventListener("click", hideErrorToast);
-
+// Function to show error modal
 const openModal = () => {
     subjectModal.classList.remove("hidden");
     subjectModal.classList.add("flex");
@@ -36,11 +18,13 @@ const openModal = () => {
     $("#saveSubject").text("Create Subject");
 };
 
+// Function to close error modal
 const closeModal = () => {
     subjectModal.classList.add("hidden");
     subjectModal.classList.remove("flex");
 };
 
+// Event listeners for opening and closing the modal
 document.getElementById("openSubjectModal").addEventListener("click", openModal);
 document.getElementById("closeSubjectModal").addEventListener("click", closeModal);
 document.getElementById("cancelSubjectModal").addEventListener("click", closeModal);
@@ -61,7 +45,6 @@ document.querySelectorAll(".color-option").forEach((button) => {
         selectedColor = button.dataset.color;
         customSubjectColor.value = selectedColor;
         updateColorSelection();
-        updatePreview();
     });
 });
 
@@ -69,7 +52,6 @@ document.querySelectorAll(".color-option").forEach((button) => {
 customSubjectColor.addEventListener("input", () => {
     selectedColor = customSubjectColor.value;
     updateColorSelection();
-    updatePreview();
 });
 
 // Update the color selection UI
@@ -100,29 +82,25 @@ document.querySelectorAll(".icon-option").forEach((button) => {
             option.classList.toggle("text-slate-600", !active);
             option.setAttribute("aria-pressed", String(active));
         });
-
-        updatePreview();
     });
 });
 
-// Update the preview of the subject card
+// Function to fetch and display all subjects
 function allSubjects() {
     $.ajax({
         url: '/api/subjects/',
         method: 'GET',
 
-        success: function (odgovor) {
-            if (odgovor.success == false) {
-                const msg = odgovor.error || 'Napaka pri pridobivanju predmetov.';
-                console.error(msg);
-                showErrorToast(msg);
+        success: function (response) {
+            if (response.success == false) {
+                howErrorModal(response.error || 'Error occurred while fetching subjects.');
                 return;
             }
 
             const subjectList = $('#subjectList');
             subjectList.empty();
 
-            odgovor.subjects.forEach(subject => {
+            response.subjects.forEach(subject => {
                 const subjectItem = $(`
                     <li class="min-w-[280px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center">
@@ -155,15 +133,11 @@ function allSubjects() {
                 subjectList.append(subjectItem);
             });
 
-        },
-        error: function (xhr) {
-            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-            console.error(msg);
-            showErrorToast(msg);
         }
     });
 }
 
+// Function to edit a subject
 var subjectId = null;
 function editSubject(subject_Id) {
     editMode = true;
@@ -179,6 +153,7 @@ $(document).ready(function () {
     // Load all subjects when the page is ready
     allSubjects();
 
+    // Handle form submission for creating or editing a subject
     $("#subjectForm").on("submit", function (e) {
         e.preventDefault();
 
@@ -198,7 +173,11 @@ $(document).ready(function () {
                 contentType: "application/json",
                 data: JSON.stringify(podatki),
 
-                success: function () {
+                success: function (response) {
+                    if (!response.success) {
+                        showErrorModal(response.error || 'Error occurred while creating the subject.');
+                        return;
+                    }
                     // Predmete ponovno naložimo šele po uspešnem shranjevanju
                     allSubjects();
 
@@ -209,14 +188,6 @@ $(document).ready(function () {
 
                     updateColorSelection();
                     closeModal();
-                },
-
-                error: function (xhr) {
-                    const msg =
-                        xhr.responseJSON?.error ||
-                        `Napaka: ${xhr.status} ${xhr.statusText}`;
-
-                    showErrorToast(msg);
                 }
             });
         } else {
@@ -231,8 +202,7 @@ $(document).ready(function () {
                         editMode = false;
                         subjectId = null;
 
-                        const msg = response.error || "Napaka pri urejanju predmeta.";
-                        showErrorToast(msg);
+                        showErrorModal(response.error || 'Error occurred while updating the subject.');
                         return;
                     }
 
@@ -240,16 +210,6 @@ $(document).ready(function () {
                     subjectId = null;
 
                     window.location.reload();
-                },
-
-                error: function (xhr) {
-                    editMode = false;
-                    subjectId = null;
-                    const msg =
-                        xhr.responseJSON?.error ||
-                        `Napaka: ${xhr.status} ${xhr.statusText}`;
-
-                    showErrorToast(msg);
                 }
             });
         }

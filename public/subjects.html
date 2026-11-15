@@ -16,16 +16,6 @@
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800 page-subjects">
-    <div id="subjectsErrorToast"
-        class="fixed right-4 top-4 z-[100] hidden w-[min(calc(100vw-2rem),24rem)] items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-700 shadow-lg shadow-red-100"
-        role="alert" aria-live="assertive">
-        <i class="bi bi-exclamation-circle-fill mt-0.5 shrink-0"></i>
-        <p id="subjectsErrorMessage" class="min-w-0 flex-1 text-sm font-medium"></p>
-        <button id="closeSubjectsError" type="button"
-            class="shrink-0 text-red-400 transition hover:text-red-700" aria-label="Close error message">
-            <i class="bi bi-x-lg"></i>
-        </button>
-    </div>
 
     <div class=" flex min-h-screen gap-6 p-4 md:p-8">
         <aside
@@ -87,8 +77,7 @@
 
 
         <!-- Add Subject Modal -->
-        <div id="subjectModal"
-            class="fixed inset-0 z-50 h-full hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
+        <div id="subjectModal" class="fixed inset-0 z-50 h-full hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
 
             <div class="w-full  max-w-xl overflow-hidden rounded-xl bg-white shadow-xl">
 
@@ -269,10 +258,38 @@
 
         <div class="flex flex-col w-full">
 
-            <div
-                class="mt-auto h-full w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+            <div class="mt-auto h-full w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
 
-                <div class="flex items-center justify-between mb-6">
+                <header class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                            Subjects
+                        </p>
+
+                        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                            My Subjects
+                        </h1>
+
+                        <p class="mt-2 max-w-lg text-sm leading-6 text-slate-500">
+                            Here you can manage your subjects, add new ones, and customize them to fit your study needs.
+                        </p>
+                    </div>
+
+                    <button id="openSubjectModal" type="button"
+                            class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                            <i class="bi bi-plus-lg"></i>
+                            Add Subject
+                        </button>
+
+<!-- 
+                        <button
+                            class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm shadow-gray-200 transition hover:bg-gray-200">
+                            <i class="bi bi-funnel"></i>
+                            Filter
+                        </button> -->
+                </header>
+
+                <!-- <div class="flex items-center justify-between mb-6">
                     <h2 class="text-lg font-semibold text-gray-800">My Subjects</h2>
 
                     <div class="flex items-center gap-2">
@@ -292,7 +309,7 @@
 
                     </div>
 
-                </div>
+                </div> -->
 
 
                 <ul id="subjectList" class="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] col-span-3 gap-3">
@@ -355,10 +372,38 @@
 
     </div>
 
+    <div id="errorModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="errorModalTitle" aria-describedby="errorModalMessage">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <i class="bi bi-exclamation-triangle-fill text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <h2 id="errorModalTitle" class="text-lg font-semibold text-slate-900">Something went wrong</h2>
+                        <button id="closeErrorModal" type="button"
+                            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                            aria-label="Close error message">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <p id="errorModalMessage" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                </div>
+            </div>
+            <button id="errorModalOk" type="button"
+                class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                OK
+            </button>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/errorHandler.js"></script>
     <script src="js/subjects.js"></script>
     <script src="js/calendar.js"></script>
-<script src="/js/user.js"></script>
+    <script src="/js/user.js"></script>
 </body>
 
 </html>

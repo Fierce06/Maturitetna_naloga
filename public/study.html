@@ -75,7 +75,6 @@
         </aside>
 
         <div id="center-content" class="flex flex-col w-full">
-            <!-- <div id="dashboard-view" aria-label="Dashboard"></div> -->
 
             <section id="study-overview"
                 class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
@@ -102,7 +101,7 @@
                hover:bg-blue-500 focus:outline-none focus:ring-2
                focus:ring-blue-500 focus:ring-offset-2">
                         <i class="bi bi-plus-lg"></i>
-                        Add exam
+                        Add quizz
                     </button>
                 </header>
                 <section id="customPracticeExamsSection" class="mb-6 hidden rounded-2xl border border-blue-100
@@ -111,11 +110,11 @@
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider
                        text-blue-600">
-                                Your exams
+                                Your quizzes
                             </p>
 
                             <h2 class="mt-1 text-lg font-bold text-slate-900">
-                                Exams made from your notes
+                                Quizzes made from your notes
                             </h2>
                         </div>
                     </div>
@@ -136,11 +135,11 @@
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider
                            text-blue-600">
-                                New practice exam
+                                New practice quizz
                             </p>
 
                             <h2 id="addExamModalTitle" class="mt-1 text-2xl font-bold text-slate-900">
-                                Add exam
+                                Add Quizz
                             </h2>
 
                             <p class="mt-1 text-sm text-slate-500">
@@ -158,7 +157,7 @@
                     <form id="addExamForm" class="flex min-h-0 flex-1 flex-col">
                         <div class="overflow-y-auto px-6 py-5">
                             <label for="practiceExamTitle" class="mb-2 block text-sm font-semibold text-slate-700">
-                                Exam title
+                                Quizz title
                             </label>
 
                             <input type="text" id="practiceExamTitle" maxlength="255" required
@@ -219,7 +218,7 @@
                            text-sm font-semibold text-white transition
                            hover:bg-blue-500 disabled:cursor-not-allowed
                            disabled:opacity-60">
-                                Create exam
+                                Create quizz
                             </button>
                         </div>
                     </form>
@@ -324,9 +323,37 @@
     </aside>
     </div>
 
+    <div id="errorModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="errorModalTitle" aria-describedby="errorModalMessage">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <i class="bi bi-exclamation-triangle-fill text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <h2 id="errorModalTitle" class="text-lg font-semibold text-slate-900">Something went wrong</h2>
+                        <button id="closeErrorModal" type="button"
+                            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                            aria-label="Close error message">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <p id="errorModalMessage" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                </div>
+            </div>
+            <button id="errorModalOk" type="button"
+                class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                OK
+            </button>
+        </div>
+    </div>
+
 
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/errorHandler.js"></script>
     <script src="js/calendar.js"></script>
     <script src="js/study.js"></script>
     <script src="js/practiceExams.js"></script>
