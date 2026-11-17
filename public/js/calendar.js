@@ -10,6 +10,7 @@ let selected = null;
 
 let examDates = [];
 
+// Function to render the calendar for the current month
 function renderCalendar() {
     calendar.innerHTML = "";
 
@@ -58,25 +59,22 @@ function renderCalendar() {
     transition-all duration-200
     hover:scale-105
 
-    ${
-        examDates.includes(formattedDate)
-            ? "bg-red-50 border-2 border-red-300 text-red-600 hover:bg-red-100"
-            : "border-2 border-transparent text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-    }
+    ${examDates.includes(formattedDate)
+                ? "bg-red-50 border-2 border-red-300 text-red-600 hover:bg-red-100"
+                : "border-2 border-transparent text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+            }
 
-    ${
-        isToday
-            ? "ring-2 ring-blue-500 ring-offset-2"
-            : ""
-    }
+    ${isToday
+                ? "ring-2 ring-blue-500 ring-offset-2"
+                : ""
+            }
 
-    ${
-        isSelected
-            ? examDates.includes(formattedDate)
-                ? "bg-red-500 border-red-500 text-white hover:bg-red-600 hover:text-white"
-                : "bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:text-white"
-            : ""
-    }
+    ${isSelected
+                ? examDates.includes(formattedDate)
+                    ? "bg-red-500 border-red-500 text-white hover:bg-red-600 hover:text-white"
+                    : "bg-blue-600 border-blue-600 text-white hover:bg-blue-700 hover:text-white"
+                : ""
+            }
 `;
 
         button.setAttribute("id", formattedDate);
@@ -91,11 +89,13 @@ function renderCalendar() {
     }
 }
 
+// Event listeners for navigating between months
 prevBtn.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() - 1);
     renderCalendar();
 });
 
+// Event listener for navigating to the next month
 nextBtn.addEventListener("click", () => {
     currentDate.setMonth(currentDate.getMonth() + 1);
     renderCalendar();
@@ -103,19 +103,22 @@ nextBtn.addEventListener("click", () => {
 
 renderCalendar();
 
+// Function to fetch all exams for the current user
 function allExams() {
     $.ajax({
         url: '/api/exams/',
         method: 'GET',
 
-        success: function (odgovor) {
-            if (odgovor.success == false) {
+        success: function (response) {
+            if (response.success == false) {
+                showErrorModal(response.error || 'An unexpected error occurred while fetching exams for the current user.');
+                return;
             }
 
             examsList = $('#upcomingExams');
-            examsList.empty();  
+            examsList.empty();
 
-            odgovor.exams.forEach(exam => {
+            response.exams.forEach(exam => {
                 const examElement = $(`
                     <div class="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center justify-between">
@@ -126,19 +129,14 @@ function allExams() {
                 `);
 
                 examsList.append(examElement);
-                
+
             })
 
-            examDates = odgovor.exams.map(exam => exam.date.slice(0, 10));
+            examDates = response.exams.map(exam => exam.date.slice(0, 10));
             renderCalendar();
-        },
-        error: function (xhr) {
-            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-
         }
     });
 }
 $(document).ready(function () {
     allExams();
-
 })

@@ -1,26 +1,44 @@
 const client = require('./db');
 
+/**
+ * Get the total number of users in the database.
+ * @returns 
+ */
 module.exports.numberOfUsers = async function() {
     const query = 'SELECT COUNT(*) AS count FROM users';
     const [rows] = await client.query(query);
     return rows[0].count;
 };
 
-// Pridobi admina preko uporabniškega imena
+/**
+ * Get an admin by their username.
+ * @param {string} username 
+ * @returns 
+ */
 module.exports.getAdminByUsername = async function(username) {
     const query = 'SELECT * FROM users WHERE username = ? LIMIT 1';
     const [rows] = await client.query(query, [username]);
     return rows[0];
 };
 
-// Pridobi admina preko ID-ja
+/**
+ * Get an admin by their ID.
+ * @param {number} id 
+ * @returns 
+ */
 module.exports.getAdminById = async function(id) {
     const query = 'SELECT * FROM users WHERE id = ? LIMIT 1';
     const [rows] = await client.query(query, [id]);
     return rows[0];
 };
 
-// Registracija
+/**
+ * Create a new user.
+ * @param {string} username 
+ * @param {string} email 
+ * @param {string} passwordHash 
+ * @returns 
+ */
 module.exports.createUser = async function(username, email, passwordHash) {
     console.log('Creating user:', username, email);
     const insertQuery = `INSERT INTO users (username, email, password_hash)
@@ -31,7 +49,15 @@ module.exports.createUser = async function(username, email, passwordHash) {
     return rows[0];
 };
 
-// Posodabjanje neuspelih poiskusov
+
+/**
+ * Update the failed attempts for a user.
+ * @param {number} failed_attempts 
+ * @param {string} locked_until 
+ * @param {number} consecutive_failed_attempts 
+ * @param {string} username 
+ * @returns 
+ */
 module.exports.updateFailedAttempts = async function(failed_attempts, locked_until, consecutive_failed_attempts, username) {
     const query = `UPDATE users 
                        SET failed_attempts=?, locked_until=?, consecutive_failed_attempts=?
@@ -41,7 +67,12 @@ module.exports.updateFailedAttempts = async function(failed_attempts, locked_unt
     return rows[0];
 };
 
-// Posodabljanje gesla
+/**
+ * Update the password for an admin.
+ * @param {string} passwordHash 
+ * @param {number} id 
+ * @returns 
+ */
 module.exports.updateAdminPassword = async function(passwordHash, id) {
     const query = 'UPDATE users SET password_hash = ? WHERE id = ?';
     await client.query(query, [passwordHash, id]);

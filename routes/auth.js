@@ -10,6 +10,11 @@ function hashPassword(password) {
     return bcrypt.hash((process.env.APP_SECRET || '') + password, 10);
 }
 
+/**
+ * Register a new user.
+ * @route POST /register
+ * @param {string} username - The username of the new user.
+ */
 router.post('/register', async (req, res) => {
     const { username, email, password, passwordConfirm } = req.body;
     console.log('Creating user:', username, email); 
@@ -18,16 +23,20 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
 
+    // Check if the password and password confirmation match
     if (password !== passwordConfirm) {
         return res.status(400).json({ success: false, error: 'Passwords do not match' });
     }
 
+    // Check if the password meets the minimum length requirement
     if (password.length < 10) {
         return res.status(400).json({ success: false, error: 'Password must be at least 10 characters long!' });
     }
 
     try {
+        // Hash the password before storing it
         const passwordHash = await hashPassword(password);
+
         await dbUsers.createUser(username, email, passwordHash);
         res.json({ success: true });
     } catch (err) {
@@ -40,6 +49,13 @@ router.post('/register', async (req, res) => {
     }
 });
 
+/**
+ * Login a user.
+ * @route POST /login
+ * @param {string} username - The username of the user.
+ * @param {string} password - The password of the user.
+ * @returns {object} - JSON object indicating success or failure.
+ */
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -50,48 +66,62 @@ router.post('/login', async (req, res) => {
     try {
         const user = await dbUsers.getAdminByUsername(username);
 
+        // If the user does not exist, perform a dummy bcrypt comparison to mitigate timing attacks
         if (!user) {
             await bcrypt.compare((process.env.APP_SECRET || '') + password, DUMMY_BCRYPT_HASH);
             return res.status(400).json({ success: false, error: 'Invalid username or password' });
         }
 
+        // If the user exists, check for failed attempts and lockout
         const consecutiveFailedAttempts = parseInt(user.consecutive_failed_attempts, 10) + 1;
+        // Store the original consecutive failed attempts before any updates
         const consecutiveFailedAttemptsNotChanged = parseInt(user.consecutive_failed_attempts, 10);
+        // Store the original failed attempts before any updates
         let failedAttempts = parseInt(user.failed_attempts, 10);
 
+        // Check if the account is locked
         if (user.locked_until && user.locked_until > new Date()) {
             const hours = String(user.locked_until.getHours()).padStart(2, '0');
             const minutes = String(user.locked_until.getMinutes()).padStart(2, '0');
+            // Return a 423 Locked status code with a message indicating when the account will be unlocked
             return res.status(423).json({
                 success: false,
                 error: 'Račun je začasno zaklenjen, poskusi ponovno ob ' + hours + ':' + minutes
             });
         }
 
+        // If the account was previously locked but the lockout period has expired, reset failed attempts
         if (user.locked_until && user.locked_until < new Date()) {
             const userUpdated = await dbUsers.updateFailedAttempts(0, null, consecutiveFailedAttemptsNotChanged, username);
             failedAttempts = parseInt(userUpdated.failed_attempts, 10);
         }
 
+        // Compare the provided password with the stored password hash
         const ok = await bcrypt.compare((process.env.APP_SECRET || '') + password, user.password_hash);
 
+        // If the password is incorrect, increment failed attempts and check for lockout
         if (ok === false) {
             failedAttempts += 1;
 
+            // If the failed attempts exceed 4, lock the account for 5 minutes multiplied by the number of consecutive failed attempts
             if (failedAttempts > 4) {
                 const lockedUntil = new Date();
                 lockedUntil.setMinutes(lockedUntil.getMinutes() + (5 * consecutiveFailedAttempts));
 
+                // Update the failed attempts and lockout time in the database
                 await dbUsers.updateFailedAttempts(failedAttempts, lockedUntil, consecutiveFailedAttempts, username);
                 return res.status(423).json({ success: false, error: 'Account is temporarily locked. Please try again later.' });
             }
 
+            // Update the failed attempts in the database without changing the consecutive failed attempts
             await dbUsers.updateFailedAttempts(failedAttempts, null, consecutiveFailedAttemptsNotChanged, username);
             return res.status(400).json({ success: false, error: 'Invalid username or password' });
         }
 
+        // If the password is correct, reset failed attempts and lockout time
         await dbUsers.updateFailedAttempts(0, null, 0, username);
 
+        // Set session variables for the logged-in user
         req.session.userId = user.id;
         req.session.username = user.username;
 
@@ -102,10 +132,20 @@ router.post('/login', async (req, res) => {
     }
 });
 
+/**
+ * Get the currently logged-in user's information.
+ * @route GET /me
+ * @returns {object} - JSON object containing the username and ID of the logged-in user.
+ */
 router.get('/me', requireAuth, (req, res) => {
     res.json({ username: req.session.username, id: req.session.userId });
 });
 
+/**
+ * Change the password for the currently logged-in user.
+ * @route POST /changePassword
+ * @param {string} currentPassword - The current password of the user.
+ */
 router.post('/changePassword', requireAuth, async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const id = req.session.userId;
@@ -145,6 +185,11 @@ router.post('/changePassword', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Logout the currently logged-in user.
+ * @route POST /logout
+ * @returns {object} - JSON object indicating success or failure.
+ */
 router.post('/logout', (req, res) => {
     req.session.destroy(err => {
         if (err) {
