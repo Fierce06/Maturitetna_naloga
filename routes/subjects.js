@@ -33,6 +33,28 @@ router.get('/subjectIds', requireAuth, async (req, res) => {
     }
 });
 
+
+/**
+ * Get a specific subject by ID for the authenticated user.
+ * @param { string } id - The ID of the subject to retrieve.
+ * @returns { success: boolean, subject: Object } - The subject object if found.
+ */
+router.get('/:id', requireAuth, async (req, res) => {
+    const user_id = req.session.userId; 
+    const subjectId = req.params.id;
+
+    try {
+        const subject = await dbSubjects.getSubjectById(user_id, subjectId);
+        if (!subject) {
+            return res.status(404).json({ error: 'Subject not found' });
+        }
+        res.json({ success: true, subject: subject });
+    } catch (error) {
+        console.error('Error fetching subject:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 /**
  * Create a new subject for the authenticated user.
  * @param { string } name - The name of the subject.

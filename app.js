@@ -28,8 +28,7 @@ app.use(session({
 // Javne datoteke: CSS, JavaScript, slike ...
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Javne strani
-app.get('/', (req, res) => {
+app.get('/', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -41,7 +40,6 @@ app.get('/signup', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-// Zaščitene strani
 app.get('/subjects', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'subjects.html'));
 });
@@ -70,12 +68,15 @@ app.get('/settings', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'settings.html'));
 });
 
+app.get('/subject-info', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'subject-info.html'));
+});
+
 // API za prijavo in registracijo
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/subjects', require('./routes/subjects'));
 app.use('/api/exams', require('./routes/exams'));
 app.use('/api/notebook', require('./routes/notebook'));
-// Profilna fotografija prijavljenega uporabnika
 app.use('/api/profile-photo', require('./routes/profilePhoto'));
 app.use('/api/quiz', require('./routes/quizzes'));
 

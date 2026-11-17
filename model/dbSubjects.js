@@ -6,7 +6,7 @@ const client = require('./db');
  * @returns 
  */
 module.exports.getAllSubjects = async function(user_id) {
-    const query = 'SELECT * FROM subjects WHERE user_id = ?';
+    const query = `SELECT s.*, COUNT(n.id) AS total_notes FROM subjects s LEFT JOIN notes n ON s.id = n.subject_id WHERE s.user_id = ? GROUP BY s.id`;
     const [rows] = await client.query(query, [user_id]);
     return rows;
 };
@@ -55,4 +55,16 @@ module.exports.getAllSubjectIds = async function(user_id) {
     const query = 'SELECT id, name FROM subjects WHERE user_id = ?';
     const [rows] = await client.query(query, [user_id]);
     return rows.map(row => row);
+}
+
+/**
+ * Get a specific subject by ID for a user.
+ * @param {number} user_id 
+ * @param {number} subjectId 
+ * @returns {Object} - The subject object if found.
+ */
+module.exports.getSubjectById = async function(user_id, subjectId) {
+    const query = 'SELECT * FROM subjects WHERE user_id = ? AND id = ? LIMIT 1';
+    const [rows] = await client.query(query, [user_id, subjectId]);
+    return rows[0];
 }

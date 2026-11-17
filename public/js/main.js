@@ -14,31 +14,60 @@ function allSubjects() {
             const subjectList = $('#subjectList');
             subjectList.empty();
 
+            const maxSubjectsToShow = 6; // Limit the number of subjects to show
+            const subjectsToShow = odgovor.subjects.slice(0, maxSubjectsToShow);
+
             // Loop through each subject and create a list item for it
-            odgovor.subjects.forEach(subject => {
+            subjectsToShow.forEach(subject => {
                 const subjectItem = $(`
-                        <li class="max-w-[300px] min-w-[250px] shrink-0 rounded-xl bg-gray-50 p-4 shadow-sm transition hover:shadow-md">
-                            <div class="flex items-center">
+                        <li class="group min-w-0 w-full rounded-2xl border border-gray-100 bg-white p-5
+                                shadow-sm transition-all duration-200 hover:-translate-y-1
+                                hover:border-blue-100 hover:shadow-lg">
+
+                            <!-- Header -->
+                            <div class="flex items-center gap-3 min-w-0">
                                 <div style="background-color: ${subject.color}"
-                                    class="p-2 px-3 rounded-lg text-white">
-                                    <i class="bi ${subject.icon || 'bi-calculator'}"></i>
+                                    class="flex size-12 shrink-0 items-center justify-center
+                                            rounded-xl text-white shadow-sm">
+                                    <i class="bi ${subject.icon || 'bi-calculator'} text-xl"></i>
                                 </div>
-                                <span class="ml-4 font-medium text-gray-800">${subject.name}</span>
+
+                                <div class="min-w-0 flex-1">
+                                    <h3 class="truncate text-base font-semibold text-gray-800">
+                                        ${subject.name}
+                                    </h3>
+                                    <p class="mt-1 text-xs text-gray-400">Study subject</p>
+                                </div>
+
+                                <i class="bi bi-arrow-up-right text-gray-300 transition
+                                        group-hover:text-blue-600"></i>
                             </div>
 
-                            <div class="my-4">
-                                <p class="text-sm text-gray-500">153 notes</p>
+                            <!-- Notes -->
+                            <div class="mt-6 flex items-center justify-between">
+                                <span class="text-sm text-gray-500">
+                                    <i class="bi bi-journal-text mr-1"></i>
+                                    Notes
+                                </span>
+                                <span class="text-sm font-semibold text-gray-800">
+                                    ${subject.total_notes}
+                                </span>
                             </div>
 
-                            <div class="mt-4">
-                                <div class="h-2 w-full rounded-full bg-gray-200">
-                                    <div class="h-2 rounded-full"
-                                        style="width: 70%; background-color: ${subject.color}"></div>
-                                </div>
-                                <p class="mt-2 text-sm text-gray-500">70% completed</p>
+                            <!-- Progress -->
+
+                            <!-- Footer -->
+                            <div class="mt-5 flex items-center justify-between border-t border-gray-100 pt-4">
+                                <span class="text-xs text-gray-400">Keep learning</span>
+                                <span class="flex items-center gap-1 text-xs font-semibold text-blue-600">
+                                    View subject
+                                    <i class="bi bi-chevron-right"></i>
+                                </span>
                             </div>
+
                         </li>
-                    `);
+
+                                            `);
 
                 subjectList.append(subjectItem);
             });
@@ -75,8 +104,12 @@ function allQuizzes() {
                 return;
             }
 
+            const maxQuizzesToShow = 6; // Limit the number of quizzes to show
+
             // If there are subjects, fetch quizzes and display them
             getAllQuizzes(function (cards) {
+                    // Limit the number of quizzes to show
+                    cards = cards.slice(0, maxQuizzesToShow);
                     studySubjectsList.innerHTML = `
                         ${cards.map(card => `
                             <button

@@ -19,7 +19,7 @@
     <div class=" flex min-h-screen gap-6 p-4 md:p-8">
         <aside
             class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
-            <div class="mb-14 flex items-center gap-3 mt-2">
+            <div class="mb-10 flex items-center gap-3 mt-2">
                 <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
                     alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
                 <div>
@@ -114,8 +114,11 @@
                     </div>
 
 
-                    <ul class="mt-4 flex col-span-3 gap-3 overflow-x-auto pb-2" id="subjectList">
-                       
+                    <ul class="mt-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3 w-full" id="subjectList">
+
+                        <p class="py-10 text-center text-sm text-slate-500">
+                            Loading subjects...
+                        </p>
                     </ul>
 
                 </div>
@@ -240,10 +243,12 @@
                     </div>
 
                     <div class="mt-4 flex gap-3 overflow-x-auto pb-2" id="quizPractice">
-                        <div id="studySubjectsList" class="space-y-5">
+                        <div id="studySubjectsList" class="mt-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-6 gap-3 w-full">
+
                             <p class="py-10 text-center text-sm text-slate-500">
-                                Loading subjects...
+                                Loading quizzes...
                             </p>
+
                         </div>
                     </div>
                 </div>
@@ -330,12 +335,13 @@
             </button>
         </div>
     </div>
-</body>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="js/errorHandler.js"></script>
 <script src="js/main.js"></script>
 <script src="js/calendar.js"></script>
 <script src="/js/user.js"></script>
+</body>
+
+
 
 </html>
