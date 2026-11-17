@@ -1,0 +1,608 @@
+/* ===========================================================
+   STUDYGRAPH - MOBILNA NAVIGACIJA
+   Na telefonih pokažemo štiri gumbe in razširljiv meni.
+   Na večjih zaslonih obstoječo navigacijo ohranimo.
+   =========================================================== */
+
+.sg-mobile-bottom-nav,
+.sg-mobile-menu-backdrop,
+.sg-mobile-more-menu {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    /* Glavni okvir se raztegne čez širino telefona. */
+    body.sg-mobile-layout > div:first-of-type {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        min-height: 100dvh !important;
+        padding: 12px 12px calc(108px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    /* Tudi samostojna stran Quiz pusti prostor za spodnjo navigacijo. */
+    body.sg-mobile-nav-active:not(.sg-mobile-layout) {
+        padding-bottom: calc(105px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    /* Profil je zdaj v spodnji navigaciji, zato zgornje vrstice na telefonu ne potrebujemo. */
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type {
+        display: none !important;
+    }
+
+    /* Zgoraj ostane samo kompaktna profilna vrstica. */
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type {
+        width: 100% !important;
+        max-width: none !important;
+        min-width: 0 !important;
+        flex: none !important;
+        padding: 12px 15px !important;
+        border-radius: 18px !important;
+    }
+
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type > div:first-of-type {
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        margin-bottom: 0 !important;
+    }
+
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type nav {
+        display: none !important;
+    }
+
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type img[alt="Profile Picture"] {
+        width: 42px !important;
+        height: 42px !important;
+        object-fit: cover;
+    }
+
+    body.sg-mobile-layout > div:first-of-type > aside:first-of-type #user-name {
+        font-size: 0.97rem !important;
+        line-height: 1.3 !important;
+    }
+
+    body.sg-mobile-layout > div:first-of-type > :not(aside),
+    body.sg-mobile-layout > div:first-of-type > aside:last-of-type:not(:first-of-type) {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: none !important;
+    }
+
+    /* Na Notebooku ne dovolimo, da dolga orodna vrstica razširi cel zaslon. */
+    body.sg-mobile-layout #notebook-view {
+        min-width: 0 !important;
+        min-height: 0 !important;
+    }
+
+    body.sg-mobile-layout #note-editor {
+        padding-left: 22px !important;
+        padding-right: 22px !important;
+    }
+
+    body.sg-mobile-layout #note-page {
+        min-height: 65dvh !important;
+    }
+
+    /* Orodja v Notebooku so na telefonu na eni vodoravno drsljivi vrstici. */
+    body.sg-mobile-layout #notebook-view [aria-label="Orodna vrstica urejevalnika"] {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        max-width: 100%;
+        overflow-x: auto;
+        padding-bottom: 6px;
+        scrollbar-width: thin;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body.sg-mobile-layout #notebook-view [aria-label="Orodna vrstica urejevalnika"] > * {
+        flex-shrink: 0;
+    }
+
+    /* Štirje glavni gumbi so stalno dosegljivi s palcem. */
+    .sg-mobile-bottom-nav {
+        position: fixed;
+        z-index: 9997;
+        right: 12px;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        left: 12px;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 5px;
+        height: 74px;
+        padding: 7px;
+        border: 1px solid rgba(219, 229, 245, 0.96);
+        border-radius: 23px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 14px 45px rgba(26, 52, 100, 0.15), 0 3px 12px rgba(26, 52, 100, 0.06);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+    }
+
+    .sg-mobile-tab {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-width: 0;
+        min-height: 58px;
+        padding: 6px 4px;
+        border: 0;
+        border-radius: 17px;
+        background: transparent;
+        color: #65748d;
+        font: inherit;
+        font-size: 11px;
+        font-weight: 650;
+        line-height: 1.3;
+        text-decoration: none;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+        transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .sg-mobile-tab i {
+        display: block;
+        font-size: 22px;
+        line-height: 1;
+    }
+
+    .sg-mobile-tab.is-active,
+    .sg-mobile-menu-open .sg-mobile-more-button {
+        background: #edf3ff;
+        color: #245ef0;
+    }
+
+    /* Mobilni profil uporablja isti gumb in modal kot namizna profilna fotografija. */
+    .sg-mobile-profile-tab {
+        position: relative;
+        padding: 0;
+    }
+
+    .sg-mobile-profile-tab .sg-avatar-trigger {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 100%;
+        padding: 6px 4px;
+        border-radius: 17px;
+        background: transparent;
+    }
+
+    .sg-mobile-profile-tab .sg-avatar-image,
+    .sg-mobile-profile-tab .sg-mobile-profile-image {
+        width: 27px !important;
+        height: 27px !important;
+        border: 1px solid #d7e3f5;
+        border-radius: 50%;
+        object-fit: cover;
+        box-shadow: none;
+    }
+
+    .sg-mobile-profile-tab .sg-avatar-camera {
+        display: none !important;
+    }
+
+    .sg-mobile-profile-label {
+        position: absolute;
+        bottom: 7px;
+        left: 0;
+        right: 0;
+        font-size: 11px;
+        font-weight: 650;
+        line-height: 1.3;
+        text-align: center;
+        pointer-events: none;
+    }
+
+    .sg-mobile-profile-tab:has(.sg-avatar-trigger:focus-visible) {
+        outline: 3px solid #93b6ff;
+        outline-offset: 2px;
+    }
+
+    /* Koledar mora takoj uporabiti sedem enako širokih stolpcev. */
+    body.sg-mobile-layout #calendar {
+        display: grid !important;
+        width: 100%;
+        min-width: 0;
+        grid-template-columns: repeat(7, minmax(0, 1fr)) !important;
+        gap: 4px !important;
+    }
+
+    body.sg-mobile-layout #calendar > * {
+        box-sizing: border-box;
+        width: 100% !important;
+        min-width: 0;
+        max-width: 40px;
+        height: auto !important;
+        aspect-ratio: 1 / 1;
+        margin: 0 auto;
+    }
+
+    body.sg-mobile-layout .right #monthYear {
+        min-width: 0;
+        font-size: clamp(15px, 4vw, 20px);
+        text-align: center;
+    }
+
+    /* Na strani Exams so trije kazalniki znotraj ene skupne kartice. */
+    body.page-exam .sg-exam-stats {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 0 !important;
+        padding: 9px 5px !important;
+        border: 1px solid #e2e8f0;
+        border-radius: 19px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 6px 16px rgba(30, 60, 100, 0.06);
+    }
+
+    body.page-exam .sg-exam-stats > div {
+        min-width: 0;
+        padding: 10px 7px !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        text-align: center;
+    }
+
+    body.page-exam .sg-exam-stats > div + div {
+        border-left: 1px solid #e8eef7 !important;
+    }
+
+    body.page-exam .sg-exam-stats > div > div:first-child {
+        width: 34px;
+        height: 34px;
+        margin: 0 auto;
+        font-size: 15px;
+    }
+
+    body.page-exam .sg-exam-stats > div > p:nth-of-type(1) {
+        min-height: 28px;
+        margin-top: 10px !important;
+        font-size: 11px !important;
+        line-height: 1.25;
+    }
+
+    body.page-exam .sg-exam-stats > div > p:nth-of-type(2) {
+        margin-top: 4px !important;
+        font-size: clamp(13px, 4.8vw, 24px) !important;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+    }
+
+    body.page-exam .sg-exam-stats #nextExamText {
+        font-size: 12px !important;
+    }
+
+    /* Naslov predmetov je nad tremi enako visokimi gumbi. */
+    body.page-subjects .sg-subject-toolbar {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    body.page-subjects .sg-subject-toolbar > h2 {
+        margin: 0;
+        font-size: 18px;
+        white-space: nowrap;
+    }
+
+    body.page-subjects .sg-subject-actions {
+        display: grid !important;
+        grid-template-columns: 1.25fr 1fr 0.8fr;
+        gap: 7px !important;
+        width: 100%;
+    }
+
+    body.page-subjects .sg-subject-actions > button {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        min-width: 0;
+        min-height: 39px;
+        padding: 8px 6px !important;
+        gap: 5px !important;
+        border-radius: 11px;
+        font-size: 12px !important;
+        white-space: nowrap;
+    }
+
+    .sg-mobile-tab:active {
+        transform: scale(0.96);
+    }
+
+    .sg-mobile-tab:focus-visible,
+    .sg-mobile-menu-close:focus-visible,
+    .sg-mobile-menu-item:focus-visible {
+        outline: 3px solid #93b6ff;
+        outline-offset: 2px;
+    }
+
+    /* Polprosojno ozadje, ki se pojavi ob odpiranju More. */
+    .sg-mobile-menu-backdrop {
+        position: fixed;
+        z-index: 9995;
+        inset: 0;
+        display: block;
+        visibility: hidden;
+        background: rgba(15, 23, 42, 0.31);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms ease, visibility 220ms ease;
+    }
+
+    /* Spodnji razširljivi meni. */
+    .sg-mobile-more-menu {
+        position: fixed;
+        z-index: 9996;
+        right: 12px;
+        bottom: calc(94px + env(safe-area-inset-bottom, 0px));
+        left: 12px;
+        display: flex;
+        flex-direction: column;
+        max-height: min(72dvh, 690px);
+        overflow: hidden;
+        border: 1px solid #e2eaf6;
+        border-radius: 25px;
+        background: #ffffff;
+        box-shadow: 0 22px 70px rgba(17, 35, 70, 0.24);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(16px) scale(0.985);
+        transform-origin: bottom center;
+        pointer-events: none;
+        transition: opacity 220ms ease, visibility 220ms ease, transform 220ms ease;
+    }
+
+    body.sg-mobile-menu-open {
+        overflow: hidden !important;
+    }
+
+    .sg-mobile-menu-open .sg-mobile-menu-backdrop,
+    .sg-mobile-menu-open .sg-mobile-more-menu {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: none;
+    }
+
+    .sg-mobile-menu-grip {
+        flex: none;
+        width: 40px;
+        height: 5px;
+        margin: 10px auto 4px;
+        border-radius: 20px;
+        background: #d8e2f1;
+    }
+
+    .sg-mobile-menu-header {
+        display: flex;
+        flex: none;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 10px 17px 12px;
+    }
+
+    .sg-mobile-menu-eyebrow {
+        margin: 0 0 3px;
+        color: #3167e9;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+    }
+
+    .sg-mobile-menu-header h2 {
+        margin: 0;
+        color: #172642;
+        font-size: 23px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 1.15;
+    }
+
+    .sg-mobile-menu-description {
+        margin: 5px 0 0;
+        color: #8390a6;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .sg-mobile-menu-close {
+        display: grid;
+        flex: none;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border: 0;
+        border-radius: 12px;
+        background: #f0f4fa;
+        color: #52647c;
+        font-size: 15px;
+        cursor: pointer;
+    }
+
+    .sg-mobile-menu-content {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 0 16px 12px;
+        scrollbar-width: thin;
+        scrollbar-color: #cbd8ed transparent;
+    }
+
+    .sg-mobile-menu-group {
+        margin-bottom: 13px;
+    }
+
+    .sg-mobile-menu-group h3 {
+        margin: 0 0 8px 5px;
+        color: #8b97a9;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+    }
+
+    .sg-mobile-menu-grid {
+        display: grid;
+        gap: 7px;
+    }
+
+    .sg-mobile-menu-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-height: 62px;
+        padding: 9px 11px;
+        border: 1px solid #edf1f8;
+        border-radius: 15px;
+        background: #f9fbff;
+        color: #202f49;
+        text-decoration: none;
+        transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    .sg-mobile-logout {
+        width: 100%;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+    }
+
+    .sg-mobile-logout:disabled {
+        opacity: 0.55;
+        cursor: wait;
+    }
+
+    .sg-mobile-logout .sg-mobile-menu-icon {
+        background: #fff0f1 !important;
+        color: #db4e62 !important;
+    }
+
+    .sg-mobile-menu-item:active {
+        transform: scale(0.99);
+        background: #eaf1ff;
+    }
+
+    .sg-mobile-menu-item.is-current {
+        border-color: #c7d9ff;
+        background: #eff5ff;
+    }
+
+    .sg-mobile-menu-icon {
+        display: grid;
+        flex: none;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
+        background: #eaf0ff;
+        color: #326cf1;
+        font-size: 18px;
+    }
+
+    .sg-mobile-menu-group:nth-child(2) .sg-mobile-menu-icon {
+        background: #eef9f4;
+        color: #15936b;
+    }
+
+    .sg-mobile-menu-group:nth-child(3) .sg-mobile-menu-icon {
+        background: #f2eeff;
+        color: #7750c8;
+    }
+
+    .sg-mobile-menu-item-text {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+    }
+
+    .sg-mobile-menu-item-text strong {
+        font-size: 13px;
+        font-weight: 750;
+        line-height: 1.25;
+    }
+
+    .sg-mobile-menu-item-text small {
+        color: #8592a7;
+        font-size: 11px;
+        line-height: 1.25;
+    }
+
+    .sg-mobile-menu-arrow {
+        color: #a4b2ca;
+        font-size: 12px;
+    }
+
+    .sg-mobile-menu-error {
+        margin: 10px 0;
+        padding: 10px;
+        color: #b42335;
+        background: #fff1f2;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+
+    .sg-mobile-menu-error[hidden] { display: none; }
+
+    .sg-mobile-menu-footer {
+        display: flex;
+        flex: none;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 10px 16px 13px;
+        border-top: 1px solid #edf2f8;
+        background: #fafcff;
+        color: #7e8ca4;
+        font-size: 11px;
+    }
+
+    .sg-mobile-menu-footer i {
+        color: #326cf1;
+    }
+}
+
+@media (max-width: 370px) {
+    .sg-mobile-bottom-nav {
+        right: 8px;
+        left: 8px;
+    }
+
+    .sg-mobile-more-menu {
+        right: 8px;
+        left: 8px;
+    }
+
+    .sg-mobile-menu-header {
+        padding: 9px 15px 12px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sg-mobile-tab,
+    .sg-mobile-more-menu,
+    .sg-mobile-menu-backdrop,
+    .sg-mobile-menu-item {
+        transition: none !important;
+    }
+}
+
+/* More menu is intentionally absent from print layouts. */
+@media print {
+    .sg-mobile-bottom-nav, .sg-mobile-menu-backdrop, .sg-mobile-more-menu { display: none !important; }
+}
