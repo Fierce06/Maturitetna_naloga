@@ -224,6 +224,7 @@ function startTimer() {
 // Showing exam with questions for a selected subject
 var correctAnswers = {};
 var explanation = {};
+var currentQuizId = null;
 function showExam(card, quizIdFromUrl = null) {
     correctAnswers = {};
     explanation = {};
@@ -234,6 +235,8 @@ function showExam(card, quizIdFromUrl = null) {
     } else if (card) {
         quizId = card.dataset.id;
     }
+
+    currentQuizId = quizId;
 
     $.ajax({
         url: "/api/quiz/questions/" + quizId,
@@ -370,6 +373,23 @@ function checkExamAnswers() {
     scoreModalDetails.textContent = `${correctCount} correct and ${incorrectCount} incorrect out of ${questions.length} questions.`;
     scoreModal.classList.remove("hidden");
     scoreModal.classList.add("flex");
+
+    $.ajax({
+        url: "/api/quiz/submit",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            quiz_id: currentQuizId,
+            score: (score / 10),
+            total_questions: questions.length
+        }),
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while submitting the quiz result.');
+                return;
+            }
+        }
+    });
 }
 
 function closeScoreModal() {

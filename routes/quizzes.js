@@ -151,4 +151,19 @@ router.post('/create', requireAuth, async (req, res) => {
     }
 });
 
+// Submit quiz result for the authenticated user
+// This endpoint allows the user to submit their quiz results, including the quiz ID, score, and total number of questions. The result is stored in the database for future reference.
+router.post('/submit', requireAuth, async (req, res) => {
+    const { quiz_id, score, total_questions } = req.body;
+    const user_id = req.session.userId;
+
+    try {
+        await dbQuizzes.submitQuizResult(quiz_id, user_id, score, total_questions);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error submitting quiz result:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router;

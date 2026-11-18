@@ -39,8 +39,8 @@ function allSubjects() {
                                     <p class="mt-1 text-xs text-gray-400">Study subject</p>
                                 </div>
 
-                                <i class="bi bi-arrow-up-right text-gray-300 transition
-                                        group-hover:text-blue-600"></i>
+                                <a href="/subject-info?id=${subject.id}"  class="bi bi-arrow-up-right text-gray-300 transition
+                                    group-hover:text-blue-600"></a>
                             </div>
 
                             <!-- Notes -->
@@ -59,10 +59,10 @@ function allSubjects() {
                             <!-- Footer -->
                             <div class="mt-5 flex items-center justify-between border-t border-gray-100 pt-4">
                                 <span class="text-xs text-gray-400">Keep learning</span>
-                                <span class="flex items-center gap-1 text-xs font-semibold text-blue-600">
+                                <a href="/subject-info?id=${subject.id}" class="flex items-center gap-1 text-xs font-semibold text-blue-600">
                                     View subject
                                     <i class="bi bi-chevron-right"></i>
-                                </span>
+                                </a>
                             </div>
 
                         </li>

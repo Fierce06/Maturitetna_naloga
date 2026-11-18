@@ -11,7 +11,7 @@ let activeNote = null;
 let saveTimer;
 
 // Function to display save status messages
-function showSaveStatus(message = 'Shranjeno', isError = false) {
+function showSaveStatus(message = 'Saved', isError = false) {
     saveStatus.innerHTML = '<i class="bi ' + (isError ? 'bi-exclamation-triangle' : 'bi-cloud-check') + '"></i> ' + message;
     saveStatus.classList.toggle('text-emerald-600', !isError);
     saveStatus.classList.toggle('text-red-600', isError);
@@ -19,15 +19,17 @@ function showSaveStatus(message = 'Shranjeno', isError = false) {
 
 // Function to schedule saving the current note after a delay
 function scheduleSave() {
-    showSaveStatus('Shranjujem …');
+    showSaveStatus('Saving …');
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(saveCurrentNote, 3000);
+    saveTimer = setTimeout(saveCurrentNote, 30000);
 }
 
 // Function to render the list of notes in the sidebar
 function renderNotesList() {
+    // Clear the existing list and update the note count
     notesList.innerHTML = '';
     noteCount.textContent = notes.length;
+    // Sort notes by updated_at in descending order and create buttons for each note
     [...notes].sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)).forEach(note => {
         const button = document.createElement('button');
         button.type = 'button';
@@ -73,11 +75,13 @@ function allSubjectIds() {
 
 // Function to load a specific note into the editor
 function loadNote(note) {
+    // If the note is not found, return early
     if (!note) return;
     activeNote = note;
     noteTitle.value = note.title;
     noteEditor.innerHTML = note.content || '';
     $('#subjectSelect').val(note.subject_id);
+    // Update the active note button in the sidebar
     renderNotesList();
 }
 
@@ -89,14 +93,15 @@ function loadNotebook() {
         dataType: 'json',
         success: function (response) {
             if (response.success === false) {
-                showSaveStatus(response.error || 'Napaka pri nalaganju zapiskov.', true);
+                showSaveStatus(response.error || 'Error occurred while loading notes.', true);
                 return;
             }
 
+            // Populate the notes array with the response data
             notes = Array.isArray(response.data) ? response.data : [];
             renderNotesList();
             if (notes[0]) loadNote(notes[0]);
-            else showSaveStatus('Ustvari prvi zapisek', false);
+            else showSaveStatus('Create new note', false);
         }
     });
 
@@ -106,10 +111,11 @@ function loadNotebook() {
         dataType: 'json',
         success: function (response) {
             if (response.success === false) {
-                showSaveStatus(response.error || 'Napaka pri nalaganju predmetov.', true);
+                showSaveStatus(response.error || 'Error occurred while loading subjects.', true);
                 return;
             }
 
+            // Populate the subjects array with the response data
             subjects = Array.isArray(response.subjects) ? response.subjects : [];
         }
     });
@@ -119,8 +125,9 @@ function loadNotebook() {
 function saveCurrentNote() {
     if (!activeNote) return;
     clearTimeout(saveTimer);
+    // Prepare the payload with the note title, content, and selected subject ID
     const payload = { title: noteTitle.value.trim() || 'Nov zapisek', content: noteEditor.innerHTML || '<p><br></p>', subject_id: $('#subjectSelect').val() };
-    showSaveStatus('Shranjujem …');
+    showSaveStatus('Saving …');
     return $.ajax({
         url: `${API_URL}/${activeNote.id}`,
         method: 'PATCH',
@@ -129,11 +136,12 @@ function saveCurrentNote() {
         data: JSON.stringify(payload),
         success: function (response) {
             if (!response.success) {
-                showSaveStatus(response.error || 'Napaka pri shranjevanju zapiska.', true);
+                showSaveStatus(response.error || 'Error occurred while saving the note.', true);
                 return;
             }
             const saved = response.data;
             activeNote = saved;
+            // Update the notes array with the saved note
             notes = notes.map(note => note.id === saved.id ? saved : note);
             noteTitle.value = saved.title;
             renderNotesList();
@@ -149,11 +157,13 @@ document.querySelectorAll('[data-command]').forEach(button => button.addEventLis
     document.execCommand(button.dataset.command, false);
     scheduleSave();
 }));
+// Event listeners for font name and size changes
 document.getElementById('font-name').addEventListener('change', event => { noteEditor.focus(); document.execCommand('fontName', false, event.target.value); scheduleSave(); });
 document.getElementById('font-size').addEventListener('change', event => { noteEditor.focus(); document.execCommand('fontSize', false, event.target.value); scheduleSave(); });
 
 // Event listener for selecting a note from the sidebar
 notesList.addEventListener('click', async event => {
+    // If the clicked element is not a note button or if it's the currently active note, return early
     const button = event.target.closest('[data-note-id]');
     const noteId = Number(button?.dataset.noteId);
     if (!button || noteId === Number(activeNote?.id)) return;
@@ -168,7 +178,7 @@ document.getElementById('new-note').addEventListener('click', async () => {
     await saveCurrentNote();
     const subject = subjects[0];
     if (!subject) {
-        showSaveStatus('Najprej ustvari predmet', true);
+        showSaveStatus('First, create a subject', true);
         return;
     }
 
@@ -177,7 +187,7 @@ document.getElementById('new-note').addEventListener('click', async () => {
         method: 'POST',
         contentType: 'application/json',
         dataType: 'json',
-        data: JSON.stringify({ subject_id: subject.id, title: 'Nov zapisek', content: '<p><br></p>' }),
+        data: JSON.stringify({ subject_id: subject.id, title: 'New note', content: '<p><br></p>' }),
         success: function (response) {
             if (!response.success) {
                 showSaveStatus(response.error || 'Error occurred while creating a new note.', true);
@@ -191,12 +201,15 @@ document.getElementById('new-note').addEventListener('click', async () => {
     });
 });
 
-// Event listener for deleting the current note
+// Event listeners for photo input and quick photo button
 document.getElementById('add-photo').addEventListener('click', () => photoInput.click());
 document.getElementById('quick-photo').addEventListener('click', () => photoInput.click());
+// Event listener for handling photo input changes and adding images to the note editor
 photoInput.addEventListener('change', event => {
+    // Loop through the selected files and read them as data URLs
     [...event.target.files].forEach(file => {
         const reader = new FileReader();
+        // When the file is loaded, create an image element and append it to the note editor
         reader.addEventListener('load', () => {
             const image = document.createElement('img');
             image.src = reader.result;
@@ -210,6 +223,7 @@ photoInput.addEventListener('change', event => {
     event.target.value = '';
 });
 
+// Event listeners for note editor and title input changes to schedule saving
 noteEditor.addEventListener('input', scheduleSave);
 noteTitle.addEventListener('input', scheduleSave);
 document.getElementById('save-note').addEventListener('click', saveCurrentNote);
@@ -244,7 +258,7 @@ function generateQuiz() {
         data: JSON.stringify({
             subject_id: $('#subjectSelect').val(),
             note_id: activeNote.id,
-            title: noteTitle.value.trim() || 'Nov zapisek',
+            title: noteTitle.value.trim() || 'New note',
             topic: topic,
             difficulty: difficulty,
             number_of_questions: questionCount
@@ -255,8 +269,7 @@ function generateQuiz() {
                 return;
             }
             const newQuiz = response.newQuiz;
-            console.log('Kviz uspešno ustvarjen:', newQuiz);
-            showSaveStatus('Kviz uspešno ustvarjen', false);
+            showSaveStatus('Quiz generated successfully', false);
         }
     });
 }

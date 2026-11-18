@@ -5,25 +5,23 @@ function allSubjectIds() {
         url: '/api/subjects/subjectIds',
         method: 'GET',
 
-        success: function (odgovor) {
-            if (odgovor.success == false) {
+        success: function (response) {
+            if (response.success == false) {
+                showErrorModal(response.error || 'Error occurred while fetching subjects.');
+                return;
             }
 
             $('#emptyState').hide();
 
             const selectSubjects = $('#subjectSelect');
 
-            odgovor.subjectIds.forEach(subject => {
+            response.subjectIds.forEach(subject => {
                 subjectsList.push(subject);
                 const option = $(`<option value="${subject.id}">${subject.name}</option>`)
                 selectSubjects.append(option);
             })
 
             allExam();
-        },
-        error: function (xhr) {
-            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-
         }
     });
 }
@@ -33,15 +31,16 @@ function allExam() {
         url: '/api/exams/',
         method: 'GET',
 
-        success: function (odgovor) {
-            if (odgovor.success == false) {
-                alert('Napaka pri pridobivanju izpitov');
+        success: function (response) {
+            if (response.success == false) {
+                showErrorModal(response.error || 'Error occurred while fetching exams.');
+                return;
             }
 
             examsList = $('#upcomingContainer');
             examsList.empty();  
 
-            odgovor.exams.forEach(exam => {
+            response.exams.forEach(exam => {
                 const examElement = $(`
                     <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center justify-between">
@@ -54,11 +53,9 @@ function allExam() {
                 examsList.append(examElement);
             })
 
-            $('#scheduledCount').html(`${odgovor.exams.length}`);
-        },
-        error: function (xhr) {
-            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-            alert(msg);
+            $('#scheduledCount').html(`${response.exams.length}`);
+            console.log(response);
+            $("#nextExamText").html(response.exams.length > 0 ? `${new Date(response.exams[0].date).toLocaleDateString()}` : 'None');
         }
     });
 }
@@ -82,14 +79,13 @@ $(document).ready(function () {
             data: JSON.stringify(podatki),
 
 
-            success: function (odgovor) {
-                console.log('Uspešno dodan izpit:', odgovor.newExam);
+            success: function (response) {
+                if (!response.success) {
+                    showErrorModal(response.error || 'Error occurred while creating the exam.');
+                    return;
+                }
 
                 allExam();
-            },
-            error: function (xhr) {
-                const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
-                console.error(msg);
             }
         });
     });

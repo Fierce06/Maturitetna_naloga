@@ -4,8 +4,6 @@ const subjectName = document.getElementById("subjectName");
 const subjectDescription = document.getElementById("subjectDescription");
 const customSubjectColor = document.getElementById("customSubjectColor");
 
-var editMode = false;
-
 let selectedColor = "#3b82f6";
 let selectedIcon = "bi-calculator";
 let errorToastTimer;
@@ -15,7 +13,6 @@ const openModal = () => {
     subjectModal.classList.remove("hidden");
     subjectModal.classList.add("flex");
     subjectName.focus();
-    $("#saveSubject").text("Create Subject");
 };
 
 // Function to close error modal
@@ -123,11 +120,6 @@ function allSubjects() {
                                 <p class="mt-1 text-xs text-gray-400">Study subject</p>
                             </div>
 
-                            <button class="ml-auto mr-1 text-gray-300 hover:text-blue-600"
-                                onclick="editSubject(${subject.id})" aria-label="Edit Subject">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-
                             <a href="/subject-info?id=${subject.id}"  class="bi bi-arrow-up-right text-gray-300 transition
                                     group-hover:text-blue-600"></a>
                         </div>
@@ -164,10 +156,10 @@ function allSubjects() {
                         <!-- Footer -->
                         <div class="mt-5 flex items-center justify-between border-t border-gray-100 pt-4">
                             <span class="text-xs text-gray-400">Keep learning</span>
-                            <span class="flex items-center gap-1 text-xs font-semibold text-blue-600">
+                            <a href="/subject-info?id=${subject.id}" class="flex items-center gap-1 text-xs font-semibold text-blue-600">
                                 View subject
                                 <i class="bi bi-chevron-right"></i>
-                            </span>
+                            </a>
                         </div>
 
                     </li>
@@ -181,17 +173,6 @@ function allSubjects() {
     });
 }
 
-// Function to edit a subject
-var subjectId = null;
-function editSubject(subject_Id) {
-    editMode = true;
-    subjectId = subject_Id;
-    subjectModal.classList.remove("hidden");
-    subjectModal.classList.add("flex");
-    subjectName.focus();
-    $("#saveSubject").text("Save Changes");
-}
-    
 
 $(document).ready(function () {
     // Load all subjects when the page is ready
@@ -208,54 +189,29 @@ $(document).ready(function () {
             icon: selectedIcon
         };
 
-        // Validate required fields
-        if (!editMode) {
 
-            $.ajax({
-                url: "/api/subjects/",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(podatki),
+        $.ajax({
+            url: "/api/subjects/",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(podatki),
 
-                success: function (response) {
-                    if (!response.success) {
-                        showErrorModal(response.error || 'Error occurred while creating the subject.');
-                        return;
-                    }
-                    // Predmete ponovno naložimo šele po uspešnem shranjevanju
-                    allSubjects();
-
-                    subjectForm.reset();
-
-                    selectedColor = "#3b82f6";
-                    customSubjectColor.value = selectedColor;
-
-                    updateColorSelection();
-                    closeModal();
+            success: function (response) {
+                if (!response.success) {
+                    showErrorModal(response.error || 'Error occurred while creating the subject.');
+                    return;
                 }
-            });
-        } else {
-            $.ajax({
-                url: "/api/subjects/" + subjectId,
-                method: "PATCH",
-                contentType: "application/json",
-                data: JSON.stringify(podatki),
+                // Predmete ponovno naložimo šele po uspešnem shranjevanju
+                allSubjects();
 
-                success: function (response) {
-                    if (!response.success) {
-                        editMode = false;
-                        subjectId = null;
+                subjectForm.reset();
 
-                        showErrorModal(response.error || 'Error occurred while updating the subject.');
-                        return;
-                    }
+                selectedColor = "#3b82f6";
+                customSubjectColor.value = selectedColor;
 
-                    editMode = false;
-                    subjectId = null;
-
-                    window.location.reload();
-                }
-            });
-        }
+                updateColorSelection();
+                closeModal();
+            }
+        });
     });
 });

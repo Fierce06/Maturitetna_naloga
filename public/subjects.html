@@ -64,6 +64,11 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
+                <a href="/friends"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-person"></i>
+                    Friends
+                </a>
                 
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
@@ -77,7 +82,6 @@
                 </button>
             </nav>
         </aside>
-
 
         <!-- Add Subject Modal -->
         <div id="subjectModal" class="fixed inset-0 z-50 h-full hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
@@ -257,69 +261,39 @@
             </div>
         </div>
 
-
-
         <div class="flex flex-col w-full">
 
             <div class="mt-auto h-full w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
 
-                <div class="sg-subject-toolbar flex items-center justify-between mb-6">
-                <header class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
-                    <div>
-                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
-                            Subjects
-                        </p>
+                <div class="sg-subject-toolbar w-full mb-6">
+                    <header class="flex w-full items-center justify-between gap-5">
+                        <div>
+                            <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                                Subjects
+                            </p>
 
-                        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                            My Subjects
-                        </h1>
+                            <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                                My Subjects
+                            </h1>
 
-                        <p class="mt-2 max-w-lg text-sm leading-6 text-slate-500">
-                            Here you can manage your subjects, add new ones, and customize them to fit your study needs.
-                        </p>
-                    </div>
-
-                    <button id="openSubjectModal" type="button"
-                            class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
-                            <i class="bi bi-plus-lg"></i>
-                            Add Subject
-                        </button>
-
-<!-- 
-                        <button
-                            class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm shadow-gray-200 transition hover:bg-gray-200">
-                            <i class="bi bi-funnel"></i>
-                            Filter
-                        </button> -->
-                </header>
-
-                <!-- <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-lg font-semibold text-gray-800">My Subjects</h2>
-
-                    <div class="sg-subject-actions flex items-center gap-2">
+                            <p class="mt-2 max-w-lg text-sm leading-6 text-slate-500">
+                                Here you can manage your subjects, add new ones, and customize them to fit your study needs.
+                            </p>
+                        </div>
 
                         <button id="openSubjectModal" type="button"
-                            class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                            class="shrink-0 flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
                             <i class="bi bi-plus-lg"></i>
                             Add Subject
                         </button>
+                    </header>
+                </div>
 
-
-                        <button
-                            class="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm shadow-gray-200 transition hover:bg-gray-200">
-                            <i class="bi bi-funnel"></i>
-                            Filter
-                        </button>
-
-                    </div>
-
-                </div> -->
-
-
-                <ul id="subjectList" class="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 w-full">
-
+                <ul class="mt-5 grid grid-cols-[repeat(auto-fill,minmax(min(100%,220px),1fr))] gap-4 w-full items-stretch" id="subjectList">
+                    <p class="py-10 text-center text-sm text-slate-500 col-span-full">
+                        Loading subjects...
+                    </p>
                 </ul>
-
             </div>
 
         </div>
@@ -356,13 +330,7 @@
                 <!-- Calendar -->
                 <div id="calendar" class="grid grid-cols-7 gap-1"></div>
 
-                <!-- Selected date -->
-                <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
-                    <p class="text-sm text-gray-500">Selected date</p>
-                    <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
-                        None
-                    </p>
-                </div>
+                
 
             </div>
 

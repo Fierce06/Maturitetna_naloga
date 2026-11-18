@@ -69,3 +69,9 @@ module.exports.deleteQuiz = async function(quiz_id) {
     const [rows] = await client.query(query, [quiz_id]);
     return rows;
 }
+
+module.exports.submitQuizResult = async function(quiz_id, user_id, score, total_questions) {
+    const query = 'INSERT INTO quiz_attempts (quiz_id, user_id, score, total_questions) VALUES (?, ?, ?, ?)';
+    const [rows] = await client.query(query, [quiz_id, user_id, score, total_questions]);
+    return rows;
+}

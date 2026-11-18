@@ -68,6 +68,26 @@ router.get('/image', function (req, res) {
     });
 });
 
+// Return another user's profile photo for authenticated social pages.
+router.get('/image/:userId', function (req, res) {
+    const userId = Number(req.params.userId);
+
+    if (!Number.isInteger(userId) || userId < 1) {
+        return res.status(400).end();
+    }
+
+    res.set('Cache-Control', 'private, no-store');
+    res.set('X-Content-Type-Options', 'nosniff');
+    res.type('jpeg');
+
+    res.sendFile(potDoFotografije(userId), function (napaka) {
+        if (napaka && !res.headersSent) {
+            const status = napaka.code === 'ENOENT' ? 404 : 500;
+            return res.status(status).end();
+        }
+    });
+});
+
 // Handle profile photo uploads. The uploaded image must be a base64-encoded JPEG and not exceed the maximum allowed size.
 router.post('/', async function (req, res) {
     const imageData = req.body && req.body.imageData;
