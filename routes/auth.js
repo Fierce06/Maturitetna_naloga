@@ -11,6 +11,23 @@ function hashPassword(password) {
 }
 
 /**
+ * Get the token usage for the currently logged-in user.
+ * @route PATCH /tokens
+ * @returns {object} - JSON object containing the token usage for the user.
+ */
+router.get('/tokens', requireAuth, async (req, res) => {
+    const userId = req.session.userId;
+
+    try {
+        const tokenUse = await dbUsers.getTokenUse(userId);
+        return res.json({ success: true, tokenUse });
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: 'Error updating token use' });
+    }
+});
+
+/**
  * Register a new user.
  * @route POST /register
  * @param {string} username - The username of the new user.
@@ -138,7 +155,7 @@ router.post('/login', async (req, res) => {
  * @returns {object} - JSON object containing the username and ID of the logged-in user.
  */
 router.get('/me', requireAuth, (req, res) => {
-    res.json({ username: req.session.username, id: req.session.userId });
+    res.json({ success: true, username: req.session.username, id: req.session.userId });
 });
 
 /**
@@ -146,33 +163,33 @@ router.get('/me', requireAuth, (req, res) => {
  * @route POST /changePassword
  * @param {string} currentPassword - The current password of the user.
  */
-router.post('/changePassword', requireAuth, async (req, res) => {
+router.post('/change-password', requireAuth, async (req, res) => {
     const { currentPassword, newPassword, confirmPassword } = req.body;
     const id = req.session.userId;
 
     if (!currentPassword || !newPassword || !confirmPassword || !id) {
-        return res.status(400).json({ success: false, error: 'Manjkajo obvezna polja!' });
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
     }
 
     try {
         const user = await dbUsers.getAdminById(id);
 
         if (!user) {
-            return res.status(404).json({ success: false, error: 'Uporabnik ni najden!' });
+            return res.status(404).json({ success: false, error: 'User not found' });
         }
 
         const ok = await bcrypt.compare((process.env.APP_SECRET || '') + currentPassword, user.password_hash);
 
         if (ok === false) {
-            return res.status(400).json({ success: false, error: 'Geslo ni pravilno!' });
+            return res.status(400).json({ success: false, error: 'Password is not correct' });
         }
 
         if (newPassword !== confirmPassword) {
-            return res.status(400).json({ success: false, error: 'Gesli se ne ujemata!' });
+            return res.status(400).json({ success: false, error: 'New passwords do not match' });
         }
 
         if (newPassword.length < 10) {
-            return res.status(400).json({ success: false, error: 'Geslo mora biti dolgo vsaj 10 znakov!' });
+            return res.status(400).json({ success: false, error: 'Password must be at least 10 characters long!' });
         }
 
         const passwordHash = await hashPassword(newPassword);
@@ -181,7 +198,7 @@ router.post('/changePassword', requireAuth, async (req, res) => {
         return res.json({ success: true });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ success: false, error: 'Napaka pri vnosu!' });
+        res.status(500).json({ success: false, error: 'Error updating password' });
     }
 });
 
@@ -200,6 +217,32 @@ router.post('/logout', (req, res) => {
         res.clearCookie('connect.sid');
         return res.json({ success: true });
     });
+});
+
+/**
+ * Update the username for the currently logged-in user.
+ * @route PATCH /update-username
+ * @param {string} username - The new username for the user.
+ * @returns {object} - JSON object indicating success or failure.
+ */
+router.patch('/update-username', requireAuth, async (req, res) => {
+    const { username } = req.body;
+    const userId = req.session.userId;
+
+    if (!username) {
+        return res.status(400).json({ success: false, error: 'Missing required fields' });
+    }
+
+    try  {
+        await dbUsers.updateUsername(username, userId);
+        req.session.username = username;
+    } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY' || err.errno === 1062) {
+            return res.status(409).json({ success: false, error: 'User with this username already exists!' });
+        }
+        console.error(err);
+        return res.status(500).json({ success: false, error: 'Error updating username' });
+    }
 });
 
 module.exports = router;

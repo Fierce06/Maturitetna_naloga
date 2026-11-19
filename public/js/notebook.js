@@ -10,6 +10,9 @@ let subjects = [];
 let activeNote = null;
 let saveTimer;
 
+const urlParams = new URLSearchParams(window.location.search);
+const noteId = urlParams.get("note");
+
 // Function to display save status messages
 function showSaveStatus(message = 'Saved', isError = false) {
     saveStatus.innerHTML = '<i class="bi ' + (isError ? 'bi-exclamation-triangle' : 'bi-cloud-check') + '"></i> ' + message;
@@ -75,6 +78,23 @@ function allSubjectIds() {
 
 // Function to load a specific note into the editor
 function loadNote(note) {
+    if (typeof note === 'string' || typeof note === 'number') {
+        $.ajax({
+            url: `${API_URL}/${note}`,
+            method: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                if (!response.success) {
+                    showSaveStatus(response.error || 'Error occurred while loading the note.', true);
+                    return;
+                }
+                loadNote(response.data);
+                return;
+            }
+        });
+        return;
+    }
+
     // If the note is not found, return early
     if (!note) return;
     activeNote = note;
@@ -100,7 +120,10 @@ function loadNotebook() {
             // Populate the notes array with the response data
             notes = Array.isArray(response.data) ? response.data : [];
             renderNotesList();
-            if (notes[0]) loadNote(notes[0]);
+            const requestedNote = notes.find(note => Number(note.id) === Number(noteId));
+            if (requestedNote) loadNote(requestedNote);
+            else if (noteId) loadNote(noteId);
+            else if (notes[0]) loadNote(notes[0]);
             else showSaveStatus('Create new note', false);
         }
     });

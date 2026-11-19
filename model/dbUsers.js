@@ -40,10 +40,12 @@ module.exports.getAdminById = async function(id) {
  * @returns 
  */
 module.exports.createUser = async function(username, email, passwordHash) {
-    console.log('Creating user:', username, email);
     const insertQuery = `INSERT INTO users (username, email, password_hash)
             VALUES (?, ?, ?)`;
     const [result] = await client.query(insertQuery, [username, email, passwordHash]);
+    const createTokenUseQuery = `INSERT INTO token_use (user_id, tokens_used)
+            VALUES (?, 0)`;
+    await client.query(createTokenUseQuery, [result.insertId]);
     const selectQuery = 'SELECT id, username, password_hash, failed_attempts, locked_until, created_at, consecutive_failed_attempts FROM users WHERE id = ? LIMIT 1';
     const [rows] = await client.query(selectQuery, [result.insertId]);
     return rows[0];
@@ -79,3 +81,40 @@ module.exports.updateAdminPassword = async function(passwordHash, id) {
     const [rows] = await client.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id]);
     return rows[0];
 };
+
+/**
+ * Update the username for a user.
+ * @param {*} username 
+ * @param {*} id 
+ * @returns 
+ */
+module.exports.updateUsername = async function(username, id) {
+    const query = 'UPDATE users SET username = ? WHERE id = ?';
+    await client.query(query, [username, id]);
+    const [rows] = await client.query('SELECT * FROM users WHERE id = ? LIMIT 1', [id]);
+    return rows[0];
+} 
+
+/**
+ * Update the token use for a user.
+ * @param {*} tokenUse 
+ * @param {*} id 
+ * @returns 
+ */
+module.exports.updateTokenUse = async function(tokenUse, id) {
+    const query = 'UPDATE token_use SET tokens_used = tokens_used + ? WHERE user_id = ?';
+    await client.query(query, [tokenUse, id]);
+    const [rows] = await client.query('SELECT * FROM token_use WHERE id = ? LIMIT 1', [id]);
+    return rows[0];
+}
+
+/**
+ * Get the token use for a user.
+ * @param {*} id 
+ * @returns 
+ */
+module.exports.getTokenUse = async function(id) {
+    const query = 'SELECT * FROM token_use WHERE user_id = ? LIMIT 1';
+    const [rows] = await client.query(query, [id]);
+    return rows[0];
+}

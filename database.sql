@@ -376,6 +376,24 @@ CREATE TABLE friends (
 ) ENGINE=InnoDB;
 
 -- =====================================================
+-- FRIENDS
+-- =====================================================
+
+CREATE TABLE token_use (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    tokens_used INT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_token_use_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB;
+
+-- =====================================================
 -- ADDITIONAL INDEXES
 -- =====================================================
 
