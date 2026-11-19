@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+
 const session = require('express-session');
 const path = require('path');
 
@@ -84,6 +85,10 @@ app.use('/api/notebook', require('./routes/notebook'));
 app.use('/api/profile-photo', require('./routes/profilePhoto'));
 app.use('/api/quiz', require('./routes/quizzes'));
 app.use('/api/friends', require('./routes/friends'));   
+
+app.use("/legal", express.static(
+    path.join(__dirname, "documentation")
+));
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);
