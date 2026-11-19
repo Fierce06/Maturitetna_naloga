@@ -26,3 +26,27 @@ module.exports.insertNewExam = async function(user_id, subject_id, title, date) 
     const [rows] = await client.query(selectQuery, [result.insertId]);
     return rows[0];
 }
+
+/**
+ * Update an existing exam.
+ * @param {*} examId 
+ * @param {*} title 
+ * @param {*} date 
+ * @returns 
+ */
+module.exports.updateExam = async function(examId, title, date) {
+    const updateQuery = 'UPDATE exams SET title = ?, date = ? WHERE id = ?';
+    await client.query(updateQuery, [title, date, examId]);
+    const selectQuery = 'SELECT * FROM exams WHERE id = ? LIMIT 1';
+    const [rows] = await client.query(selectQuery, [examId]);
+    return rows[0];
+}
+
+/**
+ * Delete an existing exam.
+ * @param {*} examId 
+ */
+module.exports.deleteExam = async function(examId) {
+    const deleteQuery = 'DELETE FROM exams WHERE id = ?';
+    await client.query(deleteQuery, [examId]);
+}

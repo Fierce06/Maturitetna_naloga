@@ -42,4 +42,45 @@ router.post('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Update an existing exam for the authenticated user.
+ * @param { number } id - The ID of the exam to update.
+ * @param { string } title - The new title of the exam.
+ * @param { string } date - The new date of the exam in YYYY-MM-DD format.
+ * @returns { success: boolean, updatedExam: Object } - The updated exam object.
+ */
+router.put('/:id', requireAuth, async (req, res) => {
+    const examId = req.params.id;
+    const { title, date } = req.body;
+
+    if (!title || !date) {
+        return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    try {
+        const updatedExam = await dbExams.updateExam(examId, title, date);
+        res.json({ success: true, updatedExam });
+    } catch (error) {
+        console.error('Error updating exam:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+/**
+ * Delete an existing exam for the authenticated user.
+ * @param { number } id - The ID of the exam to delete.
+ * @returns { success: boolean } - Indicates whether the deletion was successful.
+ */
+router.delete('/:id', requireAuth, async (req, res) => {
+    const examId = req.params.id;
+    
+    try {
+        await dbExams.deleteExam(examId);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting exam:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 module.exports = router;

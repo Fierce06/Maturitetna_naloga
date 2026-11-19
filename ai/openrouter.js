@@ -1,12 +1,13 @@
 
 require("dotenv").config();
+const dbUsers = require("../model/dbUsers");
 
 const OPENROUTER_URL = "https://openrouter.ai/api/v1";
 
 const MODEL =
     process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini";
 
-async function generateQuiz({ topic, difficulty = "medium", questionCount = 10 }) {
+async function generateQuiz({ topic, difficulty = "medium", questionCount = 10, userId }) {
     const apiKey = process.env.OPENROUTER_API_KEY?.trim();
 
     if (!apiKey) {
@@ -79,6 +80,19 @@ Number of questions: ${questionCount}
     const data = await response.json();
     const content = data?.choices?.[0]?.message?.content;
     console.dir(data.choices[0].message, { depth: null });
+
+    const usage = data.usage;
+
+    console.log("========== QUIZ TOKEN USAGE ==========");
+    console.log("Model:", data.model);
+    console.log("Prompt tokens:", usage?.prompt_tokens);
+    console.log("Completion tokens:", usage?.completion_tokens);
+    console.log("Total tokens:", usage?.total_tokens);
+    console.log("Cost (USD):", usage?.cost);
+    console.log("======================================");
+
+    await dbUsers.updateTokenUse(usage?.total_tokens || 0, userId);
+
     if (!content) {
         throw new Error("OpenRouter returned an empty response. Finish reason: " + data?.choices?.[0]?.finish_reason);
     }

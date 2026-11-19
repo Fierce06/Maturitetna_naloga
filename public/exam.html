@@ -62,20 +62,10 @@
             >
 
 
-            <div>
-
-                <h2
-                    class="text-lg font-semibold text-slate-900"
-                    id="user-name"
-                >
-                    User name
-                </h2>
-
-                <p class="text-sm text-slate-500">
-                    Student
-                </p>
-
-            </div>
+            <a href="/settings">
+                <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                <p class="text-sm text-slate-500">Student</p>
+            </a>
 
         </div>
 
@@ -455,6 +445,46 @@
             </div>
         </aside>
 
+</div>
+
+<div id="editExamModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 px-4 py-8" aria-hidden="true">
+    <div class="mx-auto mt-16 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="editExamHeading">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <h2 id="editExamHeading" class="text-xl font-bold text-slate-900">Edit Exam</h2>
+                <p class="mt-1 text-sm text-slate-500">Update the exam details.</p>
+            </div>
+            <button type="button" class="close-exam-modal text-2xl leading-none text-slate-400 hover:text-slate-700" aria-label="Close">&times;</button>
+        </div>
+
+        <form id="editExamForm" class="mt-6 space-y-4">
+            <input id="editExamId" type="hidden">
+            <div>
+                <label for="editExamTitle" class="mb-2 block text-sm font-semibold text-slate-700">Exam name</label>
+                <input id="editExamTitle" type="text" required maxlength="100" class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div>
+                <label for="editExamDate" class="mb-2 block text-sm font-semibold text-slate-700">Exam date</label>
+                <input id="editExamDate" type="date" required class="w-full rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
+            </div>
+            <div class="flex justify-end gap-3 pt-2">
+                <button type="button" class="close-exam-modal rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancel</button>
+                <button type="submit" class="rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500">Save changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="deleteExamModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 px-4 py-8" aria-hidden="true">
+    <div class="mx-auto mt-24 w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="deleteExamHeading">
+        <h2 id="deleteExamHeading" class="text-xl font-bold text-slate-900">Delete Exam?</h2>
+        <p class="mt-2 text-sm text-slate-500">Are you sure you want to delete <strong id="deleteExamTitle" class="text-slate-700"></strong>?</p>
+        <input id="deleteExamId" type="hidden">
+        <div class="mt-6 flex justify-end gap-3">
+            <button type="button" class="close-exam-modal rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50">Cancel</button>
+            <button id="confirmDeleteButton" type="button" class="rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-500">Delete</button>
+        </div>
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

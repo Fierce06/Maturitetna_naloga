@@ -88,7 +88,8 @@ router.post('/', requireAuth, async (req, res) => {
         const newQuestions = await openRouter.generateQuiz({
             topic: removeHtmlAndStyles(topic),
             difficulty,
-            questionCount: number_of_questions
+            questionCount: number_of_questions,
+            userId: user_id
         });
 
         // Save the generated quiz to the database
@@ -135,7 +136,12 @@ router.post('/create', requireAuth, async (req, res) => {
             topic += `${removeHtmlAndStyles(note.content)}\n`;
         }
         // Generate quiz using OpenRouter
-        const newQuestions = await openRouter.generateQuiz({ topic, difficulty, questionCount: number_of_questions });
+        const newQuestions = await openRouter.generateQuiz({
+            topic,
+            difficulty,
+            questionCount: number_of_questions,
+            userId: user_id
+        });
 
         // Save the generated quiz to the database
         const newQuiz = await dbQuizzes.createQuiz(user_id, first_subject_id, note_ids[0], title);
