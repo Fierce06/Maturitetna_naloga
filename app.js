@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
+
 const session = require('express-session');
 const path = require('path');
 
@@ -83,6 +84,10 @@ app.use(
     '/api/practice-exams',
     require('./routes/practiceExams')
 );
+
+app.use("/legal", express.static(
+    path.join(__dirname, "documentation")
+));
 
 app.listen(PORT, () => {
     console.log(`Strežnik teče na http://localhost:${PORT}`);
