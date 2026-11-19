@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f8ff">
+    <meta name="description" content="StudyGraph brings your subjects, notes, knowledge graph, quizzes and exam planning together in one calm learning space.">
+    <title>StudyGraph — Make learning click.</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="/landing.css">
+    <script src="/js/landing.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <!-- Javna navigacija: na tej strani ni uporabniskih podatkov. -->
+    <header class="site-header" id="top">
+        <div class="container header-content">
+            <a class="brand" href="/" aria-label="StudyGraph home">
+                <span class="brand-mark" aria-hidden="true">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </span>
+                <span class="brand-wordmark">Study<span>Graph</span></span>
+            </a>
+
+            <nav class="desktop-nav" aria-label="Main navigation">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#your-space">Your space</a>
+            </nav>
+
+            <div class="header-actions">
+                <a class="header-login" href="/login">Log in</a>
+                <a class="button button-primary header-signup" href="/signup">Sign up <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+                    <i class="bi bi-list" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+
+        <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation" hidden>
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#your-space">Your space</a>
+            <div class="mobile-menu-links">
+                <a href="/login">Log in</a>
+                <a href="/signup">Create an account <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+            </div>
+        </nav>
+    </header>
+
+    <main id="main">
+        <!-- HERO -->
+        <section class="hero-section" aria-labelledby="hero-title">
+            <div class="container hero-grid">
+                <div class="hero-copy">
+                    <h1 id="hero-title">Make learning <span class="headline-accent">click<span class="period">.</span></span></h1>
+                    <p class="hero-description">All your subjects, notes and exam prep in one thoughtful space. Less switching between apps. More time for the things you're learning.</p>
+                    <div class="hero-actions">
+                        <a href="/signup" class="button button-primary button-large">Start with StudyGraph <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
+                    </div>
+                </div>
+
+                <!-- Predogled je predstavitveni, brez osebnih podatkov. -->
+                <div class="hero-visual" aria-label="Example StudyGraph workspace">
+                    <span class="visual-halo visual-halo-one" aria-hidden="true"></span>
+                    <span class="visual-halo visual-halo-two" aria-hidden="true"></span>
+                    <div class="float-label float-label-top" aria-hidden="true"></i> One place for everything</div>
+
+                    <div class="preview-window">
+                        <div class="preview-topline">
+                            <div class="preview-brand"><span class="preview-logo"><i class="bi bi-diagram-3-fill" aria-hidden="true"></i></span> StudyGraph</div>
+                            <div class="preview-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                        </div>
+                        <div class="preview-body">
+                            <aside class="preview-sidebar" aria-hidden="true">
+                                <div class="preview-sidebar-item current"><i class="bi bi-house-door-fill"></i></div>
+                                <div class="preview-sidebar-item"><i class="bi bi-journal-text"></i></div>
+                                <div class="preview-sidebar-item"><i class="bi bi-diagram-3"></i></div>
+                                <div class="preview-sidebar-item"><i class="bi bi-calendar2-check"></i></div>
+                                <div class="preview-sidebar-bottom"><i class="bi bi-person-circle"></i></div>
+                            </aside>
+                            <div class="preview-main">
+                                <div class="preview-heading"><div><span class="preview-kicker">YOUR WORKSPACE</span><h2>A little more clarity.</h2></div><span class="preview-bell"><i class="bi bi-bell"></i></span></div>
+                                <div class="preview-subjects">
+                                    <div class="preview-subject preview-subject-blue"><span><i class="bi bi-lightning-charge-fill"></i></span><strong>Physics</strong><small>My subject</small></div>
+                                    <div class="preview-subject preview-subject-purple"><span><i class="bi bi-calculator"></i></span><strong>Math</strong><small>My subject</small></div>
+                                    <div class="preview-subject preview-subject-mint"><span><i class="bi bi-code-slash"></i></span><strong>Computing</strong><small>My subject</small></div>
+                                </div>
+                                <div class="preview-panels">
+                                    <div class="preview-notes">
+                                        <div class="preview-section-label"><strong>Continue in Notebook</strong><i class="bi bi-arrow-up-right" aria-hidden="true"></i></div>
+                                        <div class="preview-note-item"><span class="preview-note-icon"><i class="bi bi-journal-text" aria-hidden="true"></i></span><div><strong>Newton's Laws</strong><small>Physics · Class notes</small></div></div>
+                                        <div class="preview-note-lines" aria-hidden="true"><i></i><i></i><i></i></div>
+                                    </div>
+                                    <div class="preview-exam">
+                                        <div class="preview-section-label"><strong>Upcoming exam</strong><i class="bi bi-calendar3" aria-hidden="true"></i></div>
+                                        <div class="preview-exam-illustration" aria-hidden="true"><i class="bi bi-calendar-check"></i></div>
+                                        <strong>Physics test</strong><small>Keep your plans in view</small>
+                                    </div>
+                                </div>
+                                <div class="preview-bottom"><span></i> A clearer way to learn</span><div class="preview-progress" aria-hidden="true"><span></span></div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="float-label float-label-bottom" aria-hidden="true"><span><i class="bi bi-check-lg"></i></span> All in one place</div>
+                    <span class="preview-caption">Illustrative workspace preview</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALUE PROPOSITION -->
+        <section class="benefits-section" id="features" aria-labelledby="benefits-title">
+            <div class="container">
+                <div class="section-intro centered">
+                    <h2 id="benefits-title">Your school life, a little <em>simpler.</em></h2>
+                    <p>You have enough to think about. Your learning tools shouldn't be one more thing.</p>
+                </div>
+                <div class="benefits-grid">
+                    <article class="benefit-card">
+                        <span class="benefit-icon benefit-icon-blue"><i class="bi bi-collection" aria-hidden="true"></i></span>
+                        <span class="benefit-number">01 / ORGANIZE</span>
+                        <h3>Everything in its place.</h3>
+                        <p>Give every subject a home. Keep notes and study material together so you know where to find them.</p>
+                        <span class="benefit-decoration" aria-hidden="true"><i class="bi bi-grid-1x2-fill"></i></span>
+                    </article>
+                    <article class="benefit-card">
+                        <span class="benefit-icon benefit-icon-purple"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+                        <span class="benefit-number">02 / CONNECT</span>
+                        <h3>See the bigger picture.</h3>
+                        <p>Bring related notes together with Knowledge Graph and make sense of how ideas fit.</p>
+                        <span class="benefit-decoration" aria-hidden="true"><i class="bi bi-bezier2"></i></span>
+                    </article>
+                    <article class="benefit-card">
+                        <span class="benefit-icon benefit-icon-mint"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
+                        <span class="benefit-number">03 / PREPARE</span>
+                        <h3>Feel ready, not rushed.</h3>
+                        <p>Keep track of upcoming exams and make quizzes part of your study routine.</p>
+                        <span class="benefit-decoration" aria-hidden="true"><i class="bi bi-calendar2-week"></i></span>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERACTIVE MODULE SHOWCASE -->
+        <section class="showcase-section" id="your-space" aria-labelledby="showcase-title">
+            <div class="container showcase-grid">
+                <div class="showcase-copy">
+                    <h2 id="showcase-title">A space that works <em>the way you learn.</em></h2>
+                    <p>Write a thought, connect the dots, plan what comes next. Switch between tools without losing your flow.</p>
+                    <div class="showcase-tabs" role="tablist" aria-label="Explore StudyGraph features">
+                        <button class="showcase-tab is-selected" type="button" id="tab-notebook" role="tab" aria-selected="true" aria-controls="feature-panel" data-feature="notebook"><span><i class="bi bi-journal-text" aria-hidden="true"></i></span><strong>Notebook</strong><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+                        <button class="showcase-tab" type="button" id="tab-knowledge" role="tab" aria-selected="false" aria-controls="feature-panel" data-feature="knowledge" tabindex="-1"><span><i class="bi bi-diagram-3" aria-hidden="true"></i></span><strong>Knowledge Graph</strong><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+                        <button class="showcase-tab" type="button" id="tab-exams" role="tab" aria-selected="false" aria-controls="feature-panel" data-feature="exams" tabindex="-1"><span><i class="bi bi-calendar2-check" aria-hidden="true"></i></span><strong>Exam planning</strong><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div class="showcase-display">
+                    <div class="feature-window" id="feature-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-notebook" aria-live="polite">
+                        <div class="feature-window-top"><span class="feature-window-dots" aria-hidden="true"><i></i><i></i><i></i></span><strong id="featureWindowTitle">Notebook</strong><span class="feature-window-status"><i class="bi bi-circle-fill" aria-hidden="true"></i> Preview</span></div>
+                        <div class="feature-window-content" id="featureWindowContent">
+                            <!-- Prvi prikaz je v HTML, drugi se izrisujejo z landing.js. -->
+                            <div class="demo-notebook"><div class="demo-document-label"><i class="bi bi-file-earmark-text"></i> Physics / My notes</div><h3>Newton's Laws</h3><p>An object stays in motion unless a force acts on it.</p><div class="demo-writing-lines" aria-hidden="true"><span></span><span></span><span></span><span></span></div><div class="demo-note-tag"><i class="bi bi-check2-circle"></i> Notes in one place</div></div>
+                        </div>
+                    </div>
+                    <span class="showcase-sparkle" aria-hidden="true"></i></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- SIMPLE FLOW -->
+        <section class="steps-section" id="how-it-works" aria-labelledby="steps-title">
+            <div class="container">
+                <div class="section-intro centered">
+                    <h2 id="steps-title">Your next step is <em>right here.</em></h2>
+                    <p>No complicated setup. Just a place to start making progress.</p>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-item"><span class="step-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span><h3>Create your account</h3><p>Make your own learning space in StudyGraph.</p></div>
+                    <div class="step-divider" aria-hidden="true"><i class="bi bi-arrow-right"></i></div>
+                    <div class="step-item"><span class="step-icon"><i class="bi bi-journal-plus" aria-hidden="true"></i></span><h3>Add your subjects</h3><p>Organize what you study and start writing notes.</p></div>
+                    <div class="step-divider" aria-hidden="true"><i class="bi bi-arrow-right"></i></div>
+                    <div class="step-item"><span class="step-icon"><i class="bi bi-lightning-charge" aria-hidden="true"></i></span><h3>Keep moving forward</h3><p>Connect your ideas and stay ahead of exams.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="final-section" aria-labelledby="final-title">
+            <div class="container">
+                <div class="final-card">
+                    <span class="final-orbit orbit-a" aria-hidden="true"></span>
+                    <span class="final-orbit orbit-b" aria-hidden="true"></span>
+                    <div class="final-copy"><span class="final-eyebrow"></i> READY WHEN YOU ARE</span><h2 id="final-title">A better way to stay on top of learning.</h2><p>Your notes, plans and next big idea are waiting.</p><div class="final-actions"><a class="button button-white" href="/signup">Create your account <i class="bi bi-arrow-right" aria-hidden="true"></i></a><a class="final-login" href="/login">Already have an account? Log in <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a></div></div>
+                    <div class="final-graphic" aria-hidden="true"><div class="final-graphic-node node-one"><i class="bi bi-book"></i></div><div class="final-graphic-node node-two"><i class="bi bi-stars"></i></div><div class="final-graphic-node node-three"><i class="bi bi-calendar-check"></i></div><span class="final-graphic-line line-one"></span><span class="final-graphic-line line-two"></span><span class="final-graphic-line line-three"></span><div class="final-graphic-core"><i class="bi bi-diagram-3-fill"></i></div></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-content"><a href="/" class="brand footer-brand"><span class="brand-mark"><i class="bi bi-diagram-3-fill" aria-hidden="true"></i></span><span class="brand-wordmark">Study<span>Graph</span></span></a><div class="footer-links" style="margin-left:auto"><a href="/login">Log in</a><a href="/signup">Sign up</a><a href="#top">Back to top <i class="bi bi-arrow-up" aria-hidden="true"></i></a></div></div>
+    </footer>
+</body>
+</html>

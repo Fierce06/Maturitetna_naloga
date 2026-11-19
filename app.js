@@ -25,13 +25,22 @@ app.use(session({
     }
 }));
 
-// Javne datoteke: CSS, JavaScript, slike ...
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Javne strani
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+// Direktna povezava do index.html ne sme obiti zgornjega preverjanja.
+app.get('/index.html', (req, res) => {
+    return res.redirect('/');
 });
+
+// Javne datoteke: CSS, JavaScript, slike ...
+// index: false preprecuje, da express.static samodejno odpre Dashboard.
+app.use(express.static(path.join(__dirname, 'public'), { index: false }));
+
+// Zacetna stran je odvisna od prijave uporabnika.
+// Prijavljeni uporabnik vidi obstoječi Dashboard, gost predstavitveno stran.
+app.get('/', (req, res) => {
+    const imeDatoteke = req.session.userId ? 'index.html' : 'landing.html';
+    res.sendFile(path.join(__dirname, 'public', imeDatoteke));
+});
+
 
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login.html'));
