@@ -272,8 +272,8 @@
         submitButton.disabled = true;
         submitButton.textContent = 'Creating...';
 
-        const difficulty = 'medium';
-        const questionCount = 10;
+        const difficulty = document.getElementById('difficultySelect').value;
+        const questionCount = document.getElementById('numberOfQuestions').value;
 
         $.ajax({
             url: '/api/quiz/create',

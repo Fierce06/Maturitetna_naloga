@@ -6,6 +6,9 @@ const examTitle = document.getElementById("exam-title");
 const examTopics = document.getElementById("exam-topics");
 const examIcon = document.getElementById("exam-icon");
 const notice = document.getElementById("notice");
+const scoreModal = document.getElementById("scoreModal");
+const scoreModalValue = document.getElementById("scoreModalValue");
+const scoreModalDetails = document.getElementById("scoreModalDetails");
 
 let questions = [];
 
@@ -26,25 +29,25 @@ function validColor(color) {
         : "#3b82f6";
 }
 
+// Getting all quizzes and storing them in a variable for later use
 var quizzes = { quizzes: [] };
-async function getAllQuizzes() {
-    try {
-        const response = await fetch("/api/quiz/");
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
+function getAllQuizzes(success) {
+    $.ajax({
+        url: "/api/quiz/",
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while creating the subject.');
+                return;
+            }
+            quizzes = response;
+            success();
         }
-
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
-
-        quizzes = await response.json();
-    } catch (error) {
-        console.error(error);
-    }
+    });
 }
 
+// Function to get practice cards for a subject
 function practiceCards(subject) {
     var cards = [];
 
@@ -65,6 +68,7 @@ function practiceCards(subject) {
 }
 getAllQuizzes();
 
+// Function to create a subject card
 function createSubject(subject) {
     const color = validColor(subject.color);
     const cards = practiceCards(subject);
@@ -78,7 +82,7 @@ function createSubject(subject) {
                         p-5 text-white shadow-md"
                  style="background-color: ${color}">
 
-                <i class="bi bi-book text-3xl"></i>
+                <i class="bi ${subject.icon || 'bi-calculator'} text-3xl"></i>
 
                 <div>
                     <p class="text-xs font-semibold uppercase tracking-wider text-white/70">
@@ -126,52 +130,44 @@ function createSubject(subject) {
     `;
 }
 
-async function loadStudySubjects() {
-    try {
-        await getAllQuizzes();
-        const response = await fetch("/api/subjects/");
+// Loading subjects when the page is ready
+function loadStudySubjects() {
 
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
-        }
+    // Fetching all quizzes first, then fetching subjects
+    getAllQuizzes(function () {
+        $.ajax({
+            url: "/api/subjects/",
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (!data.success) {
+                    showErrorModal(response.error || 'Error occurred while creating the subject.');
+                    return;
+                }
 
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
+                if (!data.subjects || data.subjects.length === 0) {
+                    studySubjectsList.innerHTML = `
+                        <div class="rounded-xl border border-dashed border-slate-300
+                                    bg-slate-50 p-10 text-center">
+                            <p class="font-medium text-slate-700">
+                                You don't have any subjects yet.
+                            </p>
+                            <a href="/subjects"
+                            class="mt-3 inline-block text-sm font-medium text-blue-600">
+                                Add your first subject
+                            </a>
+                        </div>
+                    `;
+                    return;
+                }
 
-        const data = await response.json();
-
-        if (!data.subjects || data.subjects.length === 0) {
-            studySubjectsList.innerHTML = `
-                <div class="rounded-xl border border-dashed border-slate-300
-                            bg-slate-50 p-10 text-center">
-                    <p class="font-medium text-slate-700">
-                        Nimaš še nobenega predmeta.
-                    </p>
-                    <a href="/subjects"
-                       class="mt-3 inline-block text-sm font-medium text-blue-600">
-                        Dodaj prvi predmet
-                    </a>
-                </div>
-            `;
-            return;
-        }
-
-        studySubjectsList.innerHTML =
-            data.subjects.map(createSubject).join("");
-
-    } catch (error) {
-        console.error(error);
-
-        studySubjectsList.innerHTML = `
-            <p class="rounded-xl bg-red-50 p-4 text-sm text-red-700">
-                Pri nalaganju predmetov je prišlo do napake.
-            </p>
-        `;
-    }
+                studySubjectsList.innerHTML = data.subjects.map(createSubject).join("");
+            }
+        });
+    })
 }
 
+// Updating the progress of the study session
 function updateProgress() {
     const answered = questions.filter(question => {
         const selectedRadio =
@@ -198,6 +194,7 @@ function updateProgress() {
     return answered;
 }
 
+// Function to start the timer for the study session
 function startTimer() {
     clearInterval(timerId);
 
@@ -224,29 +221,44 @@ function startTimer() {
     }, 1000);
 }
 
-async function showExam(card) {
-    try {
-        const quizId = card.dataset.id;
-        const response = await fetch("/api/quiz/questions/" + quizId);
-        if (response.redirected) {
-            window.location.href = response.url;
-            return;
-        }
+// Showing exam with questions for a selected subject
+var correctAnswers = {};
+var explanation = {};
+var currentQuizId = null;
+function showExam(card, quizIdFromUrl = null) {
+    correctAnswers = {};
+    explanation = {};
 
-        if (!response.ok) {
-            throw new Error("Predmetov ni bilo mogoče pridobiti.");
-        }
+    var quizId = null;
+    if (quizIdFromUrl) {
+        quizId = quizIdFromUrl;
+    } else if (card) {
+        quizId = card.dataset.id;
+    }
 
-        const data = await response.json();
-        const main = document.getElementById("study-page");
-        const quizQuestions = data.questions.questions;
+    currentQuizId = quizId;
 
-        main.querySelectorAll("[data-question]").forEach(element => element.remove());
-        main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+    $.ajax({
+        url: "/api/quiz/questions/" + quizId,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (!data.success) {
+                showErrorModal(response.error || 'Error occurred while creating the subject.');
+                return;
+            }
+            const main = document.getElementById("exam-questions");
+            const quizQuestions = data.questions.questions;
+
+            document.querySelector("#study-page progress").max = quizQuestions.length;
+
+            main.querySelectorAll("[data-question]").forEach(element => element.remove());
+            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
             const questionId = `question-${index}`;
+            correctAnswers[questionId] = element.correct_answer;
+            explanation[questionId] = element.explanation;
             return `
-                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question>
-                    <div class="mb-[18px] flex items-center justify-between"><span class="rounded-lg bg-[#eaf4fd] px-3 py-[7px] text-xs font-bold text-[#1764a5]">Multiple Choice</span><span class="text-[13px] text-[#788396]">1 mark</span></div>
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
                     <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
                     <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
                         ${[
@@ -260,18 +272,13 @@ async function showExam(card) {
                     </fieldset>
                 </section>
             `;
-        }).join(""));
-        questions = [...main.querySelectorAll("[data-question]")];
-    } catch (error) {
-        console.error(error);
-    }
+            }).join(""));
+            questions = [...main.querySelectorAll("[data-question]")];
+        }
+    });
 
     studyOverview.classList.add("hidden");
     studyPage.classList.remove("hidden");
-
-    // examTitle.textContent = card.dataset.title;
-    // examTopics.textContent = card.dataset.topics;
-    // examIcon.textContent = card.dataset.icon;
 
     startTimer();
 
@@ -279,6 +286,7 @@ async function showExam(card) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Function to show the study overview page
 function showStudyOverview() {
     clearInterval(timerId);
 
@@ -289,9 +297,9 @@ function showStudyOverview() {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+// Event listeners for user interactions
 studyOverview.addEventListener("click", event => {
     const card = event.target.closest("[data-open-exam]");
-    console.log(card);
 
     if (card) {
         showExam(card);
@@ -305,25 +313,108 @@ document.getElementById("back").addEventListener("click", event => {
     showStudyOverview();
 });
 
-// document.getElementById("previous").addEventListener("click", () => {
-//     window.scrollTo({ top: 0, behavior: "smooth" });
-// });
+document.getElementById("previous").addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+});
 
-// document.getElementById("bookmark").addEventListener("click", function () {
-//     const active = this.getAttribute("aria-pressed") !== "true";
+document.getElementById("next").addEventListener("click", () => {
+    const answered = updateProgress();
 
-//     this.setAttribute("aria-pressed", String(active));
-//     this.textContent = active
-//         ? "◆  Marked for later"
-//         : "♧  Save for later";
-// });
+    notice.textContent = answered === questions.length
+        ? `All ${questions.length} questions answered.`
+        : `${answered} of ${questions.length} answered. Complete the remaining questions.`;
 
-// document.getElementById("next").addEventListener("click", () => {
-//     const answered = updateProgress();
+    notice.classList.remove("hidden");
 
-//     notice.textContent = answered === questions.length
-//         ? `All ${questions.length} questions answered.`
-//         : `${answered} of ${questions.length} answered. Complete the remaining questions.`;
-// });
+    checkExamAnswers();
+});
+
+// Function to check the answers of the exam and display the results
+function checkExamAnswers() {
+    let correctCount = 0;
+    let incorrectCount = 0;
+
+    questions.forEach((question, index) => {
+        const questionId = `question-${index}`;
+        const selectedRadio = question.querySelector('input[type="radio"]:checked');
+
+        if (selectedRadio) {
+            const selectedAnswer = selectedRadio.value;
+            const correctAnswer = Object.keys(correctAnswers).includes(questionId) ? correctAnswers[questionId] : null;
+
+            const questionContainer = document.getElementById(questionId);
+
+            if (selectedAnswer === correctAnswer) {
+                correctCount++;
+                questionContainer.classList.add("border-green-500", "shadow-lg", "shadow-green-200", "border-2");
+                questionContainer.classList.remove("border-red-500", "shadow-red-200");
+            } else {
+                incorrectCount++;
+                questionContainer.classList.add("border-red-500", "shadow-lg", "shadow-red-200", "border-2");
+                questionContainer.classList.remove("border-green-500", "shadow-green-200");
+            }
+
+            questionContainer.insertAdjacentHTML("beforeend", `
+                <div class="mt-3 rounded-lg bg-gray-50 p-3 text-sm text-gray-700">
+                    <strong>Correct Answer:</strong> ${correctAnswer || "N/A"}<br>
+                    <strong>Explanation:</strong> ${explanation[questionId] || "No explanation available."}
+                </div>
+            `);
+            
+        }
+    });
+
+    const score = questions.length === 0
+        ? 0
+        : Math.round((correctCount / questions.length) * 100);
+
+    notice.textContent = `Correct: ${correctCount}, Incorrect: ${incorrectCount} out of ${questions.length} questions. Current score: ${score}%.`;
+    scoreModalValue.textContent = `${score}%`;
+    scoreModalDetails.textContent = `${correctCount} correct and ${incorrectCount} incorrect out of ${questions.length} questions.`;
+    scoreModal.classList.remove("hidden");
+    scoreModal.classList.add("flex");
+
+    $.ajax({
+        url: "/api/quiz/submit",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+            quiz_id: currentQuizId,
+            score: (score / 10),
+            total_questions: questions.length
+        }),
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while submitting the quiz result.');
+                return;
+            }
+        }
+    });
+}
+
+function closeScoreModal() {
+    scoreModal.classList.add("hidden");
+    scoreModal.classList.remove("flex");
+}
+
+document.getElementById("closeScoreModal").addEventListener("click", closeScoreModal);
+scoreModal.addEventListener("click", event => {
+    if (event.target === scoreModal) closeScoreModal();
+});
+
+document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && !scoreModal.classList.contains("hidden")) {
+        closeScoreModal();
+    }
+});
 
 loadStudySubjects();
+
+// If url contains quizz id show the exam page directly
+const urlParams = new URLSearchParams(window.location.search);
+const quizId = urlParams.get("quizId");
+
+if (quizId) {
+    // Show the exam page
+    showExam(null, quizId);
+}

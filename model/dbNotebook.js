@@ -1,5 +1,10 @@
 const client = require('./db');
 
+/**
+ * Get all notes from a user.
+ * @param {number} user_id 
+ * @returns 
+ */
 module.exports.getAllNotesFromUser = async function (user_id) {
     const query = `
         SELECT
@@ -22,6 +27,12 @@ module.exports.getAllNotesFromUser = async function (user_id) {
     return rows;
 };
 
+/**
+ * Get a note by its ID and user ID.
+ * @param {number} note_id 
+ * @param {number} user_id 
+ * @returns 
+ */
 module.exports.getNoteById = async function (note_id, user_id) {
     const query = `
         SELECT
@@ -40,12 +51,15 @@ module.exports.getNoteById = async function (note_id, user_id) {
     return rows[0];
 };
 
-module.exports.insertNewNote = async function (
-    user_id,
-    subject_id,
-    title,
-    content
-) {
+/**
+ * Insert a new note.
+ * @param {number} user_id
+ * @param {number} subject_id
+ * @param {string} title
+ * @param {string} content
+ * @returns
+ */
+module.exports.insertNewNote = async function (user_id, subject_id, title, content) {
     const [subjects] = await client.query(
         `SELECT id
          FROM subjects
@@ -80,13 +94,16 @@ module.exports.insertNewNote = async function (
     return rows[0];
 };
 
-module.exports.updateNote = async function (
-    note_id,
-    user_id,
-    title,
-    content,
-    subject_id
-) {
+/**
+ * Update a note.
+ * @param {number} note_id
+ * @param {number} user_id
+ * @param {string} title
+ * @param {string} content
+ * @param {number} subject_id
+ * @returns
+ */
+module.exports.updateNote = async function (note_id,  user_id,  title,  content, subject_id ) {
     const [subjects] = await client.query(
         `SELECT id
          FROM subjects

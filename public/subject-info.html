@@ -1,0 +1,435 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Maturitetna naloga</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="responsive.css">
+    <style>
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800 page-index">
+    <div class=" flex min-h-screen gap-6 p-4 md:p-8">
+        <aside
+            class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+            <div class="mb-10 flex items-center gap-3 mt-2">
+                <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
+                    alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
+                <div>
+                    <a href="/settings">
+                        <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                        <p class="text-sm text-slate-500">Student</p>
+                    </a>
+                </div>
+
+            </div>
+
+            <nav class="space-y-2">
+                <a href="/"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-house"></i>
+                    Dashboard
+                </a>
+                <a href="/subjects"
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    <i class="bi bi-book"></i>
+                    My Subjects
+                </a>
+                <a href="/notebook"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-journal"></i>
+                    Notebook
+                </a>
+                <a href="/knowledge"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-lightbulb"></i>
+                    Knowledge
+                </a>
+                <a href="/study"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-graph-up-arrow"></i>
+                    Study
+                </a>
+                <a href="/exam"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-file-earmark"></i>
+                    Exams
+                </a>
+                <a href="/friends"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-person"></i>
+                    Friends
+                </a>
+                
+                <a href="/settings"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-gear"></i>
+                    Settings
+                </a>
+<button onclick="logout()"
+                    class="flex items-center w-full gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-box-arrow-left"></i>
+                    Logout
+                </button>
+            </nav>
+        </aside>
+
+        <div class="flex flex-col w-full">
+
+            <div class="mt-auto h-full w-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+
+                <header class="mb-6 flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                            Subject Information
+                        </p>
+
+                        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900" id="subject-name">
+                            Subject Name
+                        </h1>
+
+                        <p class="mt-1 text-sm text-slate-500" id="subject-description">
+                            Subject description goes here.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a href="/subjects"
+                            class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600">
+                            <i class="bi bi-arrow-left"></i>
+                            All subjects
+                        </a>
+
+                        <button id="openSubjectModal"
+                            class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-blue-300 hover:text-blue-600">
+                            <i class="bi bi-pencil"></i>
+                            Edit
+                        </button>
+                    </div>
+                </header>
+
+                <div class="mb-6 grid gap-4 sm:grid-cols-3">
+                    <div class="rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-slate-500">Notes</p>
+                            <i class="bi bi-journal-text text-blue-600"></i>
+                        </div>
+                        <p id="subject-note-count" class="mt-2 text-3xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="rounded-2xl border border-violet-100 bg-violet-50/70 p-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-slate-500">Upcoming exams</p>
+                            <i class="bi bi-calendar-event text-violet-600"></i>
+                        </div>
+                        <p id="subject-exam-count" class="mt-2 text-3xl font-bold text-slate-900">0</p>
+                    </div>
+                    <div class="rounded-2xl border border-emerald-100 bg-emerald-50/70 p-4">
+                        <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-slate-500">Next exam</p>
+                            <i class="bi bi-clock text-emerald-600"></i>
+                        </div>
+                        <p id="subject-next-exam" class="mt-2 truncate text-lg font-bold text-slate-900">None scheduled</p>
+                    </div>
+                </div>
+
+                <div class="grid gap-6 xl:grid-cols-2">
+                    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" aria-labelledby="subject-notes-title">
+                        <div class="mb-4 flex items-center justify-between gap-3">
+                            <div>
+                                <h2 id="subject-notes-title" class="text-lg font-semibold text-slate-900">Related notes</h2>
+                                <p class="mt-1 text-sm text-slate-500">Review and continue your notes for this subject.</p>
+                            </div>
+                            <a href="/notebook" class="shrink-0 text-sm font-semibold text-blue-600 hover:text-blue-500">
+                                Open notebook <i class="bi bi-arrow-up-right"></i>
+                            </a>
+                        </div>
+                        <div id="subject-notes" class="space-y-2">
+                            <p class="rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Loading notes...</p>
+                        </div>
+                    </section>
+
+                    <section class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm" aria-labelledby="subject-exams-title">
+                        <div class="mb-4 flex items-center justify-between gap-3">
+                            <div>
+                                <h2 id="subject-exams-title" class="text-lg font-semibold text-slate-900">Related exams</h2>
+                                <p class="mt-1 text-sm text-slate-500">Prepare for upcoming assessments in this subject.</p>
+                            </div>
+                            <a href="/exam" class="shrink-0 text-sm font-semibold text-blue-600 hover:text-blue-500">
+                                Open exams <i class="bi bi-arrow-up-right"></i>
+                            </a>
+                        </div>
+                        <div id="subject-exams" class="space-y-2">
+                            <p class="rounded-xl bg-slate-50 p-4 text-sm text-slate-500">Loading exams...</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="subjectModal" class="fixed inset-0 z-50 h-full hidden items-center justify-center bg-slate-900/50 p-3 backdrop-blur-sm">
+
+            <div class="w-full  max-w-xl overflow-hidden rounded-xl bg-white shadow-xl">
+
+                <!-- Header -->
+                <div class="flex items-center justify-between border-b border-slate-100 px-4 py-3">
+                    <div>
+                        <h2 class="text-lg font-semibold text-slate-900">Edit subject</h2>
+                        <p class="mt-0.5 text-xs text-slate-500">Customize your study subject.</p>
+                    </div>
+                    <button type="button" id="closeSubjectModal"
+                        class="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form id="subjectForm" class="space-y-3 p-4">
+
+                    <!-- Name -->
+                    <div>
+                        <label for="subjectName" class="mb-1 block text-xs font-medium text-slate-700">
+                            Subject name <span class="text-red-500">*</span>
+                        </label>
+                        <input id="subjectName" name="name" type="text" required maxlength="60"
+                            placeholder="e.g. Mathematics"
+                            class="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10">
+                    </div>
+
+                    <!-- Description -->
+                    <div>
+                        <label for="subjectDescription" class="mb-1 block text-xs font-medium text-slate-700">
+                            Description
+                        </label>
+                        <textarea id="subjectDescription" name="description" rows="2" maxlength="300"
+                            placeholder="What will you study in this subject?"
+                            class="w-full resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10"></textarea>
+                    </div>
+
+                    <!-- Color -->
+                    <div>
+                        <label class="mb-2 block text-xs font-medium text-slate-700">Subject color</label>
+                        <div class="flex flex-wrap items-center gap-2" id="subjectColors">
+                            <button type="button" data-color="#3b82f6"
+                                class="color-option h-7 w-7 rounded-full bg-blue-500 ring-2 ring-blue-500 ring-offset-2"
+                                aria-label="Blue" aria-pressed="true"></button>
+
+                            <button type="button" data-color="#8b5cf6"
+                                class="color-option h-7 w-7 rounded-full bg-violet-500" aria-label="Purple"
+                                aria-pressed="false"></button>
+
+                            <button type="button" data-color="#10b981"
+                                class="color-option h-7 w-7 rounded-full bg-emerald-500" aria-label="Green"
+                                aria-pressed="false"></button>
+
+                            <button type="button" data-color="#f59e0b"
+                                class="color-option h-7 w-7 rounded-full bg-amber-500" aria-label="Orange"
+                                aria-pressed="false"></button>
+
+                            <button type="button" data-color="#ef4444"
+                                class="color-option h-7 w-7 rounded-full bg-red-500" aria-label="Red"
+                                aria-pressed="false"></button>
+
+                            <button type="button" data-color="#ec4899"
+                                class="color-option h-7 w-7 rounded-full bg-pink-500" aria-label="Pink"
+                                aria-pressed="false"></button>
+
+                            <button type="button" data-color="#64748b"
+                                class="color-option h-7 w-7 rounded-full bg-slate-500" aria-label="Slate"
+                                aria-pressed="false"></button>
+
+                            <label
+                                class="relative flex h-7 w-7 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-slate-200"
+                                title="Custom color">
+                                <i class="bi bi-eyedropper text-sm text-slate-600"></i>
+                                <input id="customSubjectColor" name="color" type="color" value="#3b82f6"
+                                    class="absolute inset-0 h-full w-full cursor-pointer opacity-0">
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Icon -->
+                    <div>
+                        <label class="mb-2 block text-xs font-medium text-slate-700">Choose an icon</label>
+
+                        <div id="subjectIcons" class="grid grid-cols-6 gap-2">
+                            <button type="button" data-icon="bi-calculator"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border-2 border-blue-500 bg-blue-50 text-lg text-blue-600"
+                                aria-label="Calculator" aria-pressed="true">
+                                <i class="bi bi-calculator"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-book"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Book" aria-pressed="false">
+                                <i class="bi bi-book"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-code-slash"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Programming" aria-pressed="false">
+                                <i class="bi bi-code-slash"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-flask"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Science" aria-pressed="false">
+                                <i class="bi bi-flask"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-globe"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Geography" aria-pressed="false">
+                                <i class="bi bi-globe"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-translate"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Languages" aria-pressed="false">
+                                <i class="bi bi-translate"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-music-note-beamed"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Music" aria-pressed="false">
+                                <i class="bi bi-music-note-beamed"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-palette"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Art" aria-pressed="false">
+                                <i class="bi bi-palette"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-lightbulb"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Ideas" aria-pressed="false">
+                                <i class="bi bi-lightbulb"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-journal-text"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Notes" aria-pressed="false">
+                                <i class="bi bi-journal-text"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-graph-up"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Statistics" aria-pressed="false">
+                                <i class="bi bi-graph-up"></i>
+                            </button>
+
+                            <button type="button" data-icon="bi-bookmark-star"
+                                class="icon-option flex h-9 items-center justify-center rounded-lg border border-slate-200 text-lg text-slate-600 hover:bg-slate-50"
+                                aria-label="Favorite" aria-pressed="false">
+                                <i class="bi bi-bookmark-star"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-end gap-2 border-t border-slate-100 pt-3">
+                        <button type="button" id="cancelSubjectModal"
+                            class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50">
+                            Cancel
+                        </button>
+                        <button type="submit" id="saveSubject"
+                            class="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-500">
+                            Save changes
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+
+        <aside
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            <!-- Calendar on top and exams on bottom -->
+            <div class="w-full max-w-md bg-white rounded-2xl">
+
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-6">
+                    <button id="prevBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8249;
+                    </button>
+
+                    <h2 id="monthYear" class="text-xl font-semibold text-gray-800"></h2>
+
+                    <button id="nextBtn" class="w-10 h-10 rounded-full hover:bg-gray-100 text-gray-600 text-xl">
+                        &#8250;
+                    </button>
+                </div>
+
+                <!-- Weekdays -->
+                <div class="grid grid-cols-7 mb-2 text-center">
+                    <div class="text-sm font-medium text-gray-400">Sun</div>
+                    <div class="text-sm font-medium text-gray-400">Mon</div>
+                    <div class="text-sm font-medium text-gray-400">Tue</div>
+                    <div class="text-sm font-medium text-gray-400">Wed</div>
+                    <div class="text-sm font-medium text-gray-400">Thu</div>
+                    <div class="text-sm font-medium text-gray-400">Fri</div>
+                    <div class="text-sm font-medium text-gray-400">Sat</div>
+                </div>
+
+                <!-- Calendar -->
+                <div id="calendar" class="grid grid-cols-7 gap-1"></div>
+
+                
+
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
+                <ul class="space-y-2" id="upcomingExams">
+                    
+                </ul>
+            </div>
+        </aside>
+    </div>
+
+    <div id="errorModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="errorModalTitle" aria-describedby="errorModalMessage">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <i class="bi bi-exclamation-triangle-fill text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <h2 id="errorModalTitle" class="text-lg font-semibold text-slate-900">Something went wrong</h2>
+                        <button id="closeErrorModal" type="button"
+                            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                            aria-label="Close error message">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <p id="errorModalMessage" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                </div>
+            </div>
+            <button id="errorModalOk" type="button"
+                class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                OK
+            </button>
+        </div>
+    </div>
+
+</body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="/js/errorHandler.js"></script>
+<script src="/js/subjectInfo.js"></script>
+<script src="/js/calendar.js"></script>
+<script src="/js/user.js"></script>
+<script src="/js/mobile-nav.js"></script>
+
+
+</html>

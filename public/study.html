@@ -13,18 +13,21 @@
             font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
     </style>
+    <link rel="stylesheet" href="/mobile-nav.css">
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 text-slate-800 page-study">
     <div class=" flex min-h-screen gap-6 p-4 md:p-8">
         <aside
             class="w-full max-w-[260px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
-            <div class="mb-14 flex items-center gap-3 mt-2">
+            <div class="mb-10 flex items-center gap-3 mt-2">
                 <img src="https://avatars.githubusercontent.com/u/111075940?s=400&u=0f1e7c5d9a2b6e4f0c1e3b5f4c6d7e8f9a0b1c2d&v=4"
                     alt="Profile Picture" class="h-12 w-12 rounded-full object-cover" />
                 <div>
-                    <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
-                    <p class="text-sm text-slate-500">Student</p>
+                    <a href="/settings">
+                        <h2 class="text-lg font-semibold text-slate-900" id="user-name">User name</h2>
+                        <p class="text-sm text-slate-500">Student</p>
+                    </a>
                 </div>
 
             </div>
@@ -60,6 +63,11 @@
                     <i class="bi bi-file-earmark"></i>
                     Exams
                 </a>
+                <a href="/friends"
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    <i class="bi bi-person"></i>
+                    Friends
+                </a>
 
                 <a href="/settings"
                     class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
@@ -72,10 +80,29 @@
                     Logout
                 </button>
             </nav>
+                        <!-- LEGAL DOCUMENTS -->
+<div class="mt-auto pt-4">
+    <div class="flex justify-center gap-3 border-t border-slate-200 pt-3">
+        <a href="/legal/legal/privacy-policy.pdf"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="text-xs text-slate-400 hover:text-blue-600">
+            Privacy Policy
+        </a>
+
+        <span class="text-slate-300">|</span>
+
+        <a href="/legal/legal/terms-of-service.pdf"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="text-xs text-slate-400 hover:text-blue-600">
+            Terms of Service
+        </a>
+    </div>
+</div>
         </aside>
 
         <div id="center-content" class="flex flex-col w-full">
-            <!-- <div id="dashboard-view" aria-label="Dashboard"></div> -->
 
             <section id="study-overview"
                 class="min-w-0 w-full rounded-2xl border border-slate-200 bg-white/70 p-4 shadow-lg shadow-slate-200/60 backdrop-blur-sm md:p-6">
@@ -102,7 +129,7 @@
                hover:bg-blue-500 focus:outline-none focus:ring-2
                focus:ring-blue-500 focus:ring-offset-2">
                         <i class="bi bi-plus-lg"></i>
-                        Add exam
+                        Add quizz
                     </button>
                 </header>
                 <section id="customPracticeExamsSection" class="mb-6 hidden rounded-2xl border border-blue-100
@@ -111,11 +138,11 @@
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider
                        text-blue-600">
-                                Your exams
+                                Your quizzes
                             </p>
 
                             <h2 class="mt-1 text-lg font-bold text-slate-900">
-                                Exams made from your notes
+                                Quizzes made from your notes
                             </h2>
                         </div>
                     </div>
@@ -136,11 +163,11 @@
                         <div>
                             <p class="text-xs font-bold uppercase tracking-wider
                            text-blue-600">
-                                New practice exam
+                                New practice quizz
                             </p>
 
                             <h2 id="addExamModalTitle" class="mt-1 text-2xl font-bold text-slate-900">
-                                Add exam
+                                Add Quizz
                             </h2>
 
                             <p class="mt-1 text-sm text-slate-500">
@@ -158,7 +185,7 @@
                     <form id="addExamForm" class="flex min-h-0 flex-1 flex-col">
                         <div class="overflow-y-auto px-6 py-5">
                             <label for="practiceExamTitle" class="mb-2 block text-sm font-semibold text-slate-700">
-                                Exam title
+                                Quizz title
                             </label>
 
                             <input type="text" id="practiceExamTitle" maxlength="255" required
@@ -219,10 +246,25 @@
                            text-sm font-semibold text-white transition
                            hover:bg-blue-500 disabled:cursor-not-allowed
                            disabled:opacity-60">
-                                Create exam
+                                Create quizz
                             </button>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div id="scoreModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="scoreModalTitle">
+                <div class="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl">
+                    <div class="mx-auto grid h-16 w-16 place-items-center rounded-full bg-blue-100 text-2xl text-blue-600">
+                        <i class="bi bi-trophy-fill" aria-hidden="true"></i>
+                    </div>
+                    <h2 id="scoreModalTitle" class="mt-5 text-2xl font-bold text-slate-900">Practice complete</h2>
+                    <p class="mt-2 text-sm text-slate-500">Your score</p>
+                    <p id="scoreModalValue" class="mt-1 text-5xl font-bold text-blue-600">0%</p>
+                    <p id="scoreModalDetails" class="mt-3 text-sm text-slate-600"></p>
+                    <button type="button" id="closeScoreModal" class="mt-6 w-full rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Continue
+                    </button>
                 </div>
             </div>
 
@@ -246,6 +288,15 @@
                     <div><strong id="time">45:00</strong><small>time remaining</small></div>
                 </div>
             </section>
+
+            <p id="notice" class="my-6 rounded-[10px] bg-[#f1eafa] p-[15px] text-sm text-[#7345c3] hidden" role="alert"></p>
+
+            <div id="exam-questions" class="space-y-6"></div>
+
+            <nav class="mt-[35px] flex flex-wrap items-center justify-between gap-[15px]" aria-label="Exam navigation">
+                <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 border-[#82a8d7] bg-white text-[#2468b8]" id="previous">← &nbsp; Back to top</button>
+                <button class="cursor-pointer rounded-[10px] border px-[21px] py-[13px] text-sm font-semibold max-[650px]:p-3 focus-visible:outline-3 focus-visible:outline-[#8bb7ff] focus-visible:outline-offset-4 min-w-[120px] border-[#4267bb] bg-[#4267bb] text-white max-[650px]:min-w-[85px]" id="next">Finish practice &nbsp; →</button>
+            </nav>
         </main>
         </div>
 
@@ -281,14 +332,6 @@
             <!-- Calendar -->
             <div id="calendar" class="grid grid-cols-7 gap-1"></div>
 
-            <!-- Selected date -->
-            <div class="mt-6 p-4 bg-gray-50 rounded-xl text-center">
-                <p class="text-sm text-gray-500">Selected date</p>
-                <p id="selectedDate" class="font-semibold text-gray-800 mt-1">
-                    None
-                </p>
-            </div>
-
         </div>
 
         <div class="mt-8">
@@ -300,13 +343,43 @@
     </aside>
     </div>
 
+    <div id="errorModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="errorModalTitle" aria-describedby="errorModalMessage">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <i class="bi bi-exclamation-triangle-fill text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <h2 id="errorModalTitle" class="text-lg font-semibold text-slate-900">Something went wrong</h2>
+                        <button id="closeErrorModal" type="button"
+                            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                            aria-label="Close error message">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <p id="errorModalMessage" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                </div>
+            </div>
+            <button id="errorModalOk" type="button"
+                class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                OK
+            </button>
+        </div>
+    </div>
+
 
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/errorHandler.js"></script>
     <script src="js/calendar.js"></script>
     <script src="js/study.js"></script>
     <script src="js/practiceExams.js"></script>
 
+    <script src="/js/user.js"></script>
+    <script src="/js/mobile-nav.js"></script>
 </body>
 
 </html>

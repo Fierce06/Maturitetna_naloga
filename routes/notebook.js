@@ -3,17 +3,17 @@ const router = express.Router();
 const dbNotebook = require('../model/dbNotebook');
 const requireAuth = require('../middleware/requireAuth');
 
+/**
+ * Get all notes for the authenticated user.
+ * @returns { success: boolean, data: Array } - List of notes for the user.
+ */
 router.get('/', requireAuth, async (req, res) => {
     const user_id = req.session.userId;
 
     try {
-        const notebooks =
-            await dbNotebook.getAllNotesFromUser(user_id);
+        const notebooks = await dbNotebook.getAllNotesFromUser(user_id);
 
-        res.json({
-            success: true,
-            data: notebooks
-        });
+        res.json({ success: true, data: notebooks }); 
     } catch (error) {
         console.error('Error fetching notes:', error);
 
@@ -24,6 +24,11 @@ router.get('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Get a specific note by its ID for the authenticated user.
+ * @param { number } note_id - The ID of the note to retrieve.
+ * @returns { success: boolean, data: Object } - The requested note object.
+ */
 router.get('/:note_id', requireAuth, async (req, res) => {
     const user_id = req.session.userId;
     const note_id = Number(req.params.note_id);
@@ -36,10 +41,7 @@ router.get('/:note_id', requireAuth, async (req, res) => {
     }
 
     try {
-        const note = await dbNotebook.getNoteById(
-            note_id,
-            user_id
-        );
+        const note = await dbNotebook.getNoteById( note_id, user_id );
 
         if (!note) {
             return res.status(404).json({
@@ -48,10 +50,7 @@ router.get('/:note_id', requireAuth, async (req, res) => {
             });
         }
 
-        res.json({
-            success: true,
-            data: note
-        });
+        res.json({  success: true, data: note  });
     } catch (error) {
         console.error('Error fetching note:', error);
 
@@ -62,14 +61,17 @@ router.get('/:note_id', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Create a new note for the authenticated user.
+ * @param { number } subject_id - The ID of the subject for the note.
+ * @param { string } title - The title of the note.
+ * @param { string } content - The content of the note (optional).
+ * @returns { success: boolean, data: Object } - The newly created note object.
+ */
 router.post('/', requireAuth, async (req, res) => {
     const user_id = req.session.userId;
 
-    const {
-        subject_id,
-        title,
-        content = ''
-    } = req.body;
+    const { subject_id, title,  content = '' } = req.body;
 
     if (!subject_id || !title?.trim() || !user_id) {
         return res.status(400).json({
@@ -79,17 +81,9 @@ router.post('/', requireAuth, async (req, res) => {
     }
 
     try {
-        const newNote = await dbNotebook.insertNewNote(
-            user_id,
-            Number(subject_id),
-            title.trim(),
-            content
-        );
+        const newNote = await dbNotebook.insertNewNote(  user_id, Number(subject_id), title.trim(), content );
 
-        res.status(201).json({
-            success: true,
-            data: newNote
-        });
+        res.status(201).json({ success: true, data: newNote });
     } catch (error) {
         console.error('Error creating note:', error);
 
@@ -107,21 +101,21 @@ router.post('/', requireAuth, async (req, res) => {
     }
 });
 
+/**
+ * Update an existing note for the authenticated user.
+ * @param { number } note_id - The ID of the note to update.
+ * @param { number } subject_id - The ID of the subject for the note.
+ * @param { string } title - The title of the note.
+ * @param { string } content - The content of the note (optional).
+ * @returns { success: boolean, data: Object } - The updated note object.
+ */
 router.patch('/:note_id', requireAuth, async (req, res) => {
     const user_id = req.session.userId;
     const note_id = Number(req.params.note_id);
 
-    const {
-        title,
-        content = '',
-        subject_id
-    } = req.body;
+    const {  title,  content = '', subject_id } = req.body;
 
-    if (
-        !Number.isInteger(note_id) ||
-        !subject_id ||
-        !title?.trim()
-    ) {
+    if (!Number.isInteger(note_id) || !subject_id || !title?.trim()) {
         return res.status(400).json({
             success: false,
             error: 'Missing or invalid fields'
@@ -129,13 +123,7 @@ router.patch('/:note_id', requireAuth, async (req, res) => {
     }
 
     try {
-        const note = await dbNotebook.updateNote(
-            note_id,
-            user_id,
-            title.trim(),
-            content,
-            Number(subject_id)
-        );
+        const note = await dbNotebook.updateNote( note_id, user_id, title.trim(), content, Number(subject_id) );
 
         if (!note) {
             return res.status(404).json({
@@ -144,10 +132,7 @@ router.patch('/:note_id', requireAuth, async (req, res) => {
             });
         }
 
-        res.json({
-            success: true,
-            data: note
-        });
+        res.json({ success: true, data: note  });
     } catch (error) {
         console.error('Error updating note:', error);
 

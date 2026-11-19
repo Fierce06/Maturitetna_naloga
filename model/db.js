@@ -1,5 +1,9 @@
 const mysql = require('mysql2/promise');
 
+/**
+ * Create a MySQL connection pool using environment variables for configuration.
+ * If environment variables are not set, default values are used.
+ */
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
     port: parseInt(process.env.DB_PORT, 10) || 3306,
@@ -11,11 +15,15 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
+
+/**
+ * Test the database connection.
+ */
 pool.getConnection()
     .then(connection => {
         connection.release();
         console.log(`Povezan na bazo ${process.env.DB_NAME || 'scroll_app'}`);
     })
-    .catch(err => console.error('Napaka pri povezavi na bazo:', err));
+    .catch(err => console.error('Error testing database connection:', err));
 
 module.exports = pool;
