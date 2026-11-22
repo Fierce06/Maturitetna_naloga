@@ -75,3 +75,22 @@ module.exports.submitQuizResult = async function(quiz_id, user_id, score, total_
     const [rows] = await client.query(query, [quiz_id, user_id, score, total_questions]);
     return rows;
 }
+
+/**
+ * Get recent quiz attempts for a user.
+ * @param {number} user_id
+ * @returns
+ */
+module.exports.getQuizAttemptsByUserId = async function(user_id) {
+    const query = `SELECT qa.id, qa.quiz_id, qa.score, qa.total_questions,
+                          qa.completed_at, q.title, q.subject_id,
+                          s.name AS subject_name, s.color AS subject_color
+                   FROM quiz_attempts qa
+                   JOIN quizzes q ON q.id = qa.quiz_id
+                   JOIN subjects s ON s.id = q.subject_id
+                   WHERE qa.user_id = ?
+                   ORDER BY qa.completed_at DESC
+                   LIMIT 50`;
+    const [rows] = await client.query(query, [user_id]);
+    return rows;
+}

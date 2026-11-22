@@ -152,8 +152,11 @@ CREATE TABLE note_connections (
 
     user_id INT UNSIGNED NOT NULL,
 
+    title VARCHAR(255) NOT NULL,
+    short_description VARCHAR(500) NULL,
+
     source_note_id INT UNSIGNED NOT NULL,
-    target_note_id INT UNSIGNED NOT NULL,
+    target_note_id VARCHAR(255) NOT NULL,
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -170,19 +173,10 @@ CREATE TABLE note_connections (
         ON DELETE CASCADE
         ON UPDATE CASCADE,
 
-    CONSTRAINT fk_connection_target
-        FOREIGN KEY (target_note_id, user_id)
-        REFERENCES notes(id, user_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
     -- Prevent duplicate connections
     CONSTRAINT uq_note_connection
         UNIQUE (source_note_id, target_note_id),
 
-    -- Prevent self-connections and reverse duplicates
-    CONSTRAINT chk_note_connection
-        CHECK (source_note_id < target_note_id)
 
 ) ENGINE=InnoDB;
 

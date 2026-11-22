@@ -147,3 +147,36 @@ module.exports.updateNote = async function (note_id,  user_id,  title,  content,
 
     return rows[0];
 };
+
+module.exports.getNoteConnections = async function (user_id) {
+    const query = `SELECT * FROM note_connections WHERE user_id = ?`
+    const [rows] = await client.query(query, [user_id]);
+    return rows;
+}
+
+module.exports.getNoteConnectionsForUser = async function (user_id) {
+    const query = `
+        SELECT nc.*, source_note.title AS source_title
+        FROM note_connections nc
+        INNER JOIN notes source_note
+            ON source_note.id = nc.source_note_id
+        WHERE nc.user_id = ?
+        ORDER BY nc.id DESC
+    `;
+    const [rows] = await client.query(query, [user_id]);
+    return rows;
+}
+
+module.exports.insertNoteConnection = async function (user_id, title, description, source_note_id, target_note_id) {
+    await client.query(
+        `DELETE FROM note_connections WHERE user_id = ? AND source_note_id = ?`,
+        [user_id, source_note_id]
+    );
+
+    const query = `INSERT INTO note_connections (user_id, title, short_description, source_note_id, target_note_id) VALUES (?, ?, ?, ?, ?)`;
+    const [result] = await client.query(
+        query,
+        [user_id, title, description, source_note_id, target_note_id]
+    );
+    return result.insertId;
+}

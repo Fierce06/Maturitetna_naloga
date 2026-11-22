@@ -13,6 +13,8 @@ const scoreModalDetails = document.getElementById("scoreModalDetails");
 let questions = [];
 
 let timerId = null;
+let selectedSubjectId = null;
+let subjectsCache = [];
 
 function escapeHtml(value) {
     return String(value ?? "")
@@ -72,59 +74,71 @@ getAllQuizzes();
 function createSubject(subject) {
     const color = validColor(subject.color);
     const cards = practiceCards(subject);
+    const isSelected = selectedSubjectId === subject.id;
+    const quizCount = cards.length;
 
     return `
-        <section
-            class="grid gap-4 rounded-2xl border border-slate-200 bg-white p-4
-                   md:grid-cols-[150px_minmax(0,1fr)]">
+        <button type="button"
+            data-select-subject="${escapeHtml(subject.id)}"
+            aria-expanded="${isSelected}"
+            class="group min-h-[112px] rounded-2xl border p-4 text-left text-white shadow-sm transition
+                   hover:-translate-y-0.5 hover:shadow-md ${isSelected ? "ring-4 ring-blue-100" : ""}"
+            style="background: ${color}; border-color: ${color}">
+            <span class="flex items-start justify-between">
+                <i class="bi ${subject.icon || 'bi-calculator'} text-2xl"></i>
+                <i class="bi ${isSelected ? 'bi-chevron-up' : 'bi-chevron-down'} text-white/70"></i>
+            </span>
+            <strong class="mt-5 block text-base leading-tight">${escapeHtml(subject.name)}</strong>
+            <span class="mt-1 block text-xs text-white/75">${quizCount} ${quizCount === 1 ? 'quiz' : 'quizzes'}</span>
+        </button>
+    `;
+}
 
-            <div class="flex min-h-[145px] flex-col justify-between rounded-xl
-                        p-5 text-white shadow-md"
-                 style="background-color: ${color}">
+function renderSubjectQuizzes(subject) {
+    const panel = document.getElementById("studySubjectQuizzes");
+    if (!subject) {
+        panel.innerHTML = `
+            <div class="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center text-sm text-slate-500">
+                Select a subject to view its quizzes.
+            </div>`;
+        return;
+    }
 
-                <i class="bi ${subject.icon || 'bi-calculator'} text-3xl"></i>
+    const color = validColor(subject.color);
+    const cards = practiceCards(subject);
 
+    panel.innerHTML = `
+        <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <header class="flex items-center gap-3 border-b border-slate-100 px-5 py-4">
+                <span class="grid h-10 w-10 place-items-center rounded-xl text-white" style="background-color:${color}">
+                    <i class="bi ${subject.icon || 'bi-calculator'}"></i>
+                </span>
                 <div>
-                    <p class="text-xs font-semibold uppercase tracking-wider text-white/70">
-                        Subject
-                    </p>
-
-                    <h2 class="mt-1 text-xl font-bold">
-                        ${escapeHtml(subject.name)}
-                    </h2>
+                    <p class="text-xs font-bold uppercase tracking-wider" style="color:${color}">${escapeHtml(subject.name)}</p>
+                    <h2 class="text-lg font-bold text-slate-900">Available quizzes</h2>
                 </div>
-            </div>
-
-            <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                ${cards.map(card => `
-                    <button
-                        type="button"
-                        data-open-exam
-                        id="${card.id}"
-                        data-id="${escapeHtml(card.id)}"
-                        data-title="${escapeHtml(card.title)}"
-                        data-icon="${escapeHtml(card.icon)}"
-                        class="group min-h-[145px] rounded-xl border border-slate-200
-                               bg-slate-50 p-4 text-left transition
-                               hover:-translate-y-0.5 hover:border-blue-300
-                               hover:bg-blue-50 hover:shadow-md">
-
+            </header>
+            <div class="grid gap-3 p-4 sm:grid-cols-2 xl:grid-cols-3">
+                ${cards.length ? cards.map(card => `
+                    <button type="button" data-open-exam id="${card.id}" data-id="${escapeHtml(card.id)}"
+                        data-title="${escapeHtml(card.title)}" data-icon="${escapeHtml(card.icon)}"
+                        class="group min-h-[118px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition
+                               hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
                         <span class="flex items-start justify-between">
-                            <i class="bi ${card.bootstrapIcon} text-2xl"
-                               style="color: ${color}"></i>
-
+                            <i class="bi ${card.bootstrapIcon} text-2xl" style="color:${color}"></i>
                             <i class="bi bi-arrow-up-right text-slate-400"></i>
                         </span>
-
-                        <strong class="mt-5 block text-slate-900">
-                            ${escapeHtml(card.name)}
-                        </strong>
-
-                        <span class="mt-1 block text-xs text-slate-500">
-                            ${card.question_count} questions · 45 min
-                        </span>
+                        <strong class="mt-4 block text-slate-900">${escapeHtml(card.name)}</strong>
+                        <span class="mt-1 block text-xs text-slate-500">${card.question_count} questions · 45 min</span>
                     </button>
-                `).join("")}
+                `).join("") : `
+                    <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+                        <p class="font-medium text-slate-700">No quizzes for this subject yet.</p>
+                        <button type="button" id="openAddExamFromSubject" class="mt-3 text-sm font-semibold text-blue-600">
+                            Create a quiz
+                        </button>
+                    </div>
+                `}
             </div>
         </section>
     `;
@@ -161,10 +175,66 @@ function loadStudySubjects() {
                     return;
                 }
 
+                subjectsCache = data.subjects;
+                if (!selectedSubjectId && data.subjects.length) {
+                    selectedSubjectId = data.subjects[0].id;
+                }
                 studySubjectsList.innerHTML = data.subjects.map(createSubject).join("");
+                const selectedSubject = data.subjects.find(subject => subject.id === selectedSubjectId) || null;
+                renderSubjectQuizzes(selectedSubject);
             }
         });
     })
+}
+
+function loadStudyHistory() {
+    $.ajax({
+        url: "/api/quiz/history",
+        method: "GET",
+        success: function (response) {
+            const historyList = document.getElementById("studyHistory");
+            if (!response.success) {
+                historyList.innerHTML = '<p class="rounded-xl bg-red-50 p-4 text-sm text-red-700">History could not be loaded.</p>';
+                return;
+            }
+
+            if (!response.attempts || response.attempts.length === 0) {
+                historyList.innerHTML = `
+                    <div class="rounded-xl border border-dashed border-slate-300 bg-slate-50 p-6 text-center text-sm text-slate-500">
+                        Completed quizzes will appear here.
+                    </div>`;
+                return;
+            }
+
+            historyList.innerHTML = response.attempts.map(attempt => {
+                const percent = attempt.total_questions
+                    ? Math.round((attempt.score / attempt.total_questions) * 100)
+                    : 0;
+                const date = new Date(attempt.completed_at);
+                const dateText = Number.isNaN(date.getTime())
+                    ? ""
+                    : date.toLocaleString([], { dateStyle: "medium", timeStyle: "short" });
+                const color = validColor(attempt.subject_color);
+
+                return `
+                    <button type="button" data-open-exam data-id="${escapeHtml(attempt.quiz_id)}"
+                        class="flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-left transition hover:border-blue-300 hover:bg-blue-50/40">
+                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-white" style="background:${color}">
+                            <i class="bi bi-clipboard-check"></i>
+                        </span>
+                        <span class="min-w-0 flex-1">
+                            <strong class="block truncate text-sm text-slate-800">${escapeHtml(attempt.title)}</strong>
+                            <span class="mt-0.5 block text-xs text-slate-500">${escapeHtml(attempt.subject_name)} · ${escapeHtml(dateText)}</span>
+                        </span>
+                        <span class="text-sm font-bold ${percent >= 70 ? 'text-emerald-600' : 'text-amber-600'}">${percent}%</span>
+                    </button>`;
+            }).join("");
+        },
+        error: function () {
+            document.getElementById("studyHistory").innerHTML =
+                '<p class="rounded-xl bg-red-50 p-4 text-sm text-red-700">History could not be loaded.</p>';
+        }
+    });
 }
 
 // Updating the progress of the study session
@@ -299,10 +369,24 @@ function showStudyOverview() {
 
 // Event listeners for user interactions
 studyOverview.addEventListener("click", event => {
+    const subjectButton = event.target.closest("[data-select-subject]");
+    if (subjectButton) {
+        selectedSubjectId = Number(subjectButton.dataset.selectSubject);
+        studySubjectsList.innerHTML = subjectsCache.map(createSubject).join("");
+        const selectedSubject = subjectsCache.find(subject => subject.id === selectedSubjectId) || null;
+        renderSubjectQuizzes(selectedSubject);
+        return;
+    }
+
     const card = event.target.closest("[data-open-exam]");
 
     if (card) {
         showExam(card);
+        return;
+    }
+
+    if (event.target.closest("#openAddExamFromSubject")) {
+        document.getElementById("openAddExamModal").click();
     }
 });
 
@@ -380,7 +464,7 @@ function checkExamAnswers() {
         contentType: "application/json",
         data: JSON.stringify({
             quiz_id: currentQuizId,
-            score: (score / 10),
+            score: correctCount,
             total_questions: questions.length
         }),
         success: function (response) {
@@ -388,6 +472,7 @@ function checkExamAnswers() {
                 showErrorModal(response.error || 'Error occurred while submitting the quiz result.');
                 return;
             }
+            loadStudyHistory();
         }
     });
 }
@@ -409,6 +494,8 @@ document.addEventListener("keydown", event => {
 });
 
 loadStudySubjects();
+loadStudyHistory();
+window.addEventListener("quiz-created", loadStudySubjects);
 
 // If url contains quizz id show the exam page directly
 const urlParams = new URLSearchParams(window.location.search);

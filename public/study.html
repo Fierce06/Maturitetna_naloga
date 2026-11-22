@@ -132,28 +132,26 @@
                         Add quizz
                     </button>
                 </header>
-                <section id="customPracticeExamsSection" class="mb-6 hidden rounded-2xl border border-blue-100
-           bg-blue-50/60 p-4">
+                <section aria-label="Subjects">
+                    <div id="studySubjectsList" class="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
+                        <p class="col-span-full py-10 text-center text-sm text-slate-500">
+                            Loading subjects...
+                        </p>
+                    </div>
+                    <div id="studySubjectQuizzes" class="mt-4 min-h-[140px]"></div>
+                </section>
+
+                <section class="mt-8 border-t border-slate-200 pt-6" aria-labelledby="historyTitle">
                     <div class="mb-4 flex items-center justify-between">
                         <div>
-                            <p class="text-xs font-bold uppercase tracking-wider
-                       text-blue-600">
-                                Your quizzes
-                            </p>
-
-                            <h2 class="mt-1 text-lg font-bold text-slate-900">
-                                Quizzes made from your notes
-                            </h2>
+                            <p class="text-xs font-bold uppercase tracking-[0.16em] text-blue-600">Recent activity</p>
+                            <h2 id="historyTitle" class="mt-1 text-xl font-bold text-slate-900">History</h2>
                         </div>
                     </div>
-
-                    <div id="customPracticeExamsList" class="grid gap-3 md:grid-cols-2 xl:grid-cols-3"></div>
+                    <div id="studyHistory" class="space-y-2">
+                        <p class="rounded-xl bg-slate-50 p-5 text-center text-sm text-slate-500">Loading history...</p>
+                    </div>
                 </section>
-                <div id="studySubjectsList" class="space-y-5">
-                    <p class="py-10 text-center text-sm text-slate-500">
-                        Loading subjects...
-                    </p>
-                </div>
             </section>
             <div id="addExamModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="addExamModalTitle">
                 <div class="flex max-h-[90vh] w-full max-w-2xl flex-col

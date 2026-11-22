@@ -21,7 +21,7 @@ function getAllFriends() {
                                 <img src="/api/profile-photo/image/${encodeURIComponent(friend.id)}" alt="${friend.username}'s profile photo" class="h-12 w-12 rounded-full object-cover" onerror="this.style.display='none'">
                                 <div class="min-w-0">
                                     <h3 class="truncate font-semibold text-slate-900">${friend.username}</h3>
-                                    <p class="text-sm text-emerald-600">Online</p>
+                                    <p class="text-sm text-slate-500">Friends since ${new Date(friend.created_at).toLocaleDateString()}</p>
                                 </div>
                             </div>
                         </article>

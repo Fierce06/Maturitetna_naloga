@@ -18,7 +18,7 @@ module.exports.addFriend = async function(user_id, friend_id) {
  * @returns
  */
 module.exports.getAllFriends = async function(user_id) {
-    const query = 'SELECT u.id, u.username FROM users u JOIN friends f ON u.id = f.friend_id WHERE f.user_id = ?';
+    const query = 'SELECT u.id, u.username, u.created_at FROM users u JOIN friends f ON u.id = f.friend_id WHERE f.user_id = ?';
     const [rows] = await client.query(query, [user_id]);
     return rows;
 };

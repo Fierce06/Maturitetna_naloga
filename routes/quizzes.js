@@ -44,6 +44,20 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 /**
+ * Get the quiz history for the authenticated user.
+ * @returns { success: boolean, attempts: Array } - List of quiz attempts for the user.
+ */
+router.get('/history', requireAuth, async (req, res) => {
+    try {
+        const attempts = await dbQuizzes.getQuizAttemptsByUserId(req.session.userId);
+        res.json({ success: true, attempts });
+    } catch (error) {
+        console.error('Error fetching quiz history:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+/**
  * Get all questions for a specific quiz by its ID for the authenticated user.
  * @param { number } quiz_id - The ID of the quiz to retrieve questions for.
  * @returns { success: boolean, questions: Array } - List of questions for the specified quiz.

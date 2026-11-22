@@ -34,7 +34,7 @@
 
             <nav class="space-y-2">
                 <a href="/"
-                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
+                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
                     <i class="bi bi-house"></i>
                     Dashboard
                 </a>
@@ -49,7 +49,7 @@
                     Notebook
                 </a>
                 <a href="/knowledge"
-                    class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
+                    class="flex items-center gap-3 rounded-xl bg-blue-600 px-3 py-2.5 font-medium text-white shadow-sm shadow-blue-200 transition hover:bg-blue-500">
                     <i class="bi bi-lightbulb"></i>
                     Knowledge
                 </a>
@@ -103,9 +103,27 @@
         </aside>
 
         <div class="flex flex-col w-full">
-            <div class="mt-auto w-full h-full rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
-                <canvas id="networkOfKnowledge" class="w-full h-full rounded-2xl">
-                </canvas>
+
+            <header class="flex flex-col rounded-t-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+                    <div>
+                        <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                            Knowledge
+                        </p>
+
+                        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
+                            Network of Knowledge
+                        </h1>
+
+                        <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+                            Explore the interconnected web of your knowledge. Visualize how your notes relate to each other and discover new insights.
+                        </p>
+                    </div>
+                </header>
+            
+            <div class="relative mt-auto h-[calc(100vh-14rem)] min-h-[520px] w-full overflow-hidden rounded-b-2xl border border-slate-200 bg-white/80 p-2 shadow-lg shadow-slate-200/60 backdrop-blur-sm">
+                <div class="pointer-events-none absolute inset-0 opacity-40" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size:22px 22px;"></div>
+                <canvas id="networkOfKnowledge" class="relative h-full w-full rounded-2xl" aria-label="Interactive network of notes"></canvas>
+                <div id="knowledgeStatus" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-xl bg-white px-5 py-3 text-sm text-slate-500 shadow-lg">Loading your knowledge graph...</div>
             </div>
             
         </div>

@@ -290,6 +290,7 @@
                 const newQuiz = response.newQuiz;
                 console.log('Kviz uspešno ustvarjen:', newQuiz);
                 closeModal();
+                window.dispatchEvent(new CustomEvent('quiz-created'));
             },
             error: function (xhr) {
                 const message = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;

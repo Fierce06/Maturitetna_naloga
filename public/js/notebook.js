@@ -296,3 +296,27 @@ function generateQuiz() {
         }
     });
 }
+
+function generateConnections() {
+    const noteContent = removeAllHTMLTagsExceptPAndBr(noteEditor.innerHTML);
+    if (!activeNote) {
+        showErrorModal('Save or select a note before generating connections.');
+        return;
+    }
+
+    $.ajax({
+        url: '/api/notebook/generate-connections',
+        method: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({ noteContent, title: noteTitle.value.trim() || 'New note', id: activeNote.id }),
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while generating note connections.');
+                return;
+            }
+            
+            showSaveStatus('Connections generated successfully', false);
+        }
+    });
+}

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dbNotebook = require('../model/dbNotebook');
 const requireAuth = require('../middleware/requireAuth');
+const openrouter = require('../ai/openrouter');
 
 /**
  * Get all notes for the authenticated user.
@@ -16,6 +17,23 @@ router.get('/', requireAuth, async (req, res) => {
         res.json({ success: true, data: notebooks }); 
     } catch (error) {
         console.error('Error fetching notes:', error);
+
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
+    }
+});
+
+router.get('/connections', requireAuth, async (req, res) => {
+    const user_id = req.session.userId;
+
+    try {
+        const noteConnections = await dbNotebook.getNoteConnections(user_id);
+
+        res.json({ success: true, data: noteConnections });
+    } catch (error) {
+        console.error('Error fetching note connections:', error);
 
         res.status(500).json({
             success: false,
@@ -93,6 +111,90 @@ router.post('/', requireAuth, async (req, res) => {
                 error: 'Subject not found'
             });
         }
+
+        res.status(500).json({
+            success: false,
+            error: 'Internal server error'
+        });
+    }
+});
+
+/**
+ * Generate note connections for the authenticated user based on the provided note content.
+ * @param { string } noteContent - The content of the note for which to generate connections.
+ * @returns { success: boolean, data: Array } - List of generated note connections.
+ */
+router.post('/generate-connections', requireAuth, async (req, res) => {
+    const user_id = req.session.userId;
+
+    const { noteContent, title, id } = req.body;
+
+    try {
+        const sourceId = Number(id);
+        if (!Number.isInteger(sourceId) || sourceId <= 0) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid source note ID"
+            });
+        }
+
+        const userNotes = await dbNotebook.getAllNotesFromUser(user_id);
+        const noteIds = userNotes
+            .map(note => Number(note.id))
+            .filter(noteId => Number.isInteger(noteId) && noteId !== sourceId);
+
+        const noteDescriptions = userNotes
+            .filter(note => Number(note.id) !== sourceId)
+            .map(note => ({
+                id: Number(note.id),
+                title: String(note.title || "Untitled note"),
+                description: String(note.short_description || note.content || note.title || "")
+                    .replace(/<[^>]*>/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim()
+                    .slice(0, 500)
+            }));
+
+        const connections = await openrouter.generateNoteConnections({
+            noteContent,
+            userId: user_id,
+            noteDescriptions
+        });
+
+        const targetIds = (Array.isArray(connections.ids)
+            ? connections.ids
+            : String(connections.ids || "")
+                .split(",")
+                .map(value => value.trim())
+                .filter(Boolean))
+            .map(Number)
+            .filter(targetId =>
+                Number.isInteger(targetId) &&
+                targetId > 0 &&
+                targetId !== sourceId &&
+                noteIds.includes(targetId)
+            );
+
+        const uniqueTargetIds = [...new Set(targetIds)];
+        const targetIdString = uniqueTargetIds.join(",");
+
+        await dbNotebook.insertNoteConnection(
+            user_id,
+            title || "Note connection",
+            connections.short_description || "",
+            sourceId,
+            targetIdString
+        );
+
+        res.json({
+            success: true,
+            data: {
+                ids: uniqueTargetIds.join(","),
+                short_description: connections.short_description || ""
+            }
+        });
+    } catch (error) {
+        console.error('Error generating note connections:', error);
 
         res.status(500).json({
             success: false,

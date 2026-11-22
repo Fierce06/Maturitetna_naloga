@@ -122,7 +122,10 @@ function allExams() {
                 const examElement = $(`
                     <div class="flex flex-col gap-1 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:shadow-md">
                         <div class="flex items-center justify-between">
-                            <h1 class="text-md font-semibold text-slate-900">${exam.title}</h1>
+                            <div class="flex items-center gap-3">
+                                <i class="bi bi-calendar text-slate-400"></i>
+                                <h1 class="text-md font-semibold text-slate-900">${exam.title}</h1>
+                            </div>
                             <span class="text-sm text-slate-500">${new Date(exam.date).toLocaleDateString()}</span>
                         </div>
                     </div>
