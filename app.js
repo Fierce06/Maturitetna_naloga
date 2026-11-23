@@ -79,6 +79,10 @@ app.get('/settings', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'settings.html'));
 });
 
+app.get('/subscription', requireAuth, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'subscription.html'));
+});
+
 app.get('/subject-info', requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'subject-info.html'));
 });

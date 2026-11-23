@@ -388,6 +388,26 @@ CREATE TABLE token_use (
 ) ENGINE=InnoDB;
 
 -- =====================================================
+-- SUBSCRIPTIONS
+-- =====================================================
+
+CREATE TABLE subscription (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    user_id INT UNSIGNED NOT NULL,
+    plan_name ENUM('basic', 'premium', 'enterprise') NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_subscription_user
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+
+) ENGINE=InnoDB;
+
+-- =====================================================
 -- ADDITIONAL INDEXES
 -- =====================================================
 

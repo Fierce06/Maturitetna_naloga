@@ -129,7 +129,7 @@
         </div>
 
         <aside
-            class="w-full max-w-[420px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
+            class="w-full max-w-[350px] rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-lg shadow-slate-200/60 backdrop-blur-sm right">
             <!-- Calendar on top and exams on bottom -->
             <div class="w-full max-w-md bg-white rounded-2xl">
 
@@ -166,16 +166,38 @@
 
             <div class="mt-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Upcoming Exams</h3>
-                <ul class="space-y-4">
-                    <li class="p-4 bg-gray-50 rounded-xl shadow-sm hover:shadow-md transition">
-                        <div class="flex justify-between items-center">
-                            <span class="font-medium text-gray-800">Math Exam</span>
-                            <span class="text-sm text-gray-500">June 15, 2024</span>
-                        </div>
-                    </li>
+                <ul class="space-y-2" id="upcomingExams">
+                    
                 </ul>
+            </div>
         </aside>
+    </div>
 
+    <div id="errorModal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="errorModalTitle" aria-describedby="errorModalMessage">
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            <div class="flex items-start gap-4">
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                    <i class="bi bi-exclamation-triangle-fill text-xl" aria-hidden="true"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-4">
+                        <h2 id="errorModalTitle" class="text-lg font-semibold text-slate-900">Something went wrong</h2>
+                        <button id="closeErrorModal" type="button"
+                            class="rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                            aria-label="Close error message">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <p id="errorModalMessage" class="mt-2 text-sm leading-6 text-slate-600"></p>
+                </div>
+            </div>
+            <button id="errorModalOk" type="button"
+                class="mt-6 w-full rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                OK
+            </button>
+        </div>
     </div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

@@ -85,8 +85,8 @@ function draw() {
 
     notes.forEach(note => {
         const color = validColor(note.subject_color);
-        const width = 180;
-        const height = 74;
+        const width = 115;
+        const height = 55;
         const x = note.x - width / 2;
         const y = note.y - height / 2;
         const hovered = note.id === hoveredNodeId;
@@ -112,12 +112,12 @@ function draw() {
         ctx.fillStyle = "#0f172a";
         ctx.textAlign = "left";
         ctx.textBaseline = "middle";
-        ctx.font = "700 14px Inter, sans-serif";
-        ctx.fillText(escapeCanvasText(note.title), x + 20, y + 29);
+        ctx.font = "700 12px Inter, sans-serif";
+        ctx.fillText(escapeCanvasText(note.title), x + 20, y + 19);
 
         ctx.fillStyle = "#64748b";
-        ctx.font = "600 11px Inter, sans-serif";
-        ctx.fillText(escapeCanvasText(note.subject_name, 22), x + 20, y + 52);
+        ctx.font = "600 9px Inter, sans-serif";
+        ctx.fillText(escapeCanvasText(note.subject_name, 22), x + 20, y + 35);
         ctx.restore();
     });
 }
@@ -128,8 +128,8 @@ function hitTest(clientX, clientY) {
     const y = clientY - rect.top;
 
     return notes.find(note =>
-        x >= note.x - 90 &&
-        x <= note.x + 90 &&
+        x >= note.x - 45 &&
+        x <= note.x + 45 &&
         y >= note.y - 37 &&
         y <= note.y + 37
     ) || null;
