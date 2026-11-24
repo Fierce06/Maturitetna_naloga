@@ -408,6 +408,21 @@ CREATE TABLE subscription (
 ) ENGINE=InnoDB;
 
 -- =====================================================
+-- QUIZ BATTLES
+-- =====================================================
+
+CREATE TABLE quiz_battles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    challenger_id INT NOT NULL,
+    opponent_id INT NOT NULL,
+    quiz_id INT NOT NULL,
+    status ENUM('pending', 'accepted', 'declined', 'finished') DEFAULT 'pending',
+    challenger_score INT DEFAULT NULL,
+    opponent_score INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- =====================================================
 -- ADDITIONAL INDEXES
 -- =====================================================
 

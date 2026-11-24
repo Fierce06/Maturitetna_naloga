@@ -26,17 +26,18 @@ app.use(session({
     }
 }));
 
-// Direktna povezava do index.html ne sme obiti zgornjega preverjanja.
+// Online users
+const onlineUsers = new Set();
+global.onlineUsers = onlineUsers;
+
+
+
 app.get('/index.html', (req, res) => {
     return res.redirect('/');
 });
 
-// Javne datoteke: CSS, JavaScript, slike ...
-// index: false preprecuje, da express.static samodejno odpre Dashboard.
 app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 
-// Zacetna stran je odvisna od prijave uporabnika.
-// Prijavljeni uporabnik vidi obstoječi Dashboard, gost predstavitveno stran.
 app.get('/', (req, res) => {
     const imeDatoteke = req.session.userId ? 'index.html' : 'landing.html';
     res.sendFile(path.join(__dirname, 'public', imeDatoteke));
@@ -99,6 +100,7 @@ app.use('/api/notebook', require('./routes/notebook'));
 app.use('/api/profile-photo', require('./routes/profilePhoto'));
 app.use('/api/quiz', require('./routes/quizzes'));
 app.use('/api/friends', require('./routes/friends'));   
+app.use('/api/battles', require('./routes/battles'));
 
 app.use("/legal", express.static(
     path.join(__dirname, "documentation")

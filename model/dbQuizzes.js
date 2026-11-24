@@ -94,3 +94,72 @@ module.exports.getQuizAttemptsByUserId = async function(user_id) {
     const [rows] = await client.query(query, [user_id]);
     return rows;
 }
+
+/* =====================================================
+     QUIZ BATTLES
+=====================================================*/
+
+/**
+ * Create a new quiz battle request.
+ * @param {*} sender_id 
+ * @param {*} receiver_id 
+ * @param {*} quiz_id 
+ * @returns 
+ */
+module.exports.createNewBattleRequest = async function(sender_id, receiver_id, quiz_id) {
+    const query = 'INSERT INTO quiz_battles (challenger_id, opponent_id, quiz_id, status) VALUES (?, ?, ?, ?)';
+    const [rows] = await client.query(query, [sender_id, receiver_id, quiz_id, 'pending']);
+    return rows;
+}
+
+/**
+ * Get pending battle requests for a user.
+ * @param {*} user_id 
+ * @returns 
+ */
+module.exports.getPendingBattleRequests = async function(user_id) {
+    const query = 'SELECT * FROM quiz_battles WHERE opponent_id = ? AND status = ?';
+    const [rows] = await client.query(query, [user_id, 'pending']);
+    return rows;
+}
+
+/**
+ * Update the status of a battle request.
+ * @param {*} battle_id 
+ * @param {*} status 
+ * @returns 
+ */
+module.exports.updateBattleRequestStatus = async function(battle_id, status) {
+    const query = 'UPDATE quiz_battles SET status = ? WHERE id = ?';
+    const [rows] = await client.query(query, [status, battle_id]);
+    return rows;
+}
+
+/**
+ * Update the result of a battle.
+ * @param {*} battle_id 
+ * @param {*} challenger_score 
+ * @param {*} opponent_score 
+ * @param {*} status 
+ * @returns 
+ */
+module.exports.updateBattleResult = async function(battle_id, challenger_score, opponent_score, status) {
+    const query = 'UPDATE quiz_battles SET challenger_score = ?, opponent_score = ?, status = ? WHERE id = ?';
+    const [rows] = await client.query(query, [challenger_score, opponent_score, status, battle_id]);
+    return rows;
+}
+
+/**
+ * Get the quiz questions for the challenger in a battle.
+ * @param {*} battle_id 
+ * @returns 
+ */
+module.exports.getChallangerQuizQuestions = async function(battle_id) {
+    const query = `SELECT qq.*
+                   FROM quiz_battles qb
+                     JOIN quizzes q ON qb.quiz_id = q.id
+                        JOIN quiz_questions qq ON q.id = qq.quiz_id
+                     WHERE qb.id = ?`;
+    const [rows] = await client.query(query, [battle_id]);
+    return rows;
+}
