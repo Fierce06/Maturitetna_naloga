@@ -202,6 +202,7 @@ setInterval(getOnlineUsers, 30 * 1000);
 
 $(document).ready(function () {
     getAllFriends();
+    loadBattleHistory();
 
     $('#openAddFriendModal, #openAddFriendLink, #openAddFriendBottom').on('click', openAddFriendModal);
     $('#closeAddFriendModal').on('click', closeAddFriendModal);
@@ -300,10 +301,34 @@ sendQuizBattle.addEventListener("click", async () => {
                 showErrorModal(response.error || 'Unable to send quiz battle request.');
                 return;
             }
+
+            setInterval(() => {
+                $.ajax({
+                    url: `/api/battles/battle/${encodeURIComponent(response.result.insertId)}`,
+                    method: 'GET',
+                    success: function (battleResponse) {
+                        console.log('Battle response:', battleResponse);
+                        if (!battleResponse.success) {
+                            console.error('Error fetching battle details:', battleResponse.error);
+                            return;
+                        }
+                        if (battleResponse.battleDetails.status === 'accepted') {
+                            $('#battleRequestPendingModal').removeClass('flex').addClass('hidden');
+                            window.location.href = `/study?battleId=${battleResponse.battleDetails.id}`;
+                        }
+                        if (battleResponse.battleDetails.status === 'declined') {
+                            $('#battleRequestPendingModal').removeClass('flex').addClass('hidden');
+                            showErrorModal('Your friend has declined the battle request.');
+                        }
+                    }
+                });
+            }, 3000);
         }
     });
 
     closeQuizBattleModal();
+
+    $('#battleRequestPendingModal').removeClass('hidden').addClass('flex');
 });
 
 quizBattleModal.addEventListener("click", (event) => {
@@ -331,7 +356,31 @@ function checkForPendingBattleRequests() {
             if (response.incomingBattles && response.incomingBattles.length > 0) {
                 $('#battleRequestModal').removeClass('hidden').addClass('flex');
                 const battleRequest = response.incomingBattles[0];
-                $('#battleRequestFriendName').text(battleRequest.challenger_username);
+                
+                const challangerInfo = `
+                                <div class="flex items-center gap-3 bg-slate-100 p-3 rounded-xl border border-slate-200">
+                                    <img
+                                        src="/api/profile-photo/image/${encodeURIComponent(battleRequest.opponent_id)}"
+                                        alt="${battleRequest.opponent_username}'s profile photo"
+                                        class="h-12 w-12 rounded-full object-cover"
+                                        onerror="this.onerror=null; this.src='/assets/background.jpg';"
+                                    />
+                                    <div class="min-w-0">
+                                        <h1 class="truncate font-semibold text-slate-900">${battleRequest.opponent_username}</h1>
+                                        <p class="text-sm text-slate-500">has challenged you to a quiz battle: <strong>${battleRequest.quiz_title}</strong></p>
+                                    </div>
+                                </div>
+                            `;
+
+                $('#battleRequestFriendInfo').html(challangerInfo);
+
+                $('#acceptBattleRequest').off('click').on('click', function () {
+                    acceptBattleRequest(battleRequest.id);
+                });
+
+                $('#declineBattleRequest').off('click').on('click', function () {
+                    declineBattleRequest(battleRequest.id);
+                });
             }
         }
     });
@@ -348,6 +397,8 @@ function acceptBattleRequest(battleId) {
             }
 
             $('#battleRequestModal').removeClass('flex').addClass('hidden');
+
+            window.location.href = `/study?battleId=${battleId}`;
         }
     });
 }
@@ -363,6 +414,68 @@ function declineBattleRequest(battleId) {
             }
             
             $('#battleRequestModal').removeClass('flex').addClass('hidden');
+        }
+    });
+}
+
+function loadBattleHistory() {
+    $.ajax({
+        url: '/api/battles/history',
+        method: 'GET',
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Unable to load battle history.');
+                return;
+            }
+
+            const history = response.history;
+            let historyHtml = '';
+
+            if (history.length === 0) {
+                historyHtml = '<p class="text-slate-500">No battle history available.</p>';
+            } else {
+                history.forEach(function (battle) {
+                    const challenger = Number(battle.challenger_score);
+                    const opponent = Number(battle.opponent_score);
+                    const userId = String(response.userId);
+
+                    const isDraw = challenger === opponent;
+                    const winnerId = challenger > opponent
+                        ? String(battle.challenger_id)
+                        : String(battle.opponent_id);
+
+                    const won = !isDraw && winnerId === userId;
+
+                    const color = isDraw ? 'amber' : won ? 'emerald' : 'red';
+                    const result = isDraw ? 'Draw' : won ? 'You won!' : 'You lost!';
+                    const icon = isDraw ? 'bi-flag' : won ? 'bi-trophy' : 'bi-x-circle';
+
+                    historyHtml += `
+                        <div class="flex items-center gap-4 p-4 border-b border-slate-200 bg-slate-50 rounded-xl hover:bg-slate-100">
+
+                            <div class="flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-${color}-100 text-${color}-600">
+                                <i class="bi ${icon} text-xl"></i>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-${color}-600">${result}</p>
+                                <p class="font-medium text-slate-900">${battle.challenger_username} vs ${battle.opponent_username}</p>
+                                <p class="text-sm text-slate-500">${battle.quiz_title}</p>
+                                <p class="text-xs text-slate-400">${new Date(battle.created_at).toLocaleDateString('en-GB')}</p>
+                            </div>
+
+                            <div class="text-right shrink-0">
+                                <p class="font-bold text-slate-900">${challenger * 10}%</p>
+                                <p class="text-xs text-slate-400">vs</p>
+                                <p class="font-bold text-slate-900">${opponent * 10}%</p>
+                            </div>
+
+                        </div>
+                    `;
+                });
+            }
+
+            $('#battleHistory').html(historyHtml);
         }
     });
 }

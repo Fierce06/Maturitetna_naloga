@@ -10,6 +10,10 @@ const scoreModal = document.getElementById("scoreModal");
 const scoreModalValue = document.getElementById("scoreModalValue");
 const scoreModalDetails = document.getElementById("scoreModalDetails");
 
+const battleResultsModal = document.getElementById("battleResultsModal");
+const waitingStatus = document.getElementById("waitingStatus");
+const battleResultContent = document.getElementById("battleResultContent");
+
 let questions = [];
 
 let timerId = null;
@@ -356,6 +360,56 @@ function showExam(card, quizIdFromUrl = null) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
+function loadBattle(battleId) {
+    $.ajax({
+        url: "/api/battles/challanger-quiz/" + battleId,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (!data.success) {
+                showErrorModal(data.error || 'Error occurred while loading the battle.');
+                return;
+            }
+
+            const main = document.getElementById("exam-questions");
+            const quizQuestions = data.quizQuestions;
+
+            document.querySelector("#study-page progress").max = quizQuestions.length;
+
+            main.querySelectorAll("[data-question]").forEach(element => element.remove());
+            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+            const questionId = `question-${index}`;
+            correctAnswers[questionId] = element.correct_answer;
+            explanation[questionId] = element.explanation;
+            return `
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
+                    <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
+                    <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
+                        ${[
+                            ["A", element.answer_a],
+                            ["B", element.answer_b],
+                            ["C", element.answer_c],
+                            ["D", element.answer_d]
+                        ].map(([label, answer]) => `
+                            <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff]"><input class="peer sr-only" type="radio" name="${questionId}" value="${label}"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">${label}</span><span>${escapeHtml(answer)}</span></label>
+                        `).join("")}
+                    </fieldset>
+                </section>
+            `;
+            }).join(""));
+            questions = [...main.querySelectorAll("[data-question]")];
+        }
+    });
+
+    studyOverview.classList.add("hidden");
+    studyPage.classList.remove("hidden");
+
+    startTimer();
+
+    history.replaceState(null, "", "#exam");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 // Function to show the study overview page
 function showStudyOverview() {
     clearInterval(timerId);
@@ -458,23 +512,128 @@ function checkExamAnswers() {
     scoreModal.classList.remove("hidden");
     scoreModal.classList.add("flex");
 
-    $.ajax({
-        url: "/api/quiz/submit",
-        method: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({
-            quiz_id: currentQuizId,
-            score: correctCount,
-            total_questions: questions.length
-        }),
-        success: function (response) {
-            if (!response.success) {
-                showErrorModal(response.error || 'Error occurred while submitting the quiz result.');
-                return;
+    if (battleId) {
+        $.ajax({
+            url: `/api/battles/${battleId}/submit`,
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                score: correctCount,
+                total_questions: questions.length
+            }),
+            success: function (response) {
+                if (!response.success) {
+                    showErrorModal(response.error || 'Error occurred while submitting the battle result.');
+                    return;
+                }
+
+                closeScoreModal();
+
+                if (response.result.status === 'finished') {
+                    battleResultsModal.classList.remove("hidden");
+                    battleResultsModal.classList.add("flex");
+                    battleResultContent.classList.remove("hidden");
+                    waitingStatus.classList.add("hidden");
+
+                    displayBattleResults(response.result, response.userId);
+                } else {
+                    battleResultsModal.classList.remove("hidden");
+                    battleResultsModal.classList.add("flex");
+                    battleResultContent.classList.add("hidden");
+                    waitingStatus.classList.remove("hidden");
+
+                    setInterval(async () => {
+                        try {
+                            const statusResponse = await $.ajax({
+                                url: `/api/battles/battle/${encodeURIComponent(battleId)}`,
+                                method: "GET",
+                                dataType: "json"
+                            });
+                            if (statusResponse.battleDetails.status === 'finished') {
+                                clearInterval(this);
+                                battleResultsModal.classList.remove("hidden");
+                                battleResultsModal.classList.add("flex");
+                                battleResultContent.classList.remove("hidden");
+                                waitingStatus.classList.add("hidden");
+
+                                displayBattleResults(statusResponse.battleDetails, statusResponse.userId);
+                            }
+                        } catch (error) {
+                            console.error('Error occurred while fetching battle status:', error);
+                        }
+                    }, 2000);
+                }
             }
-            loadStudyHistory();
+        });
+    } else {
+        $.ajax({
+            url: "/api/quiz/submit",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                quiz_id: currentQuizId,
+                score: correctCount,
+                total_questions: questions.length
+            }),
+            success: function (response) {
+                if (!response.success) {
+                    showErrorModal(response.error || 'Error occurred while submitting the quiz result.');
+                    return;
+                }
+                loadStudyHistory();
+            }
+        });
+    }
+}
+
+function displayBattleResults(battleData, userId) {
+    if (battleData.status === 'finished') {
+        const challengerScore = battleData.challenger_score;
+        const opponentScore = battleData.opponent_score;
+        const challengerId = battleData.challenger_id;
+        const opponentId = battleData.opponent_id;
+        const challengerUsername = battleData.challenger_username;
+        const opponentUsername = battleData.opponent_username;
+
+        if (challengerId === userId) {
+            $("#myPlayerScore").text(challengerScore);
+            $("#myPlayerName").text(challengerUsername);
+            $("#opponentScore").text(opponentScore);
+            $("#opponentName").text(opponentUsername);
+            if (challengerScore > opponentScore) {
+                $("#battleResultTitle").text("Victory!");
+                $("#battleResultDescription").text("You won the battle!");
+            } else if (challengerScore < opponentScore) {
+                $("#battleResultTitle").text("Defeat!");
+                $("#battleResultDescription").text("You lost the battle.");
+            } else {
+                $("#battleResultTitle").text("Draw!");
+                $("#battleResultDescription").text("The battle ended in a draw.");
+            }
+        } else if (opponentId === userId) {
+            $("#myPlayerScore").text(opponentScore);
+            $("#myPlayerName").text(opponentUsername);
+            $("#opponentScore").text(challengerScore);
+            $("#opponentName").text(challengerUsername);
+            if (opponentScore > challengerScore) {
+                $("#battleResultTitle").text("Victory!");
+                $("#battleResultDescription").text("You won the battle!");
+            } else if (opponentScore < challengerScore) {
+                $("#battleResultTitle").text("Defeat!");
+                $("#battleResultDescription").text("You lost the battle.");
+            } else {
+                $("#battleResultTitle").text("Draw!");
+                $("#battleResultDescription").text("The battle ended in a draw.");
+            }
         }
-    });
+    }
+}
+
+function closeBattleResultsModal() {
+    battleResultsModal.classList.add("hidden");
+    battleResultsModal.classList.remove("flex");
+
+    window.location.href = "/study";
 }
 
 function closeScoreModal() {
@@ -500,8 +659,11 @@ window.addEventListener("quiz-created", loadStudySubjects);
 // If url contains quizz id show the exam page directly
 const urlParams = new URLSearchParams(window.location.search);
 const quizId = urlParams.get("quizId");
+const battleId = urlParams.get("battleId");
 
 if (quizId) {
     // Show the exam page
     showExam(null, quizId);
+} else if (battleId) {
+    loadBattle(battleId);
 }

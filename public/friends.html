@@ -154,6 +154,32 @@
                         </article>
                     </div>
                 </div>
+
+                <div class="mt-8">
+                    <div class="mb-4 flex items-center justify-between">
+                        <h2 class="text-xl font-semibold text-slate-900">Battle History</h2>
+                    </div>
+                    <div class="grid gap-4 sm:grid-cols-1 xl:grid-cols-2" id="battleHistory">
+                        <article
+                            class="col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-10 text-center">
+
+                            <div
+                                class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-blue-500">
+                                <i class="bi bi-people text-3xl"></i>
+                            </div>
+
+                            <h3 class="text-base font-semibold text-slate-800">
+                                No battles yet
+                            </h3>
+
+                            <p class="mt-2 max-w-sm text-sm leading-relaxed text-slate-500">
+                                You haven't participated in any quiz battles yet. Challenge your friends and see who
+                                knows more!
+                            </p>
+
+                        </article>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -370,36 +396,48 @@
         </div>
     </div>
 
+    
     <div id="battleRequestModal"
         class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
-        role="dialog" aria-modal="true" aria-labelledby="deleteFriendTitle">
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="battleRequestTitle">
 
         <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
 
             <!-- Header -->
             <div class="flex items-start justify-between gap-4">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-red-600">
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
                         Battle Request
                     </p>
 
-                    <h2 id="deleteFriendTitle" class="mt-1 text-xl font-bold text-slate-900">
+                    <h2 id="battleRequestTitle" class="mt-1 text-xl font-bold text-slate-900">
                         Do you want to accept this battle request?
                     </h2>
                 </div>
             </div>
 
+            <!-- Friend Username -->
+            <div class="mt-5" id="battleRequestFriendInfo">
+                
+            </div>
+
             <!-- Actions -->
             <div class="mt-6 flex gap-3">
 
-                <button id="declineBattleRequest" type="button" onclick="declineBattleRequest()"
-                    class="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50">
+                <button id="declineBattleRequest"
+                    type="button"
+                    onclick="declineBattleRequest()"
+                    class="flex-1 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50">
                     Decline
                 </button>
 
-                <button id="acceptBattleRequest" type="button" onclick="acceptBattleRequest()"
-                    class="flex-1 rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-500">
-                    <i class="bi bi-trash3-fill mr-1"></i>
+                <button id="acceptBattleRequest"
+                    type="button"
+                    onclick="acceptBattleRequest()"
+                    class="flex-1 rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-green-500">
+                    <i class="bi bi-check-circle-fill mr-1"></i>
                     Accept
                 </button>
 
@@ -408,6 +446,44 @@
         </div>
     </div>
 
+    <div id="battleRequestPendingModal"
+        class="fixed inset-0 z-[60] hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="battleRequestTitle">
+
+        <div class="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+
+            <!-- Header -->
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                        Battle Request
+                    </p>
+
+                    <h2 id="battleRequestTitle" class="mt-1 text-xl font-bold text-slate-900">
+                        Waiting for your friend to accept the battle request...
+                    </h2>
+
+                    <p class="mt-1 text-sm text-slate-500">
+                        Please do not close or reload the page while waiting for your friend to accept the battle request.
+                    </p>    
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="mt-6 flex gap-3">
+
+                <button id="cancelBattleRequest"
+                    type="button"
+                    class="flex-1 rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50">
+                    Cancel Battle Request
+                </button>
+
+            </div>
+
+        </div>
+    </div>
 
     <div id="addFriendModal"
         class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/40 p-4 backdrop-blur-sm" role="dialog"
