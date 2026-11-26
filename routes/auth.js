@@ -141,6 +141,7 @@ router.post('/login', async (req, res) => {
         // Set session variables for the logged-in user
         req.session.userId = user.id;
         req.session.username = user.username;
+        global.onlineUsers.add(String(user.id));
 
         return res.json({ success: true });
     } catch (err) {
@@ -208,6 +209,12 @@ router.post('/change-password', requireAuth, async (req, res) => {
  * @returns {object} - JSON object indicating success or failure.
  */
 router.post('/logout', (req, res) => {
+    const userId = req.session.userId;
+
+    if (userId) {
+        global.onlineUsers.delete(String(userId));
+    }
+
     req.session.destroy(err => {
         if (err) {
             console.error(err);

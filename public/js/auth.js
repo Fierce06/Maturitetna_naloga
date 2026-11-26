@@ -1,16 +1,13 @@
 function logout() {
     $.ajax({
-        // Kam se zahteva pošlje
         url: '/api/auth/logout',
-        // Tip zahteve
         method: 'POST',
 
-        success: function (odgovor) {
+        success: function (response) {
             window.location = '/login';
         },
         error: function (xhr) {
-            // Tukaj dobiš 409, 400, 500 status kode
-            const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
+            const msg = xhr.responseJSON?.error || `Error: ${xhr.status} ${xhr.statusText}`;
             $('#admin-error').text(`${msg}`);
             $('.admin-success').hide();
             $('#admin-error').show();
@@ -20,101 +17,89 @@ function logout() {
 
 $(document).ready(function () {
 
-    // Registracija uporabnika
     $('#register').on('submit', function (e) {
-        // Preprečitev osvežitve strani
         e.preventDefault();
 
-        const gesloPonovitev = $(this).find('[name=passwordConfirm]').val();
-        const geslo = $(this).find('[name=password]').val();
+        const passwordConfirm = $(this).find('[name=passwordConfirm]').val();
+        const password = $(this).find('[name=password]').val();
 
-        const podatki = {
+        const data = {
             username: $(this).find('[name=username]').val(),
             email: $(this).find('[name=email]').val(),
-            password: geslo,
-            passwordConfirm: gesloPonovitev
+            password: password,
+            passwordConfirm: passwordConfirm
         };
 
         $.ajax({
-            // Kam se zahteva pošlje
             url: '/api/auth/register',
-            // Tip zahteve
             method: 'POST',
-            contentType: 'application/json', // Poveži strežniku format
-            data: JSON.stringify(podatki), // Pretvori objekt v JSON
+            contentType: 'application/json',
+            data: JSON.stringify(data),
 
 
-            success: function (odgovor) {
-                if (!odgovor.success) {
-                    $('#admin-error').text(`${odgovor.error}`);
-                    // $('#admin-success').hide();
+            success: function (response) {
+                if (!response.success) {
+                    $('#admin-error').text(`${response.error}`);
+                    $('#admin-success').hide();
                     $('#admin-error').show();
                     return;
                 }
                 
-                $('#admin-error').text('Uspešna registracija! Sedaj se lahko prijavite.');
-                $('#admin-error').show();
+                $('#admin-success').text('Sucesful registration! You can now log in.');
+                $('#admin-success').show();
             },
             error: function (xhr) {
-                // Tukaj dobiš 409, 400, 500 status kode
-                const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
+                const msg = xhr.responseJSON?.error || `Error: ${xhr.status} ${xhr.statusText}`;
                 $('#admin-error').text(`${msg}`);
-                // $('.admin-success').hide();
                 $('#admin-error').show();
             }
         });
     });
 
-    // Login
     $('#login').on('submit', function (e) {
-        // Preprečitev osvežitve strani
         e.preventDefault();
 
-        const podatki = {
+        const data = {
             username: $(this).find('[name=username]').val(),
             password: $(this).find('[name=password]').val()
         };
 
         $.ajax({
-            // Kam se zahteva pošlje
             url: '/api/auth/login',
-            // Tip zahteve
             method: 'POST',
-            contentType: 'application/json', // Poveži strežniku format
-            data: JSON.stringify(podatki), // Pretvori objekt v JSON
+            contentType: 'application/json',
+            data: JSON.stringify(data),
 
 
-            success: function (odgovor) {
-                if (!odgovor.success) {
-                    $('#admin-error').text(`${odgovor.error}`);
-                    // $('#admin-success').hide();
+
+            success: function (response) {
+                if (!response.success) {
+                    $('#admin-error').text(`${response.error}`);
+                    $('#admin-success').hide();
                     $('#admin-error').show();
                     return;
                 }
-                // $('#sporocilo').empty();
-                // $('#forma-dodaj')[0].reset(); 
 
-                $('#admin-error').text('Uspešna prijava!');
-                $('#admin-error').show();
+                $('#admin-success').text('Successful login! You are now logged in.');
+                $('#admin-success').show();
 
                 window.location = '/';
             },
             error: function (xhr) {
-                // Tukaj dobiš 409, 400, 500 status kode
                 const msg = xhr.responseJSON?.error || `Napaka: ${xhr.status} ${xhr.statusText}`;
                 $('#admin-error').text(`${msg}`);
-                // $('#admin-success').hide();
+                $('#admin-success').hide();
                 $('#admin-error').show();
             }
         });
     });
-    // $('#forma-spremeni-geslo').on('submit', function (e) {
+    // $('#forma-spremeni-password').on('submit', function (e) {
     //     e.preventDefault();
 
-    //     const podatki = {
-    //         staroGeslo: $(this).find('[name=staroGeslo]').val(),
-    //         novoGeslo: $(this).find('[name=novoGeslo]').val(),
-    //         confirmPassword: $(this).find('[name=gesloPonovitev]').val(),
+    //     const data = {
+    //         staropassword: $(this).find('[name=staropassword]').val(),
+    //         novopassword: $(this).find('[name=novopassword]').val(),
+    //         confirmPassword: $(this).find('[name=passwordPonovitev]').val(),
     //     };
 
     //     $.ajax({
@@ -123,11 +108,11 @@ $(document).ready(function () {
     //         // Tip zahteve
     //         method: 'POST',
     //         contentType: 'application/json', // Poveži strežniku format
-    //         data: JSON.stringify(podatki), // Pretvori objekt v JSON
+    //         data: JSON.stringify(data), // Pretvori objekt v JSON
 
-    //         success: function (odgovor) {
-    //             if (!odgovor.success) {
-    //                 $('#sporocilo').html(`<div class="alert alert-danger">${odgovor.error}</div>`);
+    //         success: function (response) {
+    //             if (!response.success) {
+    //                 $('#sporocilo').html(`<div class="alert alert-danger">${response.error}</div>`);
     //                 return;
     //             }
     //             $('#sporocilo').empty();

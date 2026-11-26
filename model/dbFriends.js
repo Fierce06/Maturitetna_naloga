@@ -33,3 +33,15 @@ module.exports.searchByUsername = async function(username) {
     const [rows] = await client.query(query, [`%${username}%`]);    
     return rows;
 };
+
+/**
+ * Remove a friend from a user's friend list.
+ * @param {*} user_id 
+ * @param {*} friend_id 
+ * @returns 
+ */
+module.exports.removeFriend = async function(user_id, friend_id) {
+    const query = 'DELETE FROM friends WHERE user_id = ? AND friend_id = ?';
+    const [rows] = await client.query(query, [user_id, friend_id]);
+    return rows;
+}
