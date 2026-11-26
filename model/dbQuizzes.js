@@ -1,5 +1,11 @@
 const client = require('./db');
 
+module.exports.getQuizById = async function(quiz_id) {
+    const query = 'SELECT * FROM quizzes WHERE id = ?';
+    const [rows] = await client.query(query, [quiz_id]);
+    return rows[0];
+}
+
 /**
  * Create a new quiz.
  * @param {number} user_id 
@@ -59,6 +65,27 @@ module.exports.getQuizAndQuestionsById = async function(quiz_id) {
     return { questions: questionRows };
 }
 
+module.exports.updateQuizAndQuestions = async function(quiz_id, title, questions) {
+    const connection = await client.getConnection();
+    try {
+        await connection.beginTransaction();
+        await connection.query('UPDATE quizzes SET title = ? WHERE id = ?', [title, quiz_id]);
+        await connection.query('DELETE FROM quiz_questions WHERE quiz_id = ?', [quiz_id]);
+        for (const [index, question] of questions.entries()) {
+            await connection.query(
+                'INSERT INTO quiz_questions (quiz_id, question, answer_a, answer_b, answer_c, answer_d, correct_answer, explanation, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [quiz_id, question.question, question.answer_a, question.answer_b, question.answer_c, question.answer_d, question.correct_answer, question.explanation, index + 1]
+            );
+        }
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release();
+    }
+};
+
 /**
  * Delete a quiz.
  * @param {number} quiz_id 
@@ -92,6 +119,19 @@ module.exports.getQuizAttemptsByUserId = async function(user_id) {
                    ORDER BY qa.completed_at DESC
                    LIMIT 50`;
     const [rows] = await client.query(query, [user_id]);
+    return rows;
+}
+
+/**
+ * Delete a quiz and its associated questions.
+ * @param {number} quiz_id 
+ * @returns 
+ */
+module.exports.deleteQuiz = async function(quiz_id) {
+    const deleteQuestionsQuery = `DELETE FROM quiz_questions WHERE quiz_id = ?`;
+    await client.query(deleteQuestionsQuery, [quiz_id]);
+    const query = `DELETE FROM quizzes WHERE id = ?`;
+    const [rows] = await client.query(query, [quiz_id]);
     return rows;
 }
 

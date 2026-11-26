@@ -1,3 +1,8 @@
+/////////////////////
+// FRIEND MANAGEMENT
+/////////////////////
+
+// Function to fetch and display all friends of the current user
 function getAllFriends() {
     $.ajax({
         url: '/api/friends/all-friends',
@@ -46,17 +51,20 @@ function getAllFriends() {
     });
 }
 
+// Function to open the modal for adding a new friend
 function openAddFriendModal() {
     $('#addFriendModal').removeClass('hidden').addClass('flex');
     $('#friendUsername').trigger('focus');
 }
 
+// Function to close the modal for adding a new friend
 function closeAddFriendModal() {
     $('#addFriendModal').removeClass('flex').addClass('hidden');
     $('#friendSearchResults').empty();
     $('#friendSearchMessage').addClass('hidden').text('');
 }
 
+// Function to render the search results for friends
 function renderSearchResults(users) {
     const results = $('#friendSearchResults').empty();
 
@@ -85,40 +93,8 @@ function renderSearchResults(users) {
     });
 }
 
-function getQuizzesForFriend() {
-    $.ajax({
-        url: '/api/quiz/',
-        method: 'GET',
-        success: function (response) {
-            if (!response.success) {
-                showErrorModal(response.error || 'An unexpected error occurred while fetching quizzes.');
-                return;
-            }
-
-            const quizSelect = $('#quizBattleSelect').empty();
-            quizSelect.append('<option value="">Select a quiz...</option>');
-
-            console.log('Fetched quizzes:', response.quizzes);
-
-            response.quizzes.forEach(quiz => {
-                const createdAt = new Date(quiz.created_at).toLocaleDateString('en-GB', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-
-                quizSelect.append(`
-                    <option value="${quiz.id}">
-                        ${quiz.title} — ${quiz.question_count} Questions — ${createdAt}
-                    </option>
-                `);
-            });
-        }
-    });
-}
-
 let friendToDelete = null;
-
+// Function to open the modal for deleting a friend
 function openDeleteFriendModal(friendId, friendName) {
     friendToDelete = friendId;
 
@@ -129,6 +105,7 @@ function openDeleteFriendModal(friendId, friendName) {
         .addClass('flex');
 }
 
+// Function to close the modal for deleting a friend
 function closeDeleteFriendModal() {
     $('#deleteFriendModal')
         .addClass('hidden')
@@ -137,10 +114,12 @@ function closeDeleteFriendModal() {
     friendToDelete = null;
 }
 
+// Event listeners for the delete friend modal buttons
 $('#closeDeleteFriendModal, #cancelDeleteFriend').on('click', function () {
     closeDeleteFriendModal();
 });
 
+// Event listener for the confirm delete friend button
 $('#confirmDeleteFriend').on('click', async function () {
     if (!friendToDelete) return;
 
@@ -151,6 +130,7 @@ $('#confirmDeleteFriend').on('click', async function () {
     closeDeleteFriendModal();
 });
 
+// Function to remove a friend by sending a DELETE request to the server
 function removeFriend(friendId) {
     $.ajax({
         url: `/api/friends/remove-friend/${encodeURIComponent(friendId)}`,
@@ -165,6 +145,7 @@ function removeFriend(friendId) {
     });
 }
 
+// Function to fetch and update the online status of friends
 function getOnlineUsers() {
     $.ajax({
         url: '/api/friends/presence',
@@ -200,43 +181,43 @@ function getOnlineUsers() {
 getOnlineUsers();
 setInterval(getOnlineUsers, 30 * 1000);
 
-$(document).ready(function () {
-    getAllFriends();
-    loadBattleHistory();
 
-    $('#openAddFriendModal, #openAddFriendLink, #openAddFriendBottom').on('click', openAddFriendModal);
-    $('#closeAddFriendModal').on('click', closeAddFriendModal);
-    $('#addFriendModal').on('click', function (event) {
-        if (event.target === this) closeAddFriendModal();
-    });
+/////////////////////
+// QUIZ BATTLE MANAGEMENT
+/////////////////////
 
-    $('#friendSearchForm').on('submit', function (event) {
-        event.preventDefault();
-        const username = $('#friendUsername').val().trim();
-        if (!username) return;
-
-        $('#friendSearchMessage').removeClass('hidden').text('Searching...');
-        $('#friendSearchResults').empty();
-
-        $.ajax({
-            url: `/api/friends/search?username=${encodeURIComponent(username)}`,
-            method: 'GET',
-            success: function (response) {
-                if (!response.success || response.users.length === 0) {
-                    $('#friendSearchMessage').text('No users found with that username.');
-                    return;
-                }
-                $('#friendSearchMessage').addClass('hidden').text('');
-                renderSearchResults(response.users);
+// Function to fetch quizzes available for a friend to challenge
+function getQuizzesForFriend() {
+    $.ajax({
+        url: '/api/quiz/',
+        method: 'GET',
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'An unexpected error occurred while fetching quizzes.');
+                return;
             }
-        });
-    });
 
-    $(document).on('keydown', function (event) {
-        if (event.key === 'Escape') closeAddFriendModal();
-    });
-});
+            const quizSelect = $('#quizBattleSelect').empty();
+            quizSelect.append('<option value="">Select a quiz...</option>');
 
+            console.log('Fetched quizzes:', response.quizzes);
+
+            response.quizzes.forEach(quiz => {
+                const createdAt = new Date(quiz.created_at).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+
+                quizSelect.append(`
+                    <option value="${quiz.id}">
+                        ${quiz.title} — ${quiz.question_count} Questions — ${createdAt}
+                    </option>
+                `);
+            });
+        }
+    });
+}
 
 const quizBattleModal = document.getElementById("quizBattleModal");
 const quizBattleFriendName = document.getElementById("quizBattleFriendName");
@@ -246,6 +227,7 @@ const sendQuizBattle = document.getElementById("sendQuizBattle");
 
 let selectedFriendId = null;
 
+// Function to open the quiz battle modal for a specific friend
 function openQuizBattleModal(friendId, friendUsername) {
     selectedFriendId = friendId;
 
@@ -260,6 +242,7 @@ function openQuizBattleModal(friendId, friendUsername) {
     getQuizzesForFriend();
 }
 
+// Function to close the quiz battle modal
 function closeQuizBattleModal() {
     quizBattleModal.classList.add("hidden");
     quizBattleModal.classList.remove("flex");
@@ -341,6 +324,75 @@ setInterval(() => {
     checkForPendingBattleRequests();
 }, 10000);
 
+// Function to load the battle history of the current user
+function loadBattleHistory() {
+    $.ajax({
+        url: '/api/battles/history',
+        method: 'GET',
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Unable to load battle history.');
+                return;
+            }
+
+            const history = response.history;
+            let historyHtml = '';
+
+            if (history.length === 0) {
+                historyHtml = '<p class="text-slate-500">No battle history available.</p>';
+            } else {
+                history.forEach(function (battle) {
+                    const challenger = Number(battle.challenger_score);
+                    const opponent = Number(battle.opponent_score);
+                    const userId = String(response.userId);
+
+                    const isDraw = challenger === opponent;
+                    const winnerId = challenger > opponent
+                        ? String(battle.challenger_id)
+                        : String(battle.opponent_id);
+
+                    const won = !isDraw && winnerId === userId;
+
+                    const color = isDraw ? 'amber' : won ? 'emerald' : 'red';
+                    const result = isDraw ? 'Draw' : won ? 'You won!' : 'You lost!';
+                    const icon = isDraw ? 'bi-flag' : won ? 'bi-trophy' : 'bi-x-circle';
+
+                    historyHtml += `
+                        <div class="rounded-2xl border border-slate-200 bg-white p-4 flex items-center gap-3 justify-between">
+
+                            <div class="flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-${color}-100 text-${color}-600">
+                                <i class="bi ${icon} text-xl"></i>
+                            </div>
+
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-${color}-600">${result}</p>
+                                <p class="font-medium text-slate-900">${battle.challenger_username} vs ${battle.opponent_username}</p>
+                                <p class="text-sm text-slate-500">${battle.quiz_title}</p>
+                                <p class="text-xs text-slate-400">${new Date(battle.created_at).toLocaleDateString('en-GB')}</p>
+                            </div>
+
+                            <div class="text-right shrink-0">
+                                <p class="font-bold text-slate-900">${challenger * 10}%</p>
+                                <p class="text-xs text-slate-400">vs</p>
+                                <p class="font-bold text-slate-900">${opponent * 10}%</p>
+                            </div>
+
+                        </div>
+                    `;
+                });
+            }
+
+            $('#battleHistory').html(historyHtml);
+        }
+    });
+}
+
+
+/////////////////////
+// BATTLE REQUEST MANAGEMENT
+/////////////////////
+
+// Function to check for incoming battle requests
 function checkForPendingBattleRequests() {
     $.ajax({
         url: '/api/battles/incoming',
@@ -386,6 +438,7 @@ function checkForPendingBattleRequests() {
     });
 }
 
+// Function to accept a battle request
 function acceptBattleRequest(battleId) {
     $.ajax({
         url: `/api/battles/${battleId}/accept`,
@@ -403,6 +456,7 @@ function acceptBattleRequest(battleId) {
     });
 }
 
+// Function to decline a battle request
 function declineBattleRequest(battleId) {
     $.ajax({
         url: `/api/battles/${battleId}/decline`,
@@ -418,64 +472,41 @@ function declineBattleRequest(battleId) {
     });
 }
 
-function loadBattleHistory() {
-    $.ajax({
-        url: '/api/battles/history',
-        method: 'GET',
-        success: function (response) {
-            if (!response.success) {
-                showErrorModal(response.error || 'Unable to load battle history.');
-                return;
-            }
 
-            const history = response.history;
-            let historyHtml = '';
+// When the document is ready, initialize the friends and battle history, and set up event listeners for modals and forms
+$(document).ready(function () {
+    getAllFriends();
+    loadBattleHistory();
 
-            if (history.length === 0) {
-                historyHtml = '<p class="text-slate-500">No battle history available.</p>';
-            } else {
-                history.forEach(function (battle) {
-                    const challenger = Number(battle.challenger_score);
-                    const opponent = Number(battle.opponent_score);
-                    const userId = String(response.userId);
-
-                    const isDraw = challenger === opponent;
-                    const winnerId = challenger > opponent
-                        ? String(battle.challenger_id)
-                        : String(battle.opponent_id);
-
-                    const won = !isDraw && winnerId === userId;
-
-                    const color = isDraw ? 'amber' : won ? 'emerald' : 'red';
-                    const result = isDraw ? 'Draw' : won ? 'You won!' : 'You lost!';
-                    const icon = isDraw ? 'bi-flag' : won ? 'bi-trophy' : 'bi-x-circle';
-
-                    historyHtml += `
-                        <div class="flex items-center gap-4 p-4 border-b border-slate-200 bg-slate-50 rounded-xl hover:bg-slate-100">
-
-                            <div class="flex items-center justify-center h-11 w-11 shrink-0 rounded-full bg-${color}-100 text-${color}-600">
-                                <i class="bi ${icon} text-xl"></i>
-                            </div>
-
-                            <div class="flex-1 min-w-0">
-                                <p class="font-semibold text-${color}-600">${result}</p>
-                                <p class="font-medium text-slate-900">${battle.challenger_username} vs ${battle.opponent_username}</p>
-                                <p class="text-sm text-slate-500">${battle.quiz_title}</p>
-                                <p class="text-xs text-slate-400">${new Date(battle.created_at).toLocaleDateString('en-GB')}</p>
-                            </div>
-
-                            <div class="text-right shrink-0">
-                                <p class="font-bold text-slate-900">${challenger * 10}%</p>
-                                <p class="text-xs text-slate-400">vs</p>
-                                <p class="font-bold text-slate-900">${opponent * 10}%</p>
-                            </div>
-
-                        </div>
-                    `;
-                });
-            }
-
-            $('#battleHistory').html(historyHtml);
-        }
+    $('#openAddFriendModal, #openAddFriendLink, #openAddFriendBottom').on('click', openAddFriendModal);
+    $('#closeAddFriendModal').on('click', closeAddFriendModal);
+    $('#addFriendModal').on('click', function (event) {
+        if (event.target === this) closeAddFriendModal();
     });
-}
+
+    $('#friendSearchForm').on('submit', function (event) {
+        event.preventDefault();
+        const username = $('#friendUsername').val().trim();
+        if (!username) return;
+
+        $('#friendSearchMessage').removeClass('hidden').text('Searching...');
+        $('#friendSearchResults').empty();
+
+        $.ajax({
+            url: `/api/friends/search?username=${encodeURIComponent(username)}`,
+            method: 'GET',
+            success: function (response) {
+                if (!response.success || response.users.length === 0) {
+                    $('#friendSearchMessage').text('No users found with that username.');
+                    return;
+                }
+                $('#friendSearchMessage').addClass('hidden').text('');
+                renderSearchResults(response.users);
+            }
+        });
+    });
+
+    $(document).on('keydown', function (event) {
+        if (event.key === 'Escape') closeAddFriendModal();
+    });
+});

@@ -73,16 +73,66 @@ router.get('/questions/:id', requireAuth, async (req, res) => {
     }
 });
 
-// router.get('/subjectIds', requireAuth, async (req, res) => {
-//     const user_id = req.session.userId; 
-//     try {
-//         const subjectIds = await dbQuizzes.getAllSubjectIds(user_id);
-//         res.json({ success: true, subjectIds });
-//     } catch (error) {
-//         console.error('Error fetching subjects:', error);
-//         res.status(500).json({ error: 'Internal server error' });
-//     }
-// });
+// Fetch an owned quiz and its questions for the quiz editor.
+router.get('/:id', requireAuth, async (req, res) => {
+    try {
+        const quiz = await dbQuizzes.getQuizById(req.params.id);
+        if (!quiz) {
+            return res.status(404).json({ success: false, error: 'Quiz not found' });
+        }
+        if (String(quiz.user_id) !== String(req.session.userId)) {
+            return res.status(403).json({ success: false, error: 'You do not have permission to edit this quiz' });
+        }
+        const result = await dbQuizzes.getQuizAndQuestionsById(req.params.id);
+        res.json({ success: true, quiz, questions: result.questions });
+    } catch (error) {
+        console.error('Error fetching quiz for editing:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+});
+
+// Update an owned quiz and replace its editable questions.
+router.put('/:id', requireAuth, async (req, res) => {
+    const { title, questions } = req.body;
+    if (typeof title !== 'string' || !title.trim() || title.trim().length > 255 ||
+        !Array.isArray(questions) || questions.length < 1 || questions.length > 100) {
+        return res.status(400).json({ success: false, error: 'Provide a title and between 1 and 100 questions' });
+    }
+
+    const validQuestions = questions.every(question =>
+        question && ['question', 'answer_a', 'answer_b', 'answer_c', 'answer_d'].every(field =>
+            typeof question[field] === 'string' && question[field].trim()
+        ) && ['A', 'B', 'C', 'D'].includes(question.correct_answer) &&
+        (question.explanation === undefined || typeof question.explanation === 'string')
+    );
+    if (!validQuestions) {
+        return res.status(400).json({ success: false, error: 'Each question needs text, four answers, and a valid correct answer' });
+    }
+
+    try {
+        const quiz = await dbQuizzes.getQuizById(req.params.id);
+        if (!quiz) {
+            return res.status(404).json({ success: false, error: 'Quiz not found' });
+        }
+        if (String(quiz.user_id) !== String(req.session.userId)) {
+            return res.status(403).json({ success: false, error: 'You do not have permission to edit this quiz' });
+        }
+        const normalizedQuestions = questions.map(question => ({
+            ...question,
+            question: question.question.trim(),
+            answer_a: question.answer_a.trim(),
+            answer_b: question.answer_b.trim(),
+            answer_c: question.answer_c.trim(),
+            answer_d: question.answer_d.trim(),
+            explanation: (question.explanation || '').trim()
+        }));
+        await dbQuizzes.updateQuizAndQuestions(req.params.id, title.trim(), normalizedQuestions);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating quiz:', error);
+        res.status(500).json({ success: false, error: 'Internal server error' });
+    }
+});
 
 /**
  * Create a new quiz for the authenticated user based on a specific note.
@@ -182,6 +232,28 @@ router.post('/submit', requireAuth, async (req, res) => {
         res.json({ success: true });
     } catch (error) {
         console.error('Error submitting quiz result:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Delete a quiz by its ID for the authenticated user
+// This endpoint allows the user to delete a quiz they created. It checks if the quiz exists and if the user has permission to delete it before proceeding with the deletion.
+router.delete('/:id', requireAuth, async (req, res) => {
+    const quiz_id = req.params.id;
+    const user_id = req.session.userId;
+
+    try {
+        const quiz = await dbQuizzes.getQuizById(quiz_id);
+        if (!quiz) {
+            return res.status(404).json({ error: 'Quiz not found' });
+        }
+        if (quiz.user_id !== user_id) {
+            return res.status(403).json({ error: 'You do not have permission to delete this quiz' });
+        }
+        await dbQuizzes.deleteQuiz(quiz_id);
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting quiz:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });

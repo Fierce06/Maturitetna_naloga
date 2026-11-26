@@ -175,7 +175,7 @@ CREATE TABLE note_connections (
 
     -- Prevent duplicate connections
     CONSTRAINT uq_note_connection
-        UNIQUE (source_note_id, target_note_id),
+        UNIQUE (source_note_id, target_note_id)
 
 
 ) ENGINE=InnoDB;
@@ -194,6 +194,8 @@ CREATE TABLE quizzes (
     note_id INT UNSIGNED DEFAULT NULL,
 
     title VARCHAR(255) NOT NULL,
+
+    available_time INT UNSIGNED NOT NULL DEFAULT 0, -- in seconds
 
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

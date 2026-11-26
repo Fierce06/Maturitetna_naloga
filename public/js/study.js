@@ -1,7 +1,9 @@
+// Study page elements
 const studyOverview = document.getElementById("study-overview");
 const studyPage = document.getElementById("study-page");
 const studySubjectsList = document.getElementById("studySubjectsList");
 
+// Exam page elements
 const examTitle = document.getElementById("exam-title");
 const examTopics = document.getElementById("exam-topics");
 const examIcon = document.getElementById("exam-icon");
@@ -10,9 +12,16 @@ const scoreModal = document.getElementById("scoreModal");
 const scoreModalValue = document.getElementById("scoreModalValue");
 const scoreModalDetails = document.getElementById("scoreModalDetails");
 
+// Battle results modal elements
 const battleResultsModal = document.getElementById("battleResultsModal");
 const waitingStatus = document.getElementById("waitingStatus");
 const battleResultContent = document.getElementById("battleResultContent");
+
+// Delete modal elements
+const deleteQuizzModal = document.getElementById("deleteQuizzModal");
+
+// Edit quiz page elements
+const editQuizPage = document.getElementById("edit-quiz-page");
 
 let questions = [];
 
@@ -20,6 +29,7 @@ let timerId = null;
 let selectedSubjectId = null;
 let subjectsCache = [];
 
+// Function to escape HTML special characters to prevent XSS attacks
 function escapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -29,15 +39,21 @@ function escapeHtml(value) {
         .replaceAll("'", "&#039;");
 }
 
+// Function to validate and return a valid color code
 function validColor(color) {
     return /^#[0-9a-fA-F]{6}$/.test(color)
         ? color
         : "#3b82f6";
 }
 
+
+///////////////////
+// QUIZ MANAGEMENT - HOME PAGE
+///////////////////
+
 // Getting all quizzes and storing them in a variable for later use
 var quizzes = { quizzes: [] };
-function getAllQuizzes(success) {
+function getAllQuizzes(success = function () {}) {
     $.ajax({
         url: "/api/quiz/",
         method: "GET",
@@ -72,6 +88,8 @@ function practiceCards(subject) {
 
     return cards;
 }
+
+// Loading all quizzes when the page is ready
 getAllQuizzes();
 
 // Function to create a subject card
@@ -98,6 +116,7 @@ function createSubject(subject) {
     `;
 }
 
+// Function to render quizzes for a selected subject
 function renderSubjectQuizzes(subject) {
     const panel = document.getElementById("studySubjectQuizzes");
     if (!subject) {
@@ -124,17 +143,19 @@ function renderSubjectQuizzes(subject) {
             </header>
             <div class="grid gap-3 p-4 sm:grid-cols-2 xl:grid-cols-3">
                 ${cards.length ? cards.map(card => `
-                    <button type="button" data-open-exam id="${card.id}" data-id="${escapeHtml(card.id)}"
-                        data-title="${escapeHtml(card.title)}" data-icon="${escapeHtml(card.icon)}"
-                        class="group min-h-[118px] rounded-xl border border-slate-200 bg-slate-50 p-4 text-left transition
-                               hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
-                        <span class="flex items-start justify-between">
+                    <article class="group min-h-[118px] rounded-xl border border-slate-200 bg-slate-50 p-4 transition hover:-translate-y-0.5 hover:border-blue-300 hover:bg-blue-50 hover:shadow-md">
+                        <div class="flex items-start justify-between">
                             <i class="bi ${card.bootstrapIcon} text-2xl" style="color:${color}"></i>
-                            <i class="bi bi-arrow-up-right text-slate-400"></i>
-                        </span>
-                        <strong class="mt-4 block text-slate-900">${escapeHtml(card.name)}</strong>
-                        <span class="mt-1 block text-xs text-slate-500">${card.question_count} questions · 45 min</span>
-                    </button>
+                            <div class="flex gap-2">
+                                <button type="button" data-edit-quiz="${escapeHtml(card.id)}" aria-label="Edit ${escapeHtml(card.title)}" class="rounded-lg p-2 text-slate-400 transition hover:bg-blue-100 hover:text-blue-600"><i class="bi bi-pencil"></i></button>
+                                <button type="button" data-delete-quiz="${escapeHtml(card.id)}" aria-label="Delete ${escapeHtml(card.title)}" class="rounded-lg p-2 text-slate-400 transition hover:bg-red-100 hover:text-red-600"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </div>
+                        <button type="button" data-open-exam data-id="${escapeHtml(card.id)}" class="mt-3 block w-full text-left">
+                            <strong class="block text-slate-900">${escapeHtml(card.name)}</strong>
+                            <span class="mt-1 block text-xs text-slate-500">${card.question_count} questions · 45 min</span>
+                        </button>
+                    </article>
                 `).join("") : `
                     <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
                         <p class="font-medium text-slate-700">No quizzes for this subject yet.</p>
@@ -191,6 +212,7 @@ function loadStudySubjects() {
     })
 }
 
+// Function to load the study history for the user
 function loadStudyHistory() {
     $.ajax({
         url: "/api/quiz/history",
@@ -240,6 +262,11 @@ function loadStudyHistory() {
         }
     });
 }
+
+
+/////////////////////////
+// QUIZ MANAGEMENT - QUIZ PAGE
+/////////////////////////
 
 // Updating the progress of the study session
 function updateProgress() {
@@ -360,61 +387,12 @@ function showExam(card, quizIdFromUrl = null) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function loadBattle(battleId) {
-    $.ajax({
-        url: "/api/battles/challanger-quiz/" + battleId,
-        method: "GET",
-        dataType: "json",
-        success: function (data) {
-            if (!data.success) {
-                showErrorModal(data.error || 'Error occurred while loading the battle.');
-                return;
-            }
-
-            const main = document.getElementById("exam-questions");
-            const quizQuestions = data.quizQuestions;
-
-            document.querySelector("#study-page progress").max = quizQuestions.length;
-
-            main.querySelectorAll("[data-question]").forEach(element => element.remove());
-            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
-            const questionId = `question-${index}`;
-            correctAnswers[questionId] = element.correct_answer;
-            explanation[questionId] = element.explanation;
-            return `
-                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
-                    <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
-                    <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
-                        ${[
-                            ["A", element.answer_a],
-                            ["B", element.answer_b],
-                            ["C", element.answer_c],
-                            ["D", element.answer_d]
-                        ].map(([label, answer]) => `
-                            <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff]"><input class="peer sr-only" type="radio" name="${questionId}" value="${label}"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">${label}</span><span>${escapeHtml(answer)}</span></label>
-                        `).join("")}
-                    </fieldset>
-                </section>
-            `;
-            }).join(""));
-            questions = [...main.querySelectorAll("[data-question]")];
-        }
-    });
-
-    studyOverview.classList.add("hidden");
-    studyPage.classList.remove("hidden");
-
-    startTimer();
-
-    history.replaceState(null, "", "#exam");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
 // Function to show the study overview page
 function showStudyOverview() {
     clearInterval(timerId);
 
     studyPage.classList.add("hidden");
+    editQuizPage.classList.add("hidden");
     studyOverview.classList.remove("hidden");
 
     history.replaceState(null, "", "#study");
@@ -436,6 +414,18 @@ studyOverview.addEventListener("click", event => {
 
     if (card) {
         showExam(card);
+        return;
+    }
+
+    const editButton = event.target.closest("[data-edit-quiz]");
+    if (editButton) {
+        openEditQuiz(editButton.dataset.editQuiz);
+        return;
+    }
+
+    const deleteButton = event.target.closest("[data-delete-quiz]");
+    if (deleteButton) {
+        openDeleteExam(deleteButton.dataset.deleteQuiz);
         return;
     }
 
@@ -586,6 +576,115 @@ function checkExamAnswers() {
     }
 }
 
+
+
+///////////////////////////
+// BATTLE MANAGEMENT
+///////////////////////////
+
+// Function to load a battle quiz for a given battle ID
+function loadBattle(battleId) {
+    $.ajax({
+        url: "/api/battles/challanger-quiz/" + battleId,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (!data.success) {
+                showErrorModal(data.error || 'Error occurred while loading the battle.');
+                return;
+            }
+
+            const main = document.getElementById("exam-questions");
+            const quizQuestions = data.quizQuestions;
+
+            document.querySelector("#study-page progress").max = quizQuestions.length;
+
+            main.querySelectorAll("[data-question]").forEach(element => element.remove());
+            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+            const questionId = `question-${index}`;
+            correctAnswers[questionId] = element.correct_answer;
+            explanation[questionId] = element.explanation;
+            return `
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
+                    <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
+                    <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
+                        ${[
+                            ["A", element.answer_a],
+                            ["B", element.answer_b],
+                            ["C", element.answer_c],
+                            ["D", element.answer_d]
+                        ].map(([label, answer]) => `
+                            <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff]"><input class="peer sr-only" type="radio" name="${questionId}" value="${label}"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">${label}</span><span>${escapeHtml(answer)}</span></label>
+                        `).join("")}
+                    </fieldset>
+                </section>
+            `;
+            }).join(""));
+            questions = [...main.querySelectorAll("[data-question]")];
+        }
+    });
+
+    studyOverview.classList.add("hidden");
+    studyPage.classList.remove("hidden");
+
+    startTimer();
+
+    history.replaceState(null, "", "#exam");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Function to load a battle quiz for a given battle ID
+function loadBattle(battleId) {
+    $.ajax({
+        url: "/api/battles/challanger-quiz/" + battleId,
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+            if (!data.success) {
+                showErrorModal(data.error || 'Error occurred while loading the battle.');
+                return;
+            }
+
+            const main = document.getElementById("exam-questions");
+            const quizQuestions = data.quizQuestions;
+
+            document.querySelector("#study-page progress").max = quizQuestions.length;
+
+            main.querySelectorAll("[data-question]").forEach(element => element.remove());
+            main.insertAdjacentHTML("beforeend", quizQuestions.map((element, index) => {
+            const questionId = `question-${index}`;
+            correctAnswers[questionId] = element.correct_answer;
+            explanation[questionId] = element.explanation;
+            return `
+                <section class="mb-5 scroll-mt-[25px] rounded-[14px] border border-[#e2e8f1] bg-white p-[25px] max-[650px]:p-[18px]" data-question id="${questionId}">
+                    <h2 class="mb-[22px] mt-0 flex gap-[14px] text-lg font-semibold leading-[1.6] max-[650px]:text-base [&>span:first-child]:text-[#5775b4]" id="${questionId}"><span>${index + 1}.</span><span>${escapeHtml(element.question)}</span></h2>
+                    <fieldset class="m-0 border-0 p-0" aria-labelledby="${questionId}">
+                        ${[
+                            ["A", element.answer_a],
+                            ["B", element.answer_b],
+                            ["C", element.answer_c],
+                            ["D", element.answer_d]
+                        ].map(([label, answer]) => `
+                            <label class="mb-2 flex min-h-[54px] cursor-pointer items-center gap-[18px] rounded-[11px] border border-[#e7ecf4] px-[18px] py-[10px] transition-colors duration-150 hover:bg-[#f7faff] has-[:checked]:border-[#6b9ddd] has-[:checked]:bg-[#f0f6ff]"><input class="peer sr-only" type="radio" name="${questionId}" value="${label}"><span class="grid size-8 shrink-0 place-items-center rounded-[9px] border border-[#dce2e9] text-[#667489] peer-checked:border-[#268ad5] peer-checked:bg-[#268ad5] peer-checked:text-white">${label}</span><span>${escapeHtml(answer)}</span></label>
+                        `).join("")}
+                    </fieldset>
+                </section>
+            `;
+            }).join(""));
+            questions = [...main.querySelectorAll("[data-question]")];
+        }
+    });
+
+    studyOverview.classList.add("hidden");
+    studyPage.classList.remove("hidden");
+
+    startTimer();
+
+    history.replaceState(null, "", "#exam");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Function to display the results of a battle after it has finished
 function displayBattleResults(battleData, userId) {
     if (battleData.status === 'finished') {
         const challengerScore = battleData.challenger_score;
@@ -629,6 +728,7 @@ function displayBattleResults(battleData, userId) {
     }
 }
 
+// Function to close the battle results modal and redirect to the study page
 function closeBattleResultsModal() {
     battleResultsModal.classList.add("hidden");
     battleResultsModal.classList.remove("flex");
@@ -636,6 +736,13 @@ function closeBattleResultsModal() {
     window.location.href = "/study";
 }
 
+
+
+////////////////////////////
+// QUIZZ MODALS MANAGEMENT
+////////////////////////////
+
+// Function to close the score modal
 function closeScoreModal() {
     scoreModal.classList.add("hidden");
     scoreModal.classList.remove("flex");
@@ -656,6 +763,12 @@ loadStudySubjects();
 loadStudyHistory();
 window.addEventListener("quiz-created", loadStudySubjects);
 
+
+
+////////////////////
+// PARAMETER CHECKING
+////////////////////
+
 // If url contains quizz id show the exam page directly
 const urlParams = new URLSearchParams(window.location.search);
 const quizId = urlParams.get("quizId");
@@ -666,4 +779,153 @@ if (quizId) {
     showExam(null, quizId);
 } else if (battleId) {
     loadBattle(battleId);
+}
+
+
+
+////////////////////////////
+// MANAGING QUIZZES
+////////////////////////////
+
+let editingQuizId = null;
+
+// Function to show a message in the edit quiz page
+function showEditQuizMessage(message, isError = false) {
+    const messageElement = document.getElementById("editQuizMessage");
+    messageElement.textContent = message;
+    messageElement.className = `rounded-xl p-3 text-sm ${isError ? "bg-red-50 text-red-700" : "bg-blue-50 text-blue-700"}`;
+}
+
+// Function to render the editable quiz questions in the edit quiz page
+function renderEditableQuestions(quizQuestions) {
+    const container = document.getElementById("editQuizQuestions");
+    container.innerHTML = quizQuestions.map((question, index) => `
+        <fieldset data-edit-question class="space-y-3 rounded-2xl border border-slate-200 bg-white p-4 sm:p-5">
+            <legend class="px-2 text-base font-bold text-slate-900">Question ${index + 1}</legend>
+            <label class="block text-sm font-semibold text-slate-700">Question text
+                <textarea name="question" rows="2" required class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">${escapeHtml(question.question)}</textarea>
+            </label>
+            <div class="grid gap-3 sm:grid-cols-2">
+                ${["a", "b", "c", "d"].map(letter => `
+                    <label class="block text-sm font-semibold text-slate-700">Answer ${letter.toUpperCase()}
+                        <input name="answer_${letter}" type="text" required value="${escapeHtml(question[`answer_${letter}`])}" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">
+                    </label>
+                `).join("")}
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2">
+                <label class="block text-sm font-semibold text-slate-700">Correct answer
+                    <select name="correct_answer" required class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 font-normal">
+                        ${["A", "B", "C", "D"].map(letter => `<option value="${letter}" ${question.correct_answer === letter ? "selected" : ""}>${letter}</option>`).join("")}
+                    </select>
+                </label>
+                <label class="block text-sm font-semibold text-slate-700">Explanation
+                    <textarea name="explanation" rows="2" class="mt-1 w-full rounded-xl border border-slate-300 px-3 py-2 font-normal focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">${escapeHtml(question.explanation || "")}</textarea>
+                </label>
+            </div>
+        </fieldset>
+    `).join("");
+}
+
+// Function to open the edit quiz page and load the quiz data for editing
+function openEditQuiz(quizId) {
+    editingQuizId = quizId;
+    studyOverview.classList.add("hidden");
+    studyPage.classList.add("hidden");
+    editQuizPage.classList.remove("hidden");
+    document.getElementById("editQuizTitle").value = "";
+    document.getElementById("editQuizQuestions").innerHTML = '<p class="rounded-xl bg-slate-50 p-5 text-center text-sm text-slate-500">Loading quiz...</p>';
+    document.getElementById("editQuizMessage").classList.add("hidden");
+
+    $.ajax({
+        url: `/api/quiz/${encodeURIComponent(quizId)}`,
+        method: "GET",
+        dataType: "json",
+        success: function (response) {
+            if (!response.success) {
+                showEditQuizMessage(response.error || "Quiz could not be loaded.", true);
+                return;
+            }
+            document.getElementById("editQuizTitle").value = response.quiz.title;
+            renderEditableQuestions(response.questions);
+        },
+        error: function (xhr) {
+            showEditQuizMessage(xhr.responseJSON?.error || "Quiz could not be loaded.", true);
+        }
+    });
+}
+
+// Event listeners for the edit quiz page buttons and form submission
+document.getElementById("backToStudyFromEdit").addEventListener("click", showStudyOverview);
+document.getElementById("cancelEditQuiz").addEventListener("click", showStudyOverview);
+document.getElementById("editQuizForm").addEventListener("submit", event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const questionsToSave = [...form.querySelectorAll("[data-edit-question]")].map(question => ({
+        question: question.querySelector('[name="question"]').value.trim(),
+        answer_a: question.querySelector('[name="answer_a"]').value.trim(),
+        answer_b: question.querySelector('[name="answer_b"]').value.trim(),
+        answer_c: question.querySelector('[name="answer_c"]').value.trim(),
+        answer_d: question.querySelector('[name="answer_d"]').value.trim(),
+        correct_answer: question.querySelector('[name="correct_answer"]').value,
+        explanation: question.querySelector('[name="explanation"]').value.trim()
+    }));
+    const saveButton = document.getElementById("saveEditQuiz");
+    saveButton.disabled = true;
+
+    $.ajax({
+        url: `/api/quiz/${encodeURIComponent(editingQuizId)}`,
+        method: "PUT",
+        contentType: "application/json",
+        data: JSON.stringify({ title: document.getElementById("editQuizTitle").value.trim(), questions: questionsToSave }),
+        success: function (response) {
+            if (!response.success) {
+                showEditQuizMessage(response.error || "Quiz could not be saved.", true);
+                return;
+            }
+            loadStudySubjects();
+            showStudyOverview();
+        },
+        error: function (xhr) {
+            showEditQuizMessage(xhr.responseJSON?.error || "Quiz could not be saved.", true);
+        },
+        complete: function () {
+            saveButton.disabled = false;
+        }
+    });
+});
+
+// Function to close the delete quiz modal
+document.getElementById("closeDeleteQuizzModal").addEventListener("click", () => {
+    deleteQuizzModal.classList.add("hidden");
+    deleteQuizzModal.classList.remove("flex");
+});
+
+// Function to open the delete quiz modal and set up the confirmation button
+function openDeleteExam(quizId) {
+    // Show the delete quizz modal
+    deleteQuizzModal.classList.remove("hidden");
+    deleteQuizzModal.classList.add("flex");
+
+    const confirmDeleteButton = document.getElementById("confirmDeleteQuizz");
+    confirmDeleteButton.onclick = function () {
+        confirmDeleteExam(quizId);
+    };
+}
+
+// Function to confirm the deletion of a quiz and make an API call to delete it
+function confirmDeleteExam(quizId) {
+    $.ajax({
+        url: "/api/quiz/" + quizId,
+        method: "DELETE",
+        success: function (response) {
+            if (!response.success) {
+                showErrorModal(response.error || 'Error occurred while deleting the quiz.');
+                return;
+            }
+            deleteQuizzModal.classList.add("hidden");
+            deleteQuizzModal.classList.remove("flex");
+            
+            window.location.href = "/study";
+        }
+    });
 }
