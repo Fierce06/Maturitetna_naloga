@@ -175,7 +175,7 @@ CREATE TABLE note_connections (
 
     -- Prevent duplicate connections
     CONSTRAINT uq_note_connection
-        UNIQUE (source_note_id, target_note_id),
+        UNIQUE (source_note_id, target_note_id)
 
 
 ) ENGINE=InnoDB;

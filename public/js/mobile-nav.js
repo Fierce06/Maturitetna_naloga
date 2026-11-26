@@ -73,10 +73,24 @@ function pripraviMobilnoNavigacijo() {
             skupina: 'Planning'
         },
         {
+            naslov: 'Friends',
+            opis: 'Study with your classmates',
+            ikona: 'bi-people',
+            pot: '/friends',
+            skupina: 'Planning'
+        },
+        {
             naslov: 'Settings',
             opis: 'Manage your account',
             ikona: 'bi-gear',
             pot: '/settings',
+            skupina: 'Account'
+        },
+        {
+            naslov: 'Plans',
+            opis: 'Subscription and AI tokens',
+            ikona: 'bi-stars',
+            pot: '/subscription',
             skupina: 'Account'
         }
     ];
@@ -214,6 +228,31 @@ function pripraviMobilnoNavigacijo() {
 
         <div class="sg-mobile-menu-content"></div>
     `;
+
+
+    // Zgornja vrstica z logotipom (vidna samo na telefonu, glej mobile.css).
+    if (document.body.classList.contains('sg-mobile-layout')) {
+        const zgornjaVrstica = document.createElement('header');
+        zgornjaVrstica.className = 'sg-mobile-topbar';
+
+        const danes = new Date().toLocaleDateString('en-GB', {
+            weekday: 'short',
+            day: 'numeric',
+            month: 'short'
+        });
+
+        zgornjaVrstica.innerHTML = `
+            <a href="/" class="sg-mobile-topbar-brand" aria-label="StudyGraph home">
+                <span class="sg-mobile-topbar-mark" aria-hidden="true">
+                    <i class="bi bi-diagram-3-fill"></i>
+                </span>
+                <span class="sg-mobile-topbar-word">Study<span>Graph</span></span>
+            </a>
+            <span class="sg-mobile-topbar-date">${danes}</span>
+        `;
+
+        document.body.insertBefore(zgornjaVrstica, document.body.firstChild);
+    }
 
 
     // Elemente dodamo na stran.

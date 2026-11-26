@@ -40,8 +40,9 @@ function generatePositions(width, height) {
 
     const centerX = width / 2;
     const centerY = height / 2;
-    const radiusX = Math.max(130, width * 0.32);
-    const radiusY = Math.max(120, height * 0.31);
+    // Na ozkih zaslonih (telefon) krog zmanjšamo, da kartice ostanejo vidne.
+    const radiusX = Math.min(Math.max(130, width * 0.32), width / 2 - 64);
+    const radiusY = Math.min(Math.max(120, height * 0.31), height / 2 - 36);
 
     notes.forEach((note, index) => {
         const angle = notes.length === 1
@@ -105,9 +106,13 @@ function draw() {
         ctx.lineWidth = hovered ? 2 : 1;
         ctx.stroke();
 
-        roundRect(x, y, 7, height, 14);
+        // Barvni trak na levi, obrezan na obliko kartice.
+        ctx.save();
+        roundRect(x, y, width, height, 14);
+        ctx.clip();
         ctx.fillStyle = color;
-        ctx.fill();
+        ctx.fillRect(x, y, 7, height);
+        ctx.restore();
 
         ctx.fillStyle = "#0f172a";
         ctx.textAlign = "left";
@@ -128,10 +133,10 @@ function hitTest(clientX, clientY) {
     const y = clientY - rect.top;
 
     return notes.find(note =>
-        x >= note.x - 45 &&
-        x <= note.x + 45 &&
-        y >= note.y - 37 &&
-        y <= note.y + 37
+        x >= note.x - 58 &&
+        x <= note.x + 58 &&
+        y >= note.y - 28 &&
+        y <= note.y + 28
     ) || null;
 }
 
